@@ -1,9 +1,19 @@
+<<<<<<< HEAD
 #Tarea1/*.log
 #Tarea1/*.aux
 #Tarea1/*.synctex.gz
 #Tarea1/*.tex.bak
+=======
+Tarea1/*.log
+Tarea1/*.aux
+Tarea1/*.synctex.gz
+Tarea1/*.tex.bak
+>>>>>>> master
 *.log
 *.aux
 *.synctex.gz
 *.tex.bak
+<<<<<<< HEAD
 *.pdf
+=======
+>>>>>>> master
