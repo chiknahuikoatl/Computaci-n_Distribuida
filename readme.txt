@@ -5,3 +5,7 @@ Grupo: 7055
 
 Tarea 1: Resumen de las pláticas del taller conjunto del Instituto de
 Matemáticas y el Instituto de Investigaciones Filosóficas.
+
+Integrantes:
+Edgar Quiróz
+Jerónimo Almeida
