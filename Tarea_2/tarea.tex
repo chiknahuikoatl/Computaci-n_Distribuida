@@ -1,5 +1,3 @@
-
-
 \documentclass[12pt,a4paper]{report}
 
 \usepackage[utf8x]{inputenc}
@@ -11,9 +9,8 @@
 \usepackage{pgf}
 \usepackage{tikz}
 \usepackage{calrsfs}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
 \usetikzlibrary{arrows,automata,calc}
+
 \begin{document}
 
 \begin{titlepage}
@@ -32,7 +29,7 @@
 	\vfill
 
 % Bottom of the page
-	{\large Martes 21 de Agosto del 2018 \par}
+	{\large Jueves 23 de Agosto del 2018 \par}
 \end{titlepage}
 
 \pagebreak
@@ -50,7 +47,39 @@
 		$T=\langle \mathcal{I}, \mathcal{O}, \Delta \rangle$ con salida $\mathcal{O}$.
 		Describe el significado de todas las configuraciones iniciales en $T$
 		utilizando alguna situación de la vida real, como los ejemplos con Alice y
-		Bob vistos en clase y también describe a $\Delta$.\\\\
+		Bob vistos en clase y también describe a $\Delta$.\\
+		\begin{center}
+		  \begin{tikzpicture}[-,>=stealth',auto, node distance = 2.8cm,
+				shorten > = 1pt, semithick, state/.style = {circle, fill=#1,
+				draw=black!, inner sep=1mm, text=black}, state/.default = white]
+
+			 \tikzstyle{every state}=[fill=white,draw=black!,text=black]
+
+		  	 \node (AO0) [state]                      {$(A,0)$};%E
+		  	 \node (BO0) [state=gray, right of=AO0]   {$(B,0)$};%F
+		     \node (BO3) [state=gray, below of=AO0]   {$(B,\frac{1}{3})$};%G
+		  	 \node (AO2) [state, below of=BO3]        {$(A,\frac{2}{3})$};%H
+		  	 \node (BO1) [state=gray, below of=AO2]   {$(B,1)$};%I
+		   	 \node (AO3) [state, below of=BO0]        {$(A,\frac{1}{3})$};%J
+		  	 \node (BO2) [state=gray, below of=AO3]   {$(B,\frac{2}{3})$};%K
+		  	 \node (AO1) [state, below of=BO2]        {$(A,1)$};%L
+
+		  	 \path  \ed{AO0}{BO0}
+					\ed{AO0}{BO3}
+					\ed{BO3}{AO2}
+					\ed{AO2}{BO1}
+					\ed{BO0}{AO3}
+					\ed{AO3}{BO2}
+					\ed{BO2}{AO1}
+					(AO1) edge node {$\mathcal{O}$} (BO1);
+
+		  \end{tikzpicture}
+		\end{center}
+
+		La tarea que proponemos es la siguiente: \\
+
+		Alfredo es
+
 		\begin{tikzpicture}[-,>=stealth',auto,
 		node distance = 2.8cm,
 		    shorten > = 1pt, semithick,
@@ -74,17 +103,17 @@
 		  \node (AO1) [state, below of=BO2]        {$(A,1)$};%L
 
 		  \path \ed{AI0}{BI0}
-				\ed{BI0}{AI1}
-				\ed{AI0}{BI1}
-				\ed{AI1}{BI1}
-		        \ed{AO0}{BO0}
-		        \ed{AO0}{BO3}
-		        \ed{BO3}{AO2}
-		        \ed{AO2}{BO1}
-		        \ed{BO0}{AO3}
-		        \ed{AO3}{BO2}
-		        \ed{BO2}{AO1}
-		        \ed{BO1}{AO1};
+			    \ed{BI0}{AI1}
+			    \ed{AI0}{BI1}
+			    (AI1) edge node {$\mathcal{I}$} (BI1)
+				\ed{AO0}{BO0}
+				\ed{AO0}{BO3}
+				\ed{BO3}{AO2}
+				\ed{AO2}{BO1}
+				\ed{BO0}{AO3}
+				\ed{AO3}{BO2}
+				\ed{BO2}{AO1}
+				(AO1) edge node {$\mathcal{O}$} (BO1);
 
 		  \eee{AI1}{BI1}{BO1}{AO1}
 		  \eee{AI0}{BI0}{AO0}{BO0}
@@ -98,40 +127,66 @@
 
 		\end{tikzpicture}
 	}
-	\item {
-	Dado el problema del inciso anterior, propón un algoritmo en el modelo de
-	comunicación siguiente y demuestra que es correcto.\\\\
-		\begin{equation*}
-			\mathcal{M} = \{A \leftrightarrow B, A \rightarrow B, A \leftarrow B \}
-		\end{equation*}\\
-	El algoritmo propuesto es el siguiente para ambos procesos.\\
-		\begin{algorithmic}[1]
-			\Require $init \in \{0, 1\}$
-			\Function{$\frac{1}{3}-AproximateAgreement$}{$init$}
-				\State $send(init)$
-				\State $x \gets receive()$
-				\If{$x \ne null$}
-					\State \Return $\frac{init + 2x}{3}$
-				\Else
-					\State \Return $init$
-				\EndIf
-			\EndFunction
-		\end{algorithmic}
-	Veamos que es correcto.\\
-	Primero, supongamos, sin perder generalidad, que $init_A = init_B = v$ .\\
-	Pueden pasar dos cosas, que haya comunicación perfecta o que se pierda uno
-	de los mensajes.\\
-	Si hay comunicación perfecta, entonces los dos procesos ejecutan la línea 5,
-	y se tiene que los dos procesos regresan $\frac{v + 2v}{3} = \frac{3v}{3} = v$.\\
-	Entonces los dos procesos regresan $v$, que es bien 1 o 0, ambos estados finales
-	válidos.\\
-	Si alguno de los mensajes se pieder, supongamos sin perder generalidad que a $A$
-	no le llega el mensaje.\\
-	Entonces, $A$ ejecuta la línea 7 y regresa $init_A$.\\
-	El proceso $B$ sí recibe el mensaje, por lo que ejecuta la línea 5 y regresa
-	$\frac{init_A + 2 (init_B)}{3}$.\\
-	Entonces la diferencia entre las dos respuestas es
-	$\mid init_A - \frac{init_A + 2 (init_B)}{3} \mid$
-	}
-\end{enumerate}
+
+		\item {
+		Dado el problema del inciso anterior, propón un algoritmo en el modelo de
+		comunicación siguiente y demuestra que es correcto.\\\\
+			\begin{equation*}
+				\mathcal{M} = \{A \leftrightarrow B, A \rightarrow B, A \leftarrow B \}
+			\end{equation*}\\
+		El algoritmo propuesto es el siguiente para ambos procesos.\\
+			\begin{algorithmic}[1]
+				\Require $init \in \{0, 1\}$
+				\Function{$\frac{1}{3}-AproximateAgreement$}{$init$}
+					\State $send(init)$
+					\State $x \gets receive()$
+					\If{$x \ne null$}
+						\State \Return $\frac{init + 2x}{3}$
+					\Else
+						\State \Return $init$
+					\EndIf
+				\EndFunction
+			\end{algorithmic}
+		Veamos que es correcto.\\\\
+
+		Primero, supongamos, sin perder generalidad, que $init_A = init_B = v$ .\\
+		Pueden pasar dos cosas, que haya comunicación perfecta o que se pierda uno
+		de los mensajes.\\
+		Si hay comunicación perfecta, entonces los dos procesos ejecutan la línea 5,
+		y se tiene que los dos procesos regresan $\frac{v + 2v}{3} = \frac{3v}{3} = v$.\\
+		Si alguno de los mensajes se pieder, supongamos sin perder generalidad que a $A$
+		no le llega el mensaje.\\
+		Entonces, $A$ ejecuta la línea 7 y regresa $init_A = v$.\\
+		El proceso $B$ sí recibe el mensaje, por lo que ejecuta la línea 5 y regresa
+		$\frac{init_A + 2 (init_B)}{3} = \frac{v + 2v}{3} = \frac{3v}{3} = v$.\\
+		Entonces todos los casos los dos procesos regresan $v$, que es bien 1 o 0,
+		ambos estados finales válidos.\\
+		Entonces, si las entradas son iguales, el algoritmo produce etados finales válidos.\\\\
+
+		Luego, supongamos que $init_A \ne init_B$.\\
+		Si hay comunicaciónp perfecta, entonces ambos procesos ejecutan la línea 5.\\
+		Si $init_A = 1$ y $init_B = 0$, entonces el proceso $A$ regresa
+		$\frac{init_A + 2(init_B)}{3} = \frac{1}{3}$ y el proceso $B$ regresa
+		$\frac{init_B + 2(init_A)}{3} = \frac{2}{3}$, que es un estado final válido.\\
+		Si $init_A = 0$ y $init_B = 1$, entonces el proceso $A$ regresa
+		$\frac{init_A + 2(init_B)}{3} = \frac{2}{3}$ y el proceso $B$ regresa
+		$\frac{init_B + 2(init_A)}{3} = \frac{1}{3}$, que también es un estado final válido.\\
+		Si alguno de los mensajes se pieder, supongamos sin perder generalidad que a $A$
+		no le llega el mensaje.\\
+		Entonces $A$ ejecuta la línea 5 y regresa $init_A$.\\
+		El proceso $B$ sí recibe el mensaje, por lo que ejecuta la línea 5 y regresa
+		$\frac{init_A + 2 (init_B)}{3}$.\\
+		Si $init_A = 1$ y $init_B = 0$, entonces el proceso $A$ regresa $init_A = 1$
+		y el proceso $B$ regresa $\frac{init_B + 2(init_A)}{3} = \frac{2}{3}$,
+		que es un estado final válido.\\
+		Si $init_A = 0$ y $init_B = 1$, entonces el proceso $A$ regresa $init_A = 0$
+		y el proceso $B$ regresa $\frac{init_B + 2(init_A)}{3} = \frac{1}{3}$,
+		que también es un estado final válido.\\
+		Entonces, si las entradas son diferentes, el algoritmo produce etados finales
+		válidos.\\\\
+		Entonces, con todas las diferentes entradas y posibles errores de comunicación,
+		el algoritmo produce estados finales válidos.\\
+		Por lo tanto, el algoritmo es correcto.\\\\
+		}
+	\end{enumerate}
 \end{document}
