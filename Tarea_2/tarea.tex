@@ -1,5 +1,3 @@
-
-
 \documentclass[12pt,a4paper]{report}
 
 \usepackage[utf8x]{inputenc}
@@ -12,6 +10,7 @@
 \usepackage{tikz}
 \usepackage{calrsfs}
 \usetikzlibrary{arrows,automata,calc}
+
 \begin{document}
 
 \begin{titlepage}
@@ -30,7 +29,7 @@
 	\vfill
 
 % Bottom of the page
-	{\large Martes 21 de Agosto del 2018 \par}
+	{\large Jueves 23 de Agosto del 2018 \par}
 \end{titlepage}
 
 \pagebreak
@@ -48,7 +47,9 @@
 		$T=\langle \mathcal{I}, \mathcal{O}, \Delta \rangle$ con salida $\mathcal{O}$.
 		Describe el significado de todas las configuraciones iniciales en $T$
 		utilizando alguna situación de la vida real, como los ejemplos con Alice y
-		Bob vistos en clase y también describe a $\Delta$.\\\\
+		Bob vistos en clase y también describe a $\Delta$.\\
+		La tarea que proponemos es la siguiente: \\
+		
 		\begin{tikzpicture}[-,>=stealth',auto,
 		node distance = 2.8cm,
 		    shorten > = 1pt, semithick,
@@ -57,9 +58,18 @@
 		 state/.default = white]
 
 		  \tikzstyle{every state}=[fill=white,draw=black!,text=black]
+		  
 
-		  \node (AI0) [state]                      {$(A,0)$};%A
-		  \node (BI0) [state=gray, right of=AI0]   {$(B,0)$};%B
+		  \node (1)   [state]                      {$(A,0)$};
+		  \node (2)   [state=gray, left of=1]      {$(B,0)$};
+		  \node (3)   [state=gray, left of=1]      {$(B,0)$};
+		  \node (4)   [state=gray, left of=1]      {$(B,0)$};
+		  \node (5)   [state=gray, left of=1]      {$(B,0)$};
+		  \node (6)   [state=gray, left of=1]      {$(B,0)$};
+		  \node (7)   [state=gray, left of=1]      {$(B,0)$};
+		  \node (8)   [state=gray, left of=1]      {$(B,0)$}; 
+		  \node (AI0) [state, left of=BI0]         {$(A,0)$};%A
+		  \node (BI0) [state=gray, left of=BI3]    {$(B,0)$};%B
 		  \node (AI1) [state, below of=BI0]        {$(A,1)$};%C
 		  \node (BI1) [state=gray, below of=AI0]   {$(B,1)$};%D
 		  \node (AO0) [state, above right of=BI0]  {$(A,0)$};%E
