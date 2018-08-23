@@ -79,7 +79,10 @@
 
 		La tarea que proponemos es la siguiente: \\
 
-		Alfredo es
+		El Dr. Alfaro es el director de la planta nuclear del estado, pero necesita
+		más	barras de uranio para que la planta pueda seguir trabajando, así que llama
+		a la Dra. Benitez para comprarle el uranio que produce en su laboratorio. El 
+		problema es que si envía.
 
 		\begin{tikzpicture}[-,>=stealth',auto,
 		node distance = 2.8cm,
@@ -135,7 +138,7 @@
 			\mathcal{M} = \{A \leftrightarrow B, A \rightarrow B, A \leftarrow B \}
 		\end{equation*}\\
 	El algoritmo propuesto es el siguiente para ambos procesos.\\
-		\begin{algorithm}[1]
+		\begin{algorithmic}[1]
 			\Require $init \in \{0, 1\}$
 			\Function{$\frac{1}{3}-AproximateAgreement$}{$init$}
 				\State $send(init)$
@@ -146,7 +149,7 @@
 					\State \Return $init$
 				\EndIf
 			\EndFunction
-		\end{algorithm}
+		\end{algorithmic}
 
 	Veamos que es correcto, es decir que los estados finales son válidos.\\\\
 
@@ -155,7 +158,7 @@
 	de los mensajes.\\
 	Si hay comunicación perfecta, entonces los dos procesos ejecutan la línea 5,
 	y se tiene que los dos procesos regresan $\frac{v + 2v}{3} = \frac{3v}{3} = v$.\\
-	Si alguno de los mensajes se pieder, supongamos sin perder generalidad que a $A$
+	Si alguno de los mensajes se pierde, supongamos sin perder generalidad que a $A$
 	no le llega el mensaje.\\
 	Entonces, $A$ ejecuta la línea 7 y regresa $init_A = v$.\\
 	El proceso $B$ sí recibe el mensaje, por lo que ejecuta la línea 5 y regresa
@@ -165,14 +168,14 @@
 	Entonces, si las entradas son iguales, el algoritmo produce etados finales válidos.\\\\
 
 	Luego, supongamos que $init_A \ne init_B$.\\
-	Si hay comunicaciónp perfecta, entonces ambos procesos ejecutan la línea 5.\\
+	Si hay comunicación perfecta, entonces ambos procesos ejecutan la línea 5.\\
 	Si $init_A = 1$ y $init_B = 0$, entonces el proceso $A$ regresa
 	$\frac{init_A + 2(init_B)}{3} = \frac{1}{3}$ y el proceso $B$ regresa
 	$\frac{init_B + 2(init_A)}{3} = \frac{2}{3}$, que es un estado final válido.\\
 	Si $init_A = 0$ y $init_B = 1$, entonces el proceso $A$ regresa
 	$\frac{init_A + 2(init_B)}{3} = \frac{2}{3}$ y el proceso $B$ regresa
 	$\frac{init_B + 2(init_A)}{3} = \frac{1}{3}$, que también es un estado final válido.\\
-	Si alguno de los mensajes se pieder, supongamos sin perder generalidad que a $A$
+	Si alguno de los mensajes se pierde, supongamos sin perder generalidad que a $A$
 	no le llega el mensaje.\\
 	Entonces $A$ ejecuta la línea 5 y regresa $init_A$.\\
 	El proceso $B$ sí recibe el mensaje, por lo que ejecuta la línea 5 y regresa
