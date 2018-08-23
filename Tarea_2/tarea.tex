@@ -40,13 +40,13 @@
 \newcommand{\eee}[4]{\path [->,draw,thin] ($ (#1) !.5! (#2)$) -- ($ (#3) !.5! (#4) $);}
 
 
+\begin{itemize}
+	\item[{\Large Ejercicio 1}]
 
-\begin{tikzpicture}[-,>=stealth',auto,
-node distance = 2.8cm,
-    shorten > = 1pt, semithick,
- state/.style = {circle, fill=#1, draw=black!,
-                 inner sep=1mm, text=black},
- state/.default = white]
+
+	\begin{tikzpicture}[-,>=stealth',auto, node distance = 2.8cm, shorten > = 1pt, semithick,
+	state/.style = {circle, fill=#1, draw=black!, inner sep=1mm, text=black},
+	state/.default = white]
 
   \tikzstyle{every state}=[fill=white,draw=black!,text=black]
 
@@ -66,7 +66,7 @@ node distance = 2.8cm,
   \path \ed{AI0}{BI0}
 		\ed{BI0}{AI1}
 		\ed{AI0}{BI1}
-		\ed{AI1}{BI1}
+		(AI1) edge node {$\mathcal{I}$} (BI1)
         \ed{AO0}{BO0}
         \ed{AO0}{BO3}
         \ed{BO3}{AO2}
@@ -74,7 +74,7 @@ node distance = 2.8cm,
         \ed{BO0}{AO3}
         \ed{AO3}{BO2}
         \ed{BO2}{AO1}
-        \ed{BO1}{AO1};
+        (AO1) edge node {$\mathcal{O}$} (BO1);
 
   \eee{AI1}{BI1}{BO1}{AO1}
   \eee{AI0}{BI0}{AO0}{BO0}
@@ -85,14 +85,8 @@ node distance = 2.8cm,
   \eee{AI1}{BI0}{AO3}{BO0}
   \eee{AI1}{BI0}{BO2}{AO3}
   \eee{AI1}{BI0}{AO1}{BO2}
-
-
-
-
 \end{tikzpicture}
 
+\end{itemize}
+
 \end{document}
-
-
-
-
