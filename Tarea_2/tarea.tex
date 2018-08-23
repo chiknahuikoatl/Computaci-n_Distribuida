@@ -11,6 +11,8 @@
 \usepackage{pgf}
 \usepackage{tikz}
 \usepackage{calrsfs}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 \usetikzlibrary{arrows,automata,calc}
 \begin{document}
 
@@ -97,11 +99,39 @@
 		\end{tikzpicture}
 	}
 	\item {
-	Dado el problema del inciso anterior, propón un álgoritmo en el modelo de
+	Dado el problema del inciso anterior, propón un algoritmo en el modelo de
 	comunicación siguiente y demuestra que es correcto.\\\\
 		\begin{equation*}
 			\mathcal{M} = \{A \leftrightarrow B, A \rightarrow B, A \leftarrow B \}
-		\end{equation*}
+		\end{equation*}\\
+	El algoritmo propuesto es el siguiente para ambos procesos.\\
+		\begin{algorithmic}[1]
+			\Require $init \in \{0, 1\}$
+			\Function{$\frac{1}{3}-AproximateAgreement$}{$init$}
+				\State $send(init)$
+				\State $x \gets receive()$
+				\If{$x \ne null$}
+					\State \Return $\frac{init + 2x}{3}$
+				\Else
+					\State \Return $init$
+				\EndIf
+			\EndFunction
+		\end{algorithmic}
+	Veamos que es correcto.\\
+	Primero, supongamos, sin perder generalidad, que $init_A = init_B = v$ .\\
+	Pueden pasar dos cosas, que haya comunicación perfecta o que se pierda uno
+	de los mensajes.\\
+	Si hay comunicación perfecta, entonces los dos procesos ejecutan la línea 5,
+	y se tiene que los dos procesos regresan $\frac{v + 2v}{3} = \frac{3v}{3} = v$.\\
+	Entonces los dos procesos regresan $v$, que es bien 1 o 0, ambos estados finales
+	válidos.\\
+	Si alguno de los mensajes se pieder, supongamos sin perder generalidad que a $A$
+	no le llega el mensaje.\\
+	Entonces, $A$ ejecuta la línea 7 y regresa $init_A$.\\
+	El proceso $B$ sí recibe el mensaje, por lo que ejecuta la línea 5 y regresa
+	$\frac{init_A + 2 (init_B)}{3}$.\\
+	Entonces la diferencia entre las dos respuestas es
+	$\mid init_A - \frac{init_A + 2 (init_B)}{3} \mid$
 	}
 \end{enumerate}
 \end{document}
