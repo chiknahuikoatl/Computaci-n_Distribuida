@@ -79,7 +79,46 @@
 
 		La tarea que proponemos es la siguiente: \\
 
-		Alfredo es
+		El Dr. Alfaro es el director de la planta nuclear del estado, pero necesita
+		más	barras de uranio para que la planta pueda seguir trabajando, así que
+		intenta contactar a la Dra. Benitez para comprarle uranio del que produce en
+		su laboratorio. Por	azares del destino, la red local de comunicación se cayó,
+		así que para comunicarse cada uno envía un mensajero.\\
+		 El problema es que el cartel de los $\mathbb{N}$ está planeando robar el
+		dinero, el uranio o ambos. Si capturan a los mensajeros podrán saber dónde
+		se va a hacer la compra. Por esto mismo de la inseguridad, ninguna de las dos
+		partes está segura de querer hacer el trato. Así que, dependiendo de la
+		urgencia que tengan de cerrar el trato enviarán al mensajero para intentar
+		convencer al otro de cerrar el trato o de no arriesgarse innecesariamente.\\
+		 El doctor y la doctora saben que si los mensajeros son hábiles podrán
+		escabullirse de los mafiosos, pero tienen la certeza de que si uno es
+		capturado, entonces los mafiosos estarán demasiado ocupados con el cómo para
+		intentar capturar al otro mensajero.\\\\
+		$\mathcal{I}:=$ En la gráfica de entrada, consideramos los siguientes valores:
+		(1) Si el Dr. Alfaro está dispuesto a comprar, (0) si no. (1) Si la doctora
+		Benitez está dispuesta a vender, (0) si no.\\
+		$\mathcal{O}:=$ Para la gráfica de salida, consideramos los siguientes
+		valores: (0) Si el trato se cancela, (1) si ambos deciden cerrar el trato y 
+		$\dfrac{1}{3} \lor \dfrac{2}{3}$ si están en desacuerdo y alguno de los
+		mensajeros fue capturado.\\
+		$\Delta:=$ Si ambos consideran que hacer la compra es de suma importacia,
+		entonces ambos intentarán cerrar el trato. También, si consideran que	es
+		demasiado riesgoso salir a cerrar el trato, entonces no lo harán. Por otro
+		lado, si están en desacuerdo intentarán llegar a un compromiso dando mayor
+		peso al otro lado del trato. Finalmente, si un mensajero es capturado, la
+		parte receptora se adherirá a su decisión sin importar las consecuencias.\\
+		Por ejemplo, la arista (0)-(1) en $\mathcal{I}$ significa que A no quiere
+		comprar pero que B sí quiere vender. Entonces, una salida 
+		$(\frac{2}{3})-(\frac{1}{3})$ significa que B va a pagar 1/3 de lo que
+		normalmente pagaría para poder resolver el problema. Y B, como sabe que A no
+		quiere vender, entonces va a comprarle 2/3 de lo que había ofrecido 
+		originalmente.\\
+		De igual manera, si hay problemas de comunicación y no saben que quiere el
+		otro, entonces asumirán su parte del trato. Así, con (0)-(1), una salida 0 1/3
+		significaría que a B nunca le llegó el mensaje sobre la oferta de A, y como A
+		sabe que B no quiere comprar, sólo va a darle el 1/3 del uranio. También, el
+		(1/3) de diferencia es el margen de perdida aceptable en caso que la
+		comunicación falle.
 
 		\begin{tikzpicture}[-,>=stealth',auto,
 		node distance = 2.8cm,
@@ -155,7 +194,7 @@
 	de los mensajes.\\
 	Si hay comunicación perfecta, entonces los dos procesos ejecutan la línea 5,
 	y se tiene que los dos procesos regresan $\frac{v + 2v}{3} = \frac{3v}{3} = v$.\\
-	Si alguno de los mensajes se pieder, supongamos sin perder generalidad que a $A$
+	Si alguno de los mensajes se pierde, supongamos sin perder generalidad que a $A$
 	no le llega el mensaje.\\
 	Entonces, $A$ ejecuta la línea 7 y regresa $init_A = v$.\\
 	El proceso $B$ sí recibe el mensaje, por lo que ejecuta la línea 5 y regresa
@@ -165,14 +204,14 @@
 	Entonces, si las entradas son iguales, el algoritmo produce etados finales válidos.\\\\
 
 	Luego, supongamos que $init_A \ne init_B$.\\
-	Si hay comunicaciónp perfecta, entonces ambos procesos ejecutan la línea 5.\\
+	Si hay comunicación perfecta, entonces ambos procesos ejecutan la línea 5.\\
 	Si $init_A = 1$ y $init_B = 0$, entonces el proceso $A$ regresa
 	$\frac{init_A + 2(init_B)}{3} = \frac{1}{3}$ y el proceso $B$ regresa
 	$\frac{init_B + 2(init_A)}{3} = \frac{2}{3}$, que es un estado final válido.\\
 	Si $init_A = 0$ y $init_B = 1$, entonces el proceso $A$ regresa
 	$\frac{init_A + 2(init_B)}{3} = \frac{2}{3}$ y el proceso $B$ regresa
 	$\frac{init_B + 2(init_A)}{3} = \frac{1}{3}$, que también es un estado final válido.\\
-	Si alguno de los mensajes se pieder, supongamos sin perder generalidad que a $A$
+	Si alguno de los mensajes se pierde, supongamos sin perder generalidad que a $A$
 	no le llega el mensaje.\\
 	Entonces $A$ ejecuta la línea 5 y regresa $init_A$.\\
 	El proceso $B$ sí recibe el mensaje, por lo que ejecuta la línea 5 y regresa
