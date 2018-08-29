@@ -9,8 +9,9 @@
 \usepackage{pgf}
 \usepackage{tikz}
 \usepackage{calrsfs}
-\usepackage{algpseudocode}
-\usetikzlibrary{arrows,automata,calc, positioning}
+%\usepackage{algpseudocode}
+\usepackage[linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
+\usetikzlibrary{arrows, automata, calc, positioning}
 
 \begin{document}
 
@@ -42,17 +43,60 @@
 
 
 \begin{enumerate}
-		%Ejercicio 1
-		\item {
+	%Ejercicio 1
+	\item {
 		Dados los procesos $A$ y $B$, diseña un algoritmo para el ataque coordinado
-		proximado(aproximate agreement) en el que para llegar al acuerdo deben decidir
-		valores que estén a distancia a lo más $\frac{1}{2^k}$ y utilice menos rondas
-		de comunicación que el algoritmo visto en clase.
+		aproximado (aproximate agreement) en el que para llegar al acuerdo deben
+		decidir	valores que estén a distancia a lo más $\frac{1}{2^k}$ y utilice 
+		menos rondas de comunicación que el algoritmo visto en clase.
+		
+		El algoritmo propuesto es el siguiente:\\
+%		\begin{algorithmic}[1]
+%			\Require $init \in \{0, 1\}$
+%			\Function{$\frac{1}{2^k}-AproximateAgreement$}{$init$}
+%				\State $send(init)$
+%				\State $x \gets receive()$
+%				\For{$r = 0 \To k-1$}
+%					\State{Texto}
+%				\Endfor
+%				\If{$x \ne null$}
+%					\State \Return $\frac{init + 2x}{2^k}$
+%				\Else
+%					\State \Return $init$
+%				\EndIf
+%			\EndFunction
+%		\end{algorithmic}
+		
+		\IncMargin{1em}
+		\begin{algorithm}
+			\SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
+			\SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
+			\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+			\Input{$\ id \in \{A,B\},\ init \in \{0,1\},\ k \in \mathbb{N}$}
+			\Output{$\ v_A^k\  \&\  v_B^k\ $ tales que $\ |v_A^k - v_B^k|\ \leq\ 						\dfrac{1}{2^k}$}
+			\KwData{\textbf{Modelo}: $\{A \leftrightarrow B, A \rightarrow B 							\leftarrow B\}$}
+			\BlankLine
+			$v$ = init \;
+			\For{$r = 0$ \KwTo $k -1$}{
+				send($v$)\;
+				$msg$ = receive()\;
+				\If{$msg \neq null$}{
+					$v = \dfrac{v+msg-v}{2}$\;
+				}
+			}
+			return $v$\;
+			\caption{Approximate Agreement}
+		\end{algorithm}\DecMargin{1em}
+
 	}
+
+	%Ejercicio 2
 	\item {
 		Dibuja la gráfica del protocolo que diseñaste para 2 rondas para $k = 2$.
 		Para cada vértice indica el valor de salida y para cada arista indica el
 		patrón de mensajes recibidos.
 	}
+
+
 \end{enumerate}
 \end{document}
