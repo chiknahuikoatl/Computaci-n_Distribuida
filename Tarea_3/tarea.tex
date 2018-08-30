@@ -6,12 +6,9 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{enumitem}
+\usepackage{fontspec}
 \usepackage{pgf}
-\usepackage{tikz}
-\usepackage{calrsfs}
-%\usepackage{algpseudocode}
 \usepackage[linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
-\usetikzlibrary{arrows, automata, calc, positioning}
 
 \begin{document}
 
@@ -41,20 +38,14 @@
 \newcommand{\ed}[2]{(#1) edge (#2)}
 \newcommand{\eee}[4]{\path [->,draw,thin] ($ (#1) !.5! (#2)$) -- ($ (#3) !.5! (#4)
 	$);}
-\newcommand{\is}[1]{V_{\{#1, x\}}}	
+\newcommand{\is}[1]{V_{\{#1, x\}}}
 
 
 \begin{enumerate}
 	%Ejercicio 1
 	\item {
-		Dados los procesos $A$ y $B$, diseña un algoritmo para el ataque coordinado
-		aproximado (aproximate agreement) en el que para llegar al acuerdo deben
-		decidir	valores que estén a distancia a lo más $\frac{1}{2^k}$ y utilice
-		menos rondas de comunicación que el algoritmo visto en clase.
-
-		El algoritmo propuesto es el siguiente:\\
-
-		\IncMargin{1em}
+	
+	\IncMargin{1em}
 		\begin{algorithm}
 			\SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
 			\SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
@@ -78,24 +69,13 @@
 			\caption{Approximate Agreement}
 		\end{algorithm}\DecMargin{1em}
 		
-		\textbf{Demostración:}\\
-		S.P.G. proponemos a la variable $\is{B}$ dónde $V$ representa la
-		invariante de ciclo y el vector $\{B, x, r\}$ en el subíndice representa el
-		nombre del proceso, su	valor actual y el número de ronda actual
-		respectivamente.\\\\
-		Por el teorema visto con Karla en clase sabemos que en la ronda $r$ hay
-		comunicación perfecta, entonces $\ v_A^k\  =\  v_B^k\ $ en la ronda $r + 1$.
+		Dados los procesos $A$ y $B$, diseña un algoritmo para el ataque coordinado
+		proximado (aproximate agreement) en el que para llegar al acuerdo deben decidir
+		valores que estén a distancia a lo más $\frac{1}{2^k}$ y utilice menos rondas
+		de comunicación que el algoritmo visto en clase.\\
+
 		
-
 	}
-
-	%Ejercicio 2
-	\item {
-		Dibuja la gráfica del protocolo que diseñaste para 2 rondas para $k = 2$.
-		Para cada vértice indica el valor de salida y para cada arista indica el
-		patrón de mensajes recibidos.
-	}
-
 
 \end{enumerate}
 \end{document}
