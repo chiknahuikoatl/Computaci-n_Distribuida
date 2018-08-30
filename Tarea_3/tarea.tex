@@ -39,7 +39,9 @@
 \setlength{\headsep}{5pt}
 
 \newcommand{\ed}[2]{(#1) edge (#2)}
-\newcommand{\eee}[4]{\path [->,draw,thin] ($ (#1) !.5! (#2)$) -- ($ (#3) !.5! (#4) $);}
+\newcommand{\eee}[4]{\path [->,draw,thin] ($ (#1) !.5! (#2)$) -- ($ (#3) !.5! (#4)
+	$);}
+\newcommand{\is}[1]{V_{\{#1, x\}}}	
 
 
 \begin{enumerate}
@@ -75,6 +77,14 @@
 			return $v$\;
 			\caption{Approximate Agreement}
 		\end{algorithm}\DecMargin{1em}
+		
+		\textbf{Demostración:}\\
+		S.P.G. proponemos a la variable $\is{B}$ dónde $V$ representa la
+		invariante de ciclo y el vector $\{B, x, r\}$ en el subíndice representa el
+		nombre del proceso, su	valor actual y el número de ronda actual
+		respectivamente.\\\\
+		Por el teorema visto con Karla en clase sabemos que en la ronda $r$ hay
+		comunicación perfecta, entonces $\ v_A^k\  =\  v_B^k\ $ en la ronda $r + 1$.
 		
 
 	}
