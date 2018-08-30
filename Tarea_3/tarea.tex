@@ -10,6 +10,7 @@
 \usepackage{tikz}
 \usepackage{calrsfs}
 \usepackage{algpseudocode}
+\usepackage[linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
 \usetikzlibrary{graphs, shapes, snakes, graphdrawing}
 \usegdlibrary{layered, force}
 
@@ -43,9 +44,10 @@
 
 
 \begin{enumerate}
-		%Ejercicio 1
-		\item {
+	%Ejercicio 1
+	\item {
 		Dados los procesos $A$ y $B$, diseña un algoritmo para el ataque coordinado
+<<<<<<< HEAD
 		proximado (aproximate agreement) en el que para llegar al acuerdo deben decidir
 		valores que estén a distancia a lo más $\frac{1}{2^k}$ y utilice menos rondas
 		de comunicación que el algoritmo visto en clase.\\
@@ -53,7 +55,42 @@
 		Notemos que utilizando el algoritmo visto en clase, pasa que si en alguna
 		ronda los dos procesos tienen el mismo valor, entonces tendrán ese mismo
 		valor por todas las rondas restantes.\\
+=======
+		aproximado (aproximate agreement) en el que para llegar al acuerdo deben
+		decidir	valores que estén a distancia a lo más $\frac{1}{2^k}$ y utilice
+		menos rondas de comunicación que el algoritmo visto en clase.
+
+		El algoritmo propuesto es el siguiente:\\
+
+		\IncMargin{1em}
+		\begin{algorithm}
+			\SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
+			\SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
+			\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+			\Input{$\ id \in \{A,B\},\ init \in \{0,1\},\ k \in \mathbb{N}$}
+			\Output{$\ v_A^k\  \&\  v_B^k\ $ tales que $\ |v_A^k - v_B^k|\ \leq\
+				\dfrac{1}{2^k}$}
+			\KwData{\textbf{Modelo}: $\{A \leftrightarrow B, A \rightarrow B
+				\leftarrow B\}$}
+			\BlankLine
+			$v \leftarrow init$ \;
+			\For{$r = 0$ \KwTo $k -1$}{
+				send($v$)\;
+				$msg \leftarrow$ receive()\;
+				\If{$msg \neq null$}{
+					\lIf{$msg = v$}{break}
+					\lElse{$v \leftarrow \dfrac{v+msg}{2}$}
+				}
+			}
+			return $v$\;
+			\caption{Approximate Agreement}
+		\end{algorithm}\DecMargin{1em}
+
+
+>>>>>>> 8fcf4e6ebbd775c9f28164feb4f6fd7fb481a16d
 	}
+
+	%Ejercicio 2
 	\item {
 		Dibuja la gráfica del protocolo que diseñaste para 2 rondas para $k = 2$.
 		Para cada vértice indica el valor de salida y para cada arista indica el
@@ -75,5 +112,7 @@
 			}
 		\end{tikzpicture}
 	}
+
+
 \end{enumerate}
 \end{document}
