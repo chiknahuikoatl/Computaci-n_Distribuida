@@ -79,29 +79,76 @@
 		Para cada vértice indica el valor de salida y para cada arista indica el
 		patrón de mensajes recibidos.\\\\
 
-		\begin{tikzpicture}[scale = 1.4]
+		\begin{tikzpicture}[scale = 2]
 			\tikzstyle{every node} = [draw, shape = circle]
-			\foreach \i/\s in {0/$A \longrightarrow B$, 6/$A\longleftarrow B$}{
+			\foreach \i/\s in {0/$A \longrightarrow B$, 2/$A\longleftarrow B$}{
 				\node at (\i, 9) (Bu\i) [label = above : {1}] {$B$};
-				\node at (\i + 3, 9) (Au\i) [label = above : {1}] {$A$};
-				\ifthenelse{\i = 6}{\draw (Au0) -- node[rectangle,above,draw=none]{$A\longleftrightarrow B$}++(Bu\i);}{}
-				\draw (Au\i) --node[rectangle, above, draw=none, label = above : {\s}]{\s}++ (Bu\i) ;
+				\node at (\i + 1, 9) (Au\i) [label = above : {1}] {$A$};
+				\ifthenelse{\i = 2}{\draw (Au0) -- node[above,draw=none]{$A\longleftrightarrow B$}++(Bu\i);}{}
+				\draw (Au\i) --node[above, draw=none, label = above : {\s}]{\s}++ (Bu\i) ;
 				\node at (\i, 0) (Al\i) [label = below : {0}] {$A$};
-				\node at (\i + 3, 0) (Bl\i) [label = below : {0}] {$B$};
-				\ifthenelse{\i = 6}{\draw (Bl0) -- node[rectangle, below, draw=none]{$A\longleftrightarrow B$}++ (Al\i);}{}
-				\draw (Al\i) --node[rectangle, below, draw=none, label = below : {\s}]{\s}++ (Bl\i);
+				\node at (\i + 1, 0) (Bl\i) [label = below : {0}] {$B$};
+				\ifthenelse{\i = 2}{\draw (Bl0) -- node[below,draw=none]{$A\longleftrightarrow B$}++ (Al\i);}{}
+				\draw (Al\i) --node[below, draw=none, label = below : {\s}]{\s}++ (Bl\i);
 			}
-			\foreach \i/\j/\k/\s/\c in {2/0/3, 4/2/2, 6/4/2, 8/6/1}{
+			\foreach \i/\j/\k in {2/0/1, 4/2/2, 6/4/2, 8/6/3}{
+
 				\node at (0, \i) (Ai\i) [label = left : {\k/4}] {$A$};
 				\node at (0, \i - 1) (Bi\i) [label = left : {\k/4}] {$B$};
-				\ifthenelse{\i > 2}{\draw (Ai\j) -- (Bi\i);}{}
-				\draw (Ai\i) -- (Bi\i);
-				\node at (9, \i - 1) (Ad\i) [label = right : {\k/4}] {$A$};
-				\node at (9, \i) (Bd\i) [label = right : {\k/4}] {$B$};
-				\ifthenelse{\i > 2}{\draw (Bd\j) -- (Ad\i);}{}
-				\draw (Ad\i) -- (Bd\i);
+
+				\ifthenelse{\i = 4}{\draw (Ai\j) -- node[rectangle, left, draw=none, label = left : {$A \longleftarrow B$}]{$A \longrightarrow B$}++ (Bi\i);}{}
+				\ifthenelse{\i = 6}{\draw (Ai\j) -- node[rectangle, left, draw=none, label = left : {$A \longleftrightarrow B$}]{$A \longleftrightarrow B$}++ (Bi\i);}{}
+				\ifthenelse{\i = 8}{\draw (Ai\j) -- node[rectangle, left, draw=none, label = left : {$A \longrightarrow B$}]{$A \longleftarrow B$}++ (Bi\i);}{}
+
+				\ifthenelse{\i = 2}{\draw (Ai\i) -- node[rectangle, left, draw=none, label = left : {$A \longleftrightarrow B$}]{$A \longrightarrow B$}++ (Bi\i);}{}
+				\ifthenelse{\i = 4}{\draw (Ai\i) -- node[rectangle, left, draw=none, label = left : {$A \longleftarrow B$}]{$A \longleftrightarrow B$}++ (Bi\i);}{}
+				\ifthenelse{\i = 6}{\draw (Ai\i) -- node[rectangle, left, draw=none, label = left : {$A \longrightarrow B$}]{$A \longleftrightarrow B$}++ (Bi\i);}{}
+				\ifthenelse{\i = 8}{\draw (Ai\i) -- node[rectangle, left, draw=none, label = left : {$A \longleftrightarrow B$}]{$A \longleftarrow B$}++ (Bi\i);}{}
+				%\draw (Ai\i) -- node[rectangle, left, draw=none, label = left : {\s}]{\s} (Bi\i);
+
+				\node at (3, \i - 1) (Ad\i) [label = right : {\k/4}] {$A$};
+				\node at (3, \i) (Bd\i) [label = right : {\k/4}] {$B$};
+
+				\ifthenelse{\i = 4}{\draw (Bd\j) -- node[rectangle, right, draw=none, label = right : {$A \longrightarrow B$}]{$A \longleftarrow B$}++ (Ad\i);}{}
+				\ifthenelse{\i = 6}{\draw (Bd\j) -- node[rectangle, right, draw=none, label = right : {$A \longleftrightarrow B$}]{$A \longleftrightarrow B$}++ (Ad\i);}{}
+				\ifthenelse{\i = 8}{\draw (Bd\j) -- node[rectangle, right, draw=none, label = right : {$A \longleftarrow B$}]{$A \longrightarrow B$}++ (Ad\i);}{}
+
+				\ifthenelse{\i = 2}{\draw (Ad\i) -- node[rectangle, right, draw=none, label = right : {$A \longleftrightarrow B$}]{$A \longleftarrow B$}++ (Bd\i);}{}
+				\ifthenelse{\i = 4}{\draw (Ad\i) -- node[rectangle, right, draw=none, label = right : {$A \longrightarrow B$}]{$A \longleftrightarrow B$}++ (Bd\i);}{}
+				\ifthenelse{\i = 6}{\draw (Ad\i) -- node[rectangle, right, draw=none, label = right : {$A \longleftarrow B$}]{$A \longleftrightarrow B$}++ (Bd\i);}{}
+				\ifthenelse{\i = 8}{\draw (Ad\i) -- node[rectangle, right, draw=none, label = right : {$A \longleftrightarrow B$}]{$A \longrightarrow B$}++ (Bd\i);}{}
+				%\draw (Ad\i) -- node[rectangle, right, draw=none, label = right : {\l}]{\l}++ (Bd\i);
 			}
+			\draw (Al0) -- node[rectangle, left, draw=none, label = left : {$A \longrightarrow B$}]{$A \longrightarrow B$}++ (Bi2);
+			\draw (Bl2) -- node[rectangle, right, draw=none, label = right : {$A \longleftarrow B$}]{$A \longleftarrow B$}++(Ad2);
+			\draw (Ai8) -- node[rectangle, left, draw=none, label = left : {$A \longleftarrow B$}]{$A \longleftarrow B$}++(Bu0);
+			\draw (Bd8) -- node[rectangle, right, draw=none, label = right : {$A \longrightarrow B$}]{$A \longrightarrow B$}++ (Au2);
 		\end{tikzpicture}
+
+		En la gráfica, los números cercanos a los vértices son el estado final de
+		procesos, y las flechas indican la secuencia de comunicación que hubo,
+		siendo el primer paso el más cercano a la gráfica.\\
+		Las partes laterales de la gráfica son exactamente iguales a los de la
+		gráfica obtenida con el acuerdo aproximado visto en clase. Esto es porque
+		es imposible llegar a un punto en el que ambos procesos tienen un mismo
+		valor y alguno de ellos lo sabe en menos de dos rondas.
+		Aunque de realizar más rondas se notaría este patrón de menos posibles casos
+		en las regiones donde hay al menos una ronda de comunicación perfecta, y
+		los casos dejaría de subdividirse cuando lleguen a dos rondas de comunicación
+		perfecta.
+		Pero ya en dos rondas, se nota como en la parte superior y inferior, que
+		corresponden a cuando los procesos tienen entradas iguales, hay menos posibles
+		casos.
+		Esto sucede de dos maneras.
+		Puede ser que en la primera ronda haya comunicación perfecta, por lo que
+		ambos procesosse detienen sin realizar la segunda ronda.
+		Esto corresponde a la arista central, que se puede ver sólo tiene una ronda
+		de comunicación registrada.
+		O puede ser que haya algún mensaje se pierda, por lo que un proceso se
+		detendría pero el otro seguiría con la siguiete ronda. Entonces si hay algún
+		error de comunicación, la única posibibilidad en la siguieteronda es que
+		el proceso que no recibió mensaje lo envía. Por esto es que se reducen los
+		casos.
 	}
 
 
