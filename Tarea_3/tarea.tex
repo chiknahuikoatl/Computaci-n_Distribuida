@@ -64,15 +64,13 @@
 				\leftarrow B\}$}
 			\BlankLine
 			$v \leftarrow init$ \;
-			$msga \leftarrow null$\;
 			\For{$r = 0$ \KwTo $k -1$}{
 				send($v$)\;
 				$msg \leftarrow$ receive()\;
 				\If{$msg \neq null$}{
-					\lIf{$msg = msga$}{break}
-					\lElse{$v \leftarrow \dfrac{v+msg-v}{2}$}
+					\lIf{$msg = v$}{break}
+					\lElse{$v \leftarrow \dfrac{v+msg}{2}$}
 				}
-				$msga \leftarrow msg$\;
 			}
 			return $v$\;
 			\caption{Approximate Agreement}
