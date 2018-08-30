@@ -10,8 +10,9 @@
 \usepackage{pgf}
 \usepackage{tikz}
 \usepackage{calrsfs}
+\usepackage{ifthen}
 \usepackage{algpseudocode}
-\usepackage[linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
+%\usepackage[linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
 \usetikzlibrary{graphs, shapes, snakes, graphdrawing}
 \usegdlibrary{layered, force}
 
@@ -58,29 +59,18 @@
 
 		El algoritmo propuesto es el siguiente:\\
 
-		\IncMargin{1em}
-		\begin{algorithm}
-			\SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
-			\SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
-			\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
-			\Input{$\ id \in \{A,B\},\ init \in \{0,1\},\ k \in \mathbb{N}$}
-			\Output{$\ v_A^k\  \&\  v_B^k\ $ tales que $\ |v_A^k - v_B^k|\ \leq\
-				\dfrac{1}{2^k}$}
-			\KwData{\textbf{Modelo}: $\{A \leftrightarrow B, A \rightarrow B
-				\leftarrow B\}$}
-			\BlankLine
-			$v \leftarrow init$ \;
-			\For{$r = 0$ \KwTo $k -1$}{
-				send($v$)\;
-				$msg \leftarrow$ receive()\;
-				\If{$msg \neq null$}{
-					\lIf{$msg = v$}{break}
-					\lElse{$v \leftarrow \dfrac{v+msg}{2}$}
-				}
-			}
-			return $v$\;
-			\caption{Approximate Agreement}
-		\end{algorithm}\DecMargin{1em}
+		\begin{algorithmic}[1]
+					\Require $init \in \{0, 1\}$
+					\Function{$\frac{1}{3}-AproximateAgreement$}{$init$}
+						\State $send(init)$
+						\State $x \gets receive()$
+						\If{$x \ne null$}
+							\State \Return $\frac{init + 2x}{3}$
+						\Else
+							\State \Return $init$
+						\EndIf
+					\EndFunction
+				\end{algorithmic}
 	}
 
 	%Ejercicio 2
@@ -89,19 +79,27 @@
 		Para cada vértice indica el valor de salida y para cada arista indica el
 		patrón de mensajes recibidos.\\\\
 
-		\begin{tikzpicture}[scale = 1.2]
+		\begin{tikzpicture}[scale = 1.4]
 			\tikzstyle{every node} = [draw, shape = circle]
-			\foreach \i in {0, 2, 4, 6, 8}{
-				\node at (\i, 0) (\i0) {$A$};
-				\node at (\i + 1, 0) (\i0) {$B$};
-				\node at (9 - \i, 9) (\i0) {$A$};
-				\node at (9 - \i - 1, 9) (\i0) {$B$};
+			\foreach \i/\s in {0/$A \longrightarrow B$, 6/$A\longleftarrow B$}{
+				\node at (\i, 9) (Bu\i) [label = above : {1}] {$B$};
+				\node at (\i + 3, 9) (Au\i) [label = above : {1}] {$A$};
+				\ifthenelse{\i = 6}{\draw (Au0) -- node[rectangle,above,draw=none]{$A\longleftrightarrow B$}++(Bu\i);}{}
+				\draw (Au\i) --node[rectangle, above, draw=none, label = above : {\s}]{\s}++ (Bu\i) ;
+				\node at (\i, 0) (Al\i) [label = below : {0}] {$A$};
+				\node at (\i + 3, 0) (Bl\i) [label = below : {0}] {$B$};
+				\ifthenelse{\i = 6}{\draw (Bl0) -- node[rectangle, below, draw=none]{$A\longleftrightarrow B$}++ (Al\i);}{}
+				\draw (Al\i) --node[rectangle, below, draw=none, label = below : {\s}]{\s}++ (Bl\i);
 			}
-			\foreach \i in {2 , 4, 6, 8}{
-				\node at (0, \i) (\i0) {$A$};
-				\node at (0, \i - 1) (\i0) {$B$};
-				\node at (9, 9 - \i) (\i0) {$A$};
-				\node at (9, 9 - \i + 1) (\i0) {$B$};
+			\foreach \i/\j/\k/\s/\c in {2/0/3, 4/2/2, 6/4/2, 8/6/1}{
+				\node at (0, \i) (Ai\i) [label = left : {\k/4}] {$A$};
+				\node at (0, \i - 1) (Bi\i) [label = left : {\k/4}] {$B$};
+				\ifthenelse{\i > 2}{\draw (Ai\j) -- (Bi\i);}{}
+				\draw (Ai\i) -- (Bi\i);
+				\node at (9, \i - 1) (Ad\i) [label = right : {\k/4}] {$A$};
+				\node at (9, \i) (Bd\i) [label = right : {\k/4}] {$B$};
+				\ifthenelse{\i > 2}{\draw (Bd\j) -- (Ad\i);}{}
+				\draw (Ad\i) -- (Bd\i);
 			}
 		\end{tikzpicture}
 	}
