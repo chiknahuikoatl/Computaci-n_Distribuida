@@ -44,34 +44,51 @@
 %\newcommand{\ed}[2]{(#1) edge (#2)}
 %\newcommand{\eee}[4]{\path [->,draw,thin] ($ (#1) !.5! (#2)$) -- ($ (#3) !.5! (#4) $);}
 
+\newcommand{\is}[1]{V_{\{B, x, r\}}}
 
 \begin{enumerate}
 	%Ejercicio 1
 	\item {
 		Dados los procesos $A$ y $B$, diseña un algoritmo para el ataque coordinado
-		proximado (aproximate agreement) en el que para llegar al acuerdo deben decidir
-		valores que estén a distancia a lo más $\frac{1}{2^k}$ y utilice menos rondas
-		de comunicación que el algoritmo visto en clase.\\
-
-		Notemos que utilizando el algoritmo visto en clase, pasa que si en alguna
-		ronda los dos procesos tienen el mismo valor, entonces tendrán ese mismo
-		valor por todas las rondas restantes.\\
+		proximado (aproximate agreement) en el que para llegar al acuerdo deben
+		decidir	valores que estén a distancia a lo más $\frac{1}{2^k}$ y utilice menos
+		rondas de comunicación que el algoritmo visto en clase.\\
 
 		El algoritmo propuesto es el siguiente:\\
 
 		\begin{algorithmic}[1]
-					\Require $init \in \{0, 1\}$
-					\Function{$\frac{1}{3}-AproximateAgreement$}{$init$}
-						\State $send(init)$
-						\State $x \gets receive()$
-						\If{$x \ne null$}
-							\State \Return $\frac{init + 2x}{3}$
-						\Else
-							\State \Return $init$
+			\Require $id \in \{A,B\},\ init \in \{0, 1\},\ k \in \mathbb{N}$
+			\Ensure $v_A^k\ \& \ v_B^k$ tales que $|v_A^k\ - \ v_B^k|\ \leq\ \dfrac{1}
+				{2^k}$
+			\Function{\textbf{ Modelo:}$\{A\leftrightarrow B, A \rightarrow B, 
+				A \leftarrow B\}$}{$init$}			
+				\State $v\ \leftarrow init$
+				\For{r = 0 \textbf{to} k + 1}{}
+					\State $send(v)$
+					\State $msg \leftarrow$ receive()
+					\If{$msg \ne null$}
+						\If{$msg = v$}
+							\State break
+						\Else	
+							\State $v \leftarrow \dfrac{v + msg}{2}$
 						\EndIf
-					\EndFunction
-				\end{algorithmic}
+					\EndIf
+				\EndFor
+				\State \Return$v$
+			\EndFunction
+		\end{algorithmic}
 	}
+	
+
+	\textbf{Demostración:}\\
+	S.P.G. proponemos a la variable $\is{B}$ dónde $V$ representa la
+	invariante de ciclo y el vector $\{B, x, r\}$ en el subíndice representa el
+	nombre del proceso, su	valor actual y el número de ronda actual
+	respectivamente.\\\\
+	Por el teorema visto con Karla en clase sabemos que en la ronda $r$ hay
+	comunicación perfecta, entonces $\ v_A^k\  =\  v_B^k\ $ en la ronda $r + 1$.\\
+	
+
 
 	%Ejercicio 2
 	\item {
