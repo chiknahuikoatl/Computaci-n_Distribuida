@@ -10,7 +10,8 @@
 \usepackage{tikz}
 \usepackage{calrsfs}
 \usepackage{algpseudocode}
-\usetikzlibrary{arrows,automata,calc, positioning}
+\usetikzlibrary{graphs, shapes, snakes, graphdrawing}
+\usegdlibrary{layered, force}
 
 \begin{document}
 
@@ -45,14 +46,34 @@
 		%Ejercicio 1
 		\item {
 		Dados los procesos $A$ y $B$, diseña un algoritmo para el ataque coordinado
-		proximado(aproximate agreement) en el que para llegar al acuerdo deben decidir
+		proximado (aproximate agreement) en el que para llegar al acuerdo deben decidir
 		valores que estén a distancia a lo más $\frac{1}{2^k}$ y utilice menos rondas
-		de comunicación que el algoritmo visto en clase.
+		de comunicación que el algoritmo visto en clase.\\
+
+		Notemos que utilizando el algoritmo visto en clase, pasa que si en alguna
+		ronda los dos procesos tienen el mismo valor, entonces tendrán ese mismo
+		valor por todas las rondas restantes.\\
 	}
 	\item {
 		Dibuja la gráfica del protocolo que diseñaste para 2 rondas para $k = 2$.
 		Para cada vértice indica el valor de salida y para cada arista indica el
-		patrón de mensajes recibidos.
+		patrón de mensajes recibidos.\\\\
+
+		\begin{tikzpicture}[scale = 1.2]
+			\tikzstyle{every node} = [draw, shape = circle]
+			\foreach \i in {0, 2, 4, 6, 8}{
+				\node at (\i, 0) (\i0) {$A$};
+				\node at (\i + 1, 0) (\i0) {$B$};
+				\node at (9 - \i, 9) (\i0) {$A$};
+				\node at (9 - \i - 1, 9) (\i0) {$B$};
+			}
+			\foreach \i in {2 , 4, 6, 8}{
+				\node at (0, \i) (\i0) {$A$};
+				\node at (0, \i - 1) (\i0) {$B$};
+				\node at (9, 9 - \i) (\i0) {$A$};
+				\node at (9, 9 - \i + 1) (\i0) {$B$};
+			}
+		\end{tikzpicture}
 	}
 \end{enumerate}
 \end{document}
