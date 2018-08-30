@@ -6,6 +6,7 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{enumitem}
+\usepackage{fontspec}
 \usepackage{pgf}
 \usepackage{tikz}
 \usepackage{calrsfs}
@@ -39,15 +40,14 @@
 \setlength{\voffset}{-0.75in}
 \setlength{\headsep}{5pt}
 
-\newcommand{\ed}[2]{(#1) edge (#2)}
-\newcommand{\eee}[4]{\path [->,draw,thin] ($ (#1) !.5! (#2)$) -- ($ (#3) !.5! (#4) $);}
+%\newcommand{\ed}[2]{(#1) edge (#2)}
+%\newcommand{\eee}[4]{\path [->,draw,thin] ($ (#1) !.5! (#2)$) -- ($ (#3) !.5! (#4) $);}
 
 
 \begin{enumerate}
 	%Ejercicio 1
 	\item {
 		Dados los procesos $A$ y $B$, diseña un algoritmo para el ataque coordinado
-<<<<<<< HEAD
 		proximado (aproximate agreement) en el que para llegar al acuerdo deben decidir
 		valores que estén a distancia a lo más $\frac{1}{2^k}$ y utilice menos rondas
 		de comunicación que el algoritmo visto en clase.\\
@@ -55,10 +55,6 @@
 		Notemos que utilizando el algoritmo visto en clase, pasa que si en alguna
 		ronda los dos procesos tienen el mismo valor, entonces tendrán ese mismo
 		valor por todas las rondas restantes.\\
-=======
-		aproximado (aproximate agreement) en el que para llegar al acuerdo deben
-		decidir	valores que estén a distancia a lo más $\frac{1}{2^k}$ y utilice
-		menos rondas de comunicación que el algoritmo visto en clase.
 
 		El algoritmo propuesto es el siguiente:\\
 
@@ -85,9 +81,6 @@
 			return $v$\;
 			\caption{Approximate Agreement}
 		\end{algorithm}\DecMargin{1em}
-
-
->>>>>>> 8fcf4e6ebbd775c9f28164feb4f6fd7fb481a16d
 	}
 
 	%Ejercicio 2
