@@ -15,6 +15,11 @@ los valores estén a una distancia máxima de '1/2^k' y que termine en 'k' o men
 también una gráfica para dos rondas con 'k = 2' indicando el valor de salida y el patrón de
 comunicación.
 
+Tarea 4: Dado un algoritmo para resolver el problema del concenso en un sistema con n procesos y f 
+fallos posibles argumentar su terminación, modificar para que termine antes y mostrar su ejecución.
+Considerando el protocolo del bit alternado visto en clase argumentar propiedades sobre la 
+coloración de la cadena de bits. Escribir un resumen sobre la clase con el profesor Michel Raynal.
+
 Integrantes:
 Edgar Quiróz
 Jerónimo Almeida
