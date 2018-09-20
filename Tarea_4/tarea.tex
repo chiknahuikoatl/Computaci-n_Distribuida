@@ -12,6 +12,7 @@
 \usepackage{calrsfs}
 \usepackage{ifthen}
 \usepackage{algpseudocode}
+\usepackage{cancel}
 %\usepackage[linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
 \usetikzlibrary{graphs, shapes, snakes, graphdrawing}
 \usegdlibrary{layered, force}
@@ -53,7 +54,7 @@
 		con $n$ procesos y con a lo más $f$ procesos fallidos.\\
 		\[\includegraphics[width=0.5\textwidth]{consensus.png}\]
 
-		\begin{enumerate} [label = \alph*]
+		\begin{enumerate} [label = \alph*)]
 			\item {
 				Argumenta por qué es necesario ejecutar $f+1$ rondas para llegar a un acuedo.\\
 
@@ -99,15 +100,209 @@
 			\item{
 				Modifica el algoritmo de la figura 1 para resolver el consenso en
 				$min(t+2, f+1)$ donde $t$ es la cantidad de procesos que fallan en la
-				ejecución.
+				ejecución.\\
+
+				Del inciso anterior se sabe que si en una ronda ningún proceso muere,
+				entonces todos los procesos vivos van a tener toda la información
+				disponible por lo que queda de la ejecución. Entonces es posible llegar
+				a un consenso en ese punto.\\
+				De forma más restringida pero análoga, si en una ronda todos los procesos
+				envían información a un cierto proceso, entonces este proceso ya sabe
+				todo lo que puede saber.\\
+				Pero ¿cómo se puede saber en qué ronda ningún proceos muere?\\
+				Una solución simple es que todos los procesos en todas las rondas envíen
+				algo como señal de que siguen vivos, y que todos los procesos lleven
+				un registro de los procesos de los que reciben una señal de vida en cada ronda.
+				Entonces, si en una ronda la cantidad de procesos que responden a cierto proceso
+				es la misma que en la ronda anterior, el proceso ya sabe todo
+				lo que puede saber en esa ronda.\\
+				Pero puede pasar que alguno de los procesos que le enviaron información
+				mueran antes de enviarla a todos, por lo que faltaría reenviar una
+				última vez la información nueva que tiene a todos los demás. Entonces ya
+				puede garantizar que todos ya saben todo lo que puedes saber.\\
+				Y se puede llegar a un consenso en potencialmente menos de $f+1$ rondas
+				si en la ejecución hay menos de $f$ procesos muertos.
+				De forma análoga a la anterior, el caso donde más rondas se ejecutan es
+				cuando en cada ronda un proceso muere justo a media ejecución. Entonces,
+				al acabar la ronda $t$, ningún proceso más va a morir.\\
+				En la ronda $t+1$ todos los procesos se dan cuanta de que ya saben todo
+				lo que puede saber. Entonces envían su información nueva y en la ronda
+				$t+2$ toman su elección de valor final, que como todos tiene la misma
+				información, es la misma elección para todos.\\
+				La moficación consisa sería en la línea $(\alpha)$ quitar la condición,
+				para que en todas las rondas se envía algo, se tenga información nueva o no.\\
+				Y también hay que agregar un registro de los procesos que hay respondido.\\
+				Esto sería algo cómo
+				\\\\$R(r) \leftarrow$ set of clients answering during the $r$ round\\\\
+				en la línea después de la $(\alpha)$.\\
+				Y también hay que agregar algo justo al final de la ejecución de la ronda
+				donde se compara $R(r)$ y $R(r-1)$. Por comodidad digamos que $R(0) = \Pi \setminus \{i\}$.
+				Si son iguales, entonces ya se sabe
+				todo lo que se puede saber, y después de enviar toda la información nueva
+				durante la siguiente ronda, se puede decidir un valor.\\
+
+				Como la cantidad de ejecuciones sigues siendo a lo más $f+1$, entonces
+				el algoritmo termina. Cómo aun se sigue escongiendo la primera entrada
+				no nula del arreglo de información, entonces se escoge alguno de los valores
+				entrada, por lo que sigue siendo válido.\\
+				Por el razonamiento anterior, al acabar las $t+2$ o $f+1$ rondas, todos
+				los procesos vivos tienen la misma información, por lo que al decidir
+				el valor final, todo decidirán lo mismo, por lo que el algoritmo el correcto.
+				Si $t = f$, entonces la cantidad de rondas acaba en $f+1$
+				como en el algoritmo original. Si $t \l f$, entonces acaba en las $t+2$
+				rondas descritas anteriormente.
+				Entonces se ejecutan $min(t+2, f+1)$ rondas.
+
 			}
 			\item{
 				Muestra una ejecución para 4 procesos donde se ejecutan el máximo de
-				rondas del algoritmo propuesto.
+				rondas del algoritmo propuesto.\\
+
+				Esto corresponde a la ejecución donde en cada ronda falla exactamente un
+				proceoso a la mitad de la ejecución. Para que haya algún proceso al final
+				que decida, debe de pasar que $f$ sea a lo más la cantida de procesos menos 1.
+				Entonces, en este caso digamos que pueden fallar 3 procesos.
+
+				Al iniciar la ronda 1 tenemos que
+				\begin{center}
+					\begin{tabular}{|c|c|}
+						\hline
+						Proceso & Información\\
+						\hline
+						1 & $\{v_1, \bot, \bot, \bot\}$\\
+						\hline
+						2 & $\{\bot, v_2, \bot, \bot\}$\\
+						\hline
+						3 & $\{\bot, \bot, v_3, \bot\}$\\
+						\hline
+						4 & $\{\bot, \bot, \bot, v_4\}$\\
+						\hline
+					\end{tabular}
+				\end{center}
+				Luego digamos que el proceso 1 muere después de enviar la información a
+				2, por lo que no llega a 3 ni a 4.  Inicialmente todos lo procesos
+				tenían que $|R(0)| = 3$. Al acabar la ronda 1, 2 tiene que $|R(1) = 3|$, por
+				lo acuerda que después de enviar toda su información la próxima ronda,
+				va a decidir.
+				Los demás tienen que $|R(1) = 2|$, por lo que siguen su ejecución sin cambios.
+				Entonces al iniciar la ronda 2 tenemos
+				que
+				\begin{center}
+					\begin{tabular}{|c|c|}
+						\hline
+						Proceso & Información\\
+						\hline
+						\cancel{1} & $\cancel{\{v_1, \bot, \bot, \bot\}}$\\
+						\hline
+						2 & $\{v_1, v_2, v_3, v_4\}$\\
+						\hline
+						3 & $\{\bot, v_2, v_3, v_4\}$\\
+						\hline
+						4 & $\{\bot, v_2, v_3, v_4\}$\\
+						\hline
+					\end{tabular}
+				\end{center}
+				Siguiendo el patrón, digamos que el proceso 2 muere después de enviar
+				información a 3, por lo que 4 nunca la recibe. Cómo 2 nunca termina de
+				enviar su información, entonces nunca decide. Para 3 tenemos que
+				$R(2) = 2$, por lo que sabe que ya tiene toda la información, por lo que
+				dará su decisión después de enviar toda su información nueva la siguiente
+				ronda. Para 4 $P(2)=1$.\\
+
+				Al iniciar la ronda 3 tenemos
+				\begin{center}
+					\begin{tabular}{|c|c|}
+						\hline
+						Proceso & Información\\
+						\hline
+						\cancel{1} & $\cancel{\{v_1, \bot, \bot, \bot\}}$\\
+						\hline
+						\cancel{2}& $\cancel{\{v_1, v_2, v_3, v_4\}}$\\
+						\hline
+						3 & $\{v_1, v_2, v_3, v_4\}$\\
+						\hline
+						4 & $\{\bot, v_2, v_3, v_4\}$\\
+						\hline
+					\end{tabular}
+				\end{center}
+
+				Y ahora 3 muere justo después de enviar su mensaje a 4.
+				Tenemos que para 4 $R(3) = 1$, por lo que 4 ya sabe todo, y después
+				de enviar toda su información la próxima ronda, decidirá.
+
+				Al iniciar la ronda 4 tenemos que
+
+				\begin{center}
+					\begin{tabular}{|c|c|}
+						\hline
+						Proceso & Información\\
+						\hline
+						\cancel{1} & $\cancel{\{v_1, \bot, \bot, \bot\}}$\\
+						\hline
+						\cancel{2}& $\cancel{\{v_1, v_2, v_3, v_4\}}$\\
+						\hline
+						\cancel{3} & $\cancel{\{v_1, v_2, v_3, v_4\}}$\\
+						\hline
+						4 & $\{v_1, v_2, v_3, v_4\}$\\
+						\hline
+					\end{tabular}
+				\end{center}
+				4 envían lo que sabe, aunque nadie lo recibe. Al final de la ronda 4
+				el estado global entonces es el mismo que al inicio.
+				Y como ya pasaron las 3+1 = 4 rondas, entonces los procesos vivos, que
+				solo es 4, deciden el valor, que en este caso es $v_1$.
+				Cómo solo un proceso quedó vivo, entonces la ejecución es correcta.\\
 			}
 			\item{
 				Muestra una ejecución para 4 procesos donde se ejecuten el mínimo de
-				rondas del algoritmo propueesto.
+				rondas del algoritmo propuesto.\\
+				La forma más sencilla de mostrar esto sería con una ejecución sin ningún
+				error, por lo que terminaría en 0+2 = 2 rondas.\\
+
+				Todos los procesos inician con $R(0) = 4 - 1 = 3$.\\
+				Al inicio de la primera ronda tenemos que
+				\begin{center}
+					\begin{tabular}{|c|c|}
+						\hline
+						Proceso & Información\\
+						\hline
+						1 & $\{v_1, \bot, \bot, \bot\}$\\
+						\hline
+						2 & $\{\bot, v_2, \bot, \bot\}$\\
+						\hline
+						3 & $\{\bot, \bot, v_3, \bot\}$\\
+						\hline
+						4 & $\{\bot, \bot, \bot, v_4\}$\\
+						\hline
+					\end{tabular}
+				\end{center}
+
+				Todos los procesos viven. Todos los procesos tienen $R(1) = 3$, pues
+				recibieron mensajes de todos. Todos los procesos entonces saben que
+				ya tienen toda la información. Entonces después de enviarla la siguiente
+				ronda, van a decidir el valor final.\\
+
+				Al inicio de la segunda ronda tenemos que
+
+				\begin{center}
+					\begin{tabular}{|c|c|}
+						\hline
+						Proceso & Información\\
+						\hline
+						1 & $\{v_1, v, v_3, v_4\}$\\
+						\hline
+						2 & $\{v_1, v, v_3, v_4\}$\\
+						\hline
+						3 & $\{v_1, v, v_3, v_4\}$\\
+						\hline
+						4 & $\{v_1, v, v_3, v_4\}$\\
+						\hline
+					\end{tabular}
+				\end{center}
+				Entoces, después de enviar su información nueva, ningún proceso cambia
+				la información que tiene, pues ya saben todo.\\
+				Cómo ya lo tenían planeado cada uno independientemente, deciden su valor
+				final. En todos los casos es $v_1$, por lo que la ejecución es correcta.\\
 			}
 		\end{enumerate}
 
