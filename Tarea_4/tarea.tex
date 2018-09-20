@@ -4,17 +4,9 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
-\usepackage{graphicx}
-\usepackage{enumitem}
-\usepackage{fontspec}
-\usepackage{pgf}
-\usepackage{tikz}
-\usepackage{calrsfs}
-\usepackage{ifthen}
-\usepackage{algpseudocode}
 %\usepackage[linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
-\usetikzlibrary{graphs, shapes, snakes, graphdrawing}
-\usegdlibrary{layered, force}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
 
 \begin{document}
 
@@ -41,171 +33,74 @@
 \setlength{\voffset}{-0.75in}
 \setlength{\headsep}{5pt}
 
-%\newcommand{\ed}[2]{(#1) edge (#2)}
-%\newcommand{\eee}[4]{\path [->,draw,thin] ($ (#1) !.5! (#2)$) -- ($ (#3) !.5! (#4) $);}
-
-\newcommand{\is}[1]{V_{\{#1, x, r\}}} %Invariante de ciclo para la dem. del algoritmo
 
 \begin{enumerate}
 	%Ejercicio 1
 	\item {
-		Dados los procesos $A$ y $B$, diseña un algoritmo para el ataque coordinado
-		proximado (aproximate agreement) en el que para llegar al acuerdo deben
-		decidir	valores que estén a distancia a lo más $\frac{1}{2^k}$ y utilice menos
-		rondas de comunicación que el algoritmo visto en clase.\\
-
-		El algoritmo propuesto es el siguiente:\\
-
-		\begin{algorithmic}[1]
-			\Require $id \in \{A,B\},\ init \in \{0, 1\},\ k \in \mathbb{N}$
-			\Ensure $v_A^k\ \& \ v_B^k$ tales que $|v_A^k\ - \ v_B^k|\ \leq\ \dfrac{1}
-				{2^k}$
-			\Function{\textbf{ Modelo:}$\{A\leftrightarrow B, A \rightarrow B, 
-				A \leftarrow B\}$}{$init$}			
-				\State $v\ \leftarrow init$
-				\For{r = 0 \textbf{to} k + 1}{}
-					\State $send(v)$
-					\State $msg \leftarrow$ receive()
-					\If{$msg \ne null$}
-						\If{$msg = v$}
-							\State break
-						\Else	
-							\State $v \leftarrow \dfrac{v + msg}{2}$
-						\EndIf
-					\EndIf
-				\EndFor
-				\State \Return$v$
-			\EndFunction
-		\end{algorithmic}
+	
+		\item[c] {
+			% Declare layers
+			\pgfdeclarelayer{background}
+			\pgfsetlayers{background,main}
+			% Styles
+			\tikzstyle{information text}=[text badly centered,font=\small,text 
+											width=3cm]
+			\begin{tikzpicture}[scale=.8,cap=round]
+			% The graphic
+			    \begin{scope}[>=stealth', line width=1pt]
+			        \draw[->] (1,.9) node[below, information text]
+            			{Phonological representation of root form } -- (1,1.8);
+			        \draw[->] (5,-.2) node[below,information text]
+            			{Wickelfeature representation of root form } -- (5,.8);
+			        \draw[->] (11,-.2) node[below,information text]
+            			{Wickelfeature representation of past tense } -- (11,.8);
+			        \draw[->] (16,0.9) node[below,information text]
+            			{Phonological representation of past tense } -- (16,1.8);
+			    \end{scope}
+			    \draw (3,6) node[information text] { Fixed Encoding Network };
+			    \draw (8,6) node[information text, text width=4cm, ]
+			        { Pattern Associator Modifiable Connections };
+			    \draw (13.5,6) node[information text] { Decoding/Binding Network };
+			    % draw the nodes
+			    \foreach \x in {1,16}
+			        \foreach \y in {2,3,4} {
+				        \filldraw[fill=white] (\x,\y) circle (0.1);
+			        }
+				    \foreach \x in {5,11}
+				        \foreach \y in {1,2,3,4,5} {
+				            \filldraw[fill=white] (\x,\y) circle (0.1);
+				        }
+			    % The lines connecting the nodes are drawn in the background layer.
+			    % This way we can hide the lines behind the nodes and don't worry
+			    % about the width of each node.    
+			    \begin{pgfonlayer}{background}
+			        % we add the lines for the nodes starting in y 2,3, and 4
+			        \foreach \xa / \xb in {1 / 5, 5 / 11 , 11 / 5 , 16 / 11}
+			            \foreach \ya / \yb / \yc / \yd / \ye in {2 / 3 / 4 / 5 / 1, 
+			            3 / 4 / 5 / 1 / 2, 4 / 5 / 1 / 2 / 3} {
+			                \draw[->] (\xa,\ya) -- (\xb,\ya);
+			                \draw (\xa,\ya) -- (\xb,\yb);
+            			    \draw (\xa,\ya) -- (\xb,\yc);
+			                \draw (\xa,\ya) -- (\xb,\yd);
+            			    \draw (\xa,\ya) -- (\xb,\ye);
+			            }
+			        % add remaining lines from y1 to y5
+			        \foreach \xa / \xb in {5 / 11 , 11 / 5}
+			            \foreach \ya / \yb in {1 / 5, 5 / 1} {
+            			\draw (\xa,\ya) -- (\xb,\ya);
+			            \draw (\xa,\ya) -- (\xb,\yb);
+			        }
+			    \end{pgfonlayer}
+			\end{tikzpicture}
+		}
+	
 	}
-	
-
-	\textbf{Demostración:}\\
-	S.P.G. proponemos a la variable $\is{P}$ dónde $V$ representa la
-	invariante de ciclo y el vector $\{P, x, r\}$ en el subíndice representa el
-	nombre del proceso ($P \in \{A,B\}$), su	valor actual y el número de ronda
-	actual	respectivamente.\\\\
-	
-	Por el teorema visto con Karla en clase sabemos que en la ronda $r$ hay
-	comunicación perfecta, entonces $\ v_A^k\  =\  v_B^k\ $ en la ronda $r + 1$.\\
-	Así, proponemos $\is{P}$  en una ronda caualquiera $r$. Este proceso, cómo estamos
-	suponiendo que la comunicación es perfecta, es equivalente para $P = A$ y $P = B$.
-	Así, si observamos la trayectoria de $x$ tenemos que se evalúa el primer 'if' a 
-	verdadero. Supongamos que el segundo 'if' se evalúa a falso, pues el caso
-	contrario es equivalente a lo que sucedería en la siguiente ronda cómo vamos a
-	ver. Entonces, el nuevo valor de $x = \dfrac{v + msg}{2}$. Esto para ambos
-	procesos. De esta manera, en la ronda $r+1$ si la comunicación vuelve a ser
-	perfecta, cómo el valor de $x$ para ambos, $A,B$, es $x = \dfrac{v + msg}{2}$,
-	entonces el se cumple el primer y el segundo 'if' y se rompe el ciclo. Siempre que
-	$r < k + 1$, entonces el algoritmo terminará antes de $k+1$ rondas suponiendo que
-	haya una ronda de comunicación perfecta.\\
-	Observemos también que si la comunicación no es perfecta pero ambos procesos
-	tienen el mismo valor, entonces el proceso que recicbió el mensaje termina su 
-	ejecución pero el que no lo recibió ejecutará las $k+1$ rondas devolviendo al
-	final su valor, que es el mismo que el del otro proceso.
-	
-	
-	Ahora comprobemos que si la comunicación no es perfecta, entonces los valores de 
-	los procesos separados el uno del otro a un factor de distancia de $\dfrac{1}{2}$
-	el uno del otro. (Esto es sucede en cualquier ronda durante la ejecución del
-	algoritmo. Sean	$P_1 \in \{A,B\},\ P_2 \in \{A,B\}-P_1$. Supongamos que el modelo
-	de comunicación	es $P_1\rightarrow P_2$ (esto es equivalente si $P_1 = A\ \vee\
-	P_1 = B$) para la ronda actual $r$. Supongamos que $P_1$ tiene un valor	$x_1$
-	cualquiera.	Observamos que al no recibir mensaje, no cumple con la condición del
-	primer 'if', entonces conserva su mismo valor $x_1$. Por otro lado, sabemos	que
-	$P_2$ sí recibió el valor de $P_1$ y su valor es $x_2' = \dfrac{x_2+x_1}{2}$.
-	Suponemos que el algoritmo se ha ejecutado con valores válidos y que en la ronda
-	$r-1, |x_1-x_2| = \dfrac{1}{2}$. Tenemos luego que 
-	$$|x_1-x_2'| = |x_1 -\dfrac{x_2+x_1}{2}| = |\dfrac{2x_1}{2}-\dfrac{x_2+x_1}{2}|
-	= |\dfrac{x_1-x_2}{2}|$$
-	Pero $x_1-x_2 = \dfrac{1}{2}$ Entonces,
-	$$|x_1-x_2'| = \dfrac{\dfrac{1}{2}}{2} = \dfrac{1}{4}$$
-	Así podemos ver que la distancia entre los valores de cada proceso de una
-	ronda a otra se redujo por un factor de $\dfrac{1}{2}$.\\\\
-	
-	Por lo tanto, el algoritmo es correcto para producir un approximate agreement a
-	una distancia de $\dfrac{1}{2^k}$ entre los valores de cada proceso o de terminar
-	antes de las $k$ rondas si os valores de los procesos son iguales.\\\\
-
 
 	%Ejercicio 2
 	\item {
-		Dibuja la gráfica del protocolo que diseñaste para 2 rondas para $k = 2$.
-		Para cada vértice indica el valor de salida y para cada arista indica el
-		patrón de mensajes recibidos.\\\\
 		
-		En la gráfica, los números cercanos a los vértices son el estado final de
-		procesos, y las flechas indican la secuencia de comunicación que hubo,
-		siendo el primer paso el más cercano a la gráfica.\\
-		Las partes laterales de la gráfica son exactamente iguales a los de la
-		gráfica obtenida con el acuerdo aproximado visto en clase. Esto es porque
-		es imposible llegar a un punto en el que ambos procesos tienen un mismo
-		valor y alguno de ellos lo sabe en menos de dos rondas.
-		Aunque de realizar más rondas se notaría este patrón de menos posibles casos
-		en las regiones donde hay al menos una ronda de comunicación perfecta, y
-		los casos dejaría de subdividirse cuando lleguen a dos rondas de comunicación
-		perfecta.
-		Pero ya en dos rondas, se nota como en la parte superior y inferior, que
-		corresponden a cuando los procesos tienen entradas iguales, hay menos posibles
-		casos.
-		Esto sucede de dos maneras.
-		Puede ser que en la primera ronda haya comunicación perfecta, por lo que
-		ambos procesosse detienen sin realizar la segunda ronda.
-		Esto corresponde a la arista central, que se puede ver sólo tiene una ronda
-		de comunicación registrada.
-		O puede ser que haya algún mensaje se pierda, por lo que un proceso se
-		detendría pero el otro seguiría con la siguiete ronda. Entonces si hay algún
-		error de comunicación, la única posibibilidad en la siguieteronda es que
-		el proceso que no recibió mensaje lo envía. Por esto es que se reducen los
-		casos.\\
-
-		\begin{tikzpicture}[scale = 2]
-			\tikzstyle{every node} = [draw, shape = circle]
-			\foreach \i/\s in {0/$A \longrightarrow B$, 2/$A\longleftarrow B$}{
-				\node at (\i, 9) (Bu\i) [label = above : {1}] {$B$};
-				\node at (\i + 1, 9) (Au\i) [label = above : {1}] {$A$};
-				\ifthenelse{\i = 2}{\draw (Au0) -- node[above,draw=none]{$A\longleftrightarrow B$}++(Bu\i);}{}
-				\draw (Au\i) --node[above, draw=none, label = above : {\s}]{\s}++ (Bu\i) ;
-				\node at (\i, 0) (Al\i) [label = below : {0}] {$A$};
-				\node at (\i + 1, 0) (Bl\i) [label = below : {0}] {$B$};
-				\ifthenelse{\i = 2}{\draw (Bl0) -- node[below,draw=none]{$A\longleftrightarrow B$}++ (Al\i);}{}
-				\draw (Al\i) --node[below, draw=none, label = below : {\s}]{\s}++ (Bl\i);
-			}
-			\foreach \i/\j/\k in {2/0/1, 4/2/2, 6/4/2, 8/6/3}{
-
-				\node at (0, \i) (Ai\i) [label = left : {\k/4}] {$A$};
-				\node at (0, \i - 1) (Bi\i) [label = left : {\k/4}] {$B$};
-
-				\ifthenelse{\i = 4}{\draw (Ai\j) -- node[rectangle, left, draw=none, label = left : {$A \longleftarrow B$}]{$A \longrightarrow B$}++ (Bi\i);}{}
-				\ifthenelse{\i = 6}{\draw (Ai\j) -- node[rectangle, left, draw=none, label = left : {$A \longleftrightarrow B$}]{$A \longleftrightarrow B$}++ (Bi\i);}{}
-				\ifthenelse{\i = 8}{\draw (Ai\j) -- node[rectangle, left, draw=none, label = left : {$A \longrightarrow B$}]{$A \longleftarrow B$}++ (Bi\i);}{}
-
-				\ifthenelse{\i = 2}{\draw (Ai\i) -- node[rectangle, left, draw=none, label = left : {$A \longleftrightarrow B$}]{$A \longrightarrow B$}++ (Bi\i);}{}
-				\ifthenelse{\i = 4}{\draw (Ai\i) -- node[rectangle, left, draw=none, label = left : {$A \longleftarrow B$}]{$A \longleftrightarrow B$}++ (Bi\i);}{}
-				\ifthenelse{\i = 6}{\draw (Ai\i) -- node[rectangle, left, draw=none, label = left : {$A \longrightarrow B$}]{$A \longleftrightarrow B$}++ (Bi\i);}{}
-				\ifthenelse{\i = 8}{\draw (Ai\i) -- node[rectangle, left, draw=none, label = left : {$A \longleftrightarrow B$}]{$A \longleftarrow B$}++ (Bi\i);}{}
-				%\draw (Ai\i) -- node[rectangle, left, draw=none, label = left : {\s}]{\s} (Bi\i);
-
-				\node at (3, \i - 1) (Ad\i) [label = right : {\k/4}] {$A$};
-				\node at (3, \i) (Bd\i) [label = right : {\k/4}] {$B$};
-
-				\ifthenelse{\i = 4}{\draw (Bd\j) -- node[rectangle, right, draw=none, label = right : {$A \longrightarrow B$}]{$A \longleftarrow B$}++ (Ad\i);}{}
-				\ifthenelse{\i = 6}{\draw (Bd\j) -- node[rectangle, right, draw=none, label = right : {$A \longleftrightarrow B$}]{$A \longleftrightarrow B$}++ (Ad\i);}{}
-				\ifthenelse{\i = 8}{\draw (Bd\j) -- node[rectangle, right, draw=none, label = right : {$A \longleftarrow B$}]{$A \longrightarrow B$}++ (Ad\i);}{}
-
-				\ifthenelse{\i = 2}{\draw (Ad\i) -- node[rectangle, right, draw=none, label = right : {$A \longleftrightarrow B$}]{$A \longleftarrow B$}++ (Bd\i);}{}
-				\ifthenelse{\i = 4}{\draw (Ad\i) -- node[rectangle, right, draw=none, label = right : {$A \longrightarrow B$}]{$A \longleftrightarrow B$}++ (Bd\i);}{}
-				\ifthenelse{\i = 6}{\draw (Ad\i) -- node[rectangle, right, draw=none, label = right : {$A \longleftarrow B$}]{$A \longleftrightarrow B$}++ (Bd\i);}{}
-				\ifthenelse{\i = 8}{\draw (Ad\i) -- node[rectangle, right, draw=none, label = right : {$A \longleftrightarrow B$}]{$A \longrightarrow B$}++ (Bd\i);}{}
-				%\draw (Ad\i) -- node[rectangle, right, draw=none, label = right : {\l}]{\l}++ (Bd\i);
-			}
-			\draw (Al0) -- node[rectangle, left, draw=none, label = left : {$A \longrightarrow B$}]{$A \longrightarrow B$}++ (Bi2);
-			\draw (Bl2) -- node[rectangle, right, draw=none, label = right : {$A \longleftarrow B$}]{$A \longleftarrow B$}++(Ad2);
-			\draw (Ai8) -- node[rectangle, left, draw=none, label = left : {$A \longleftarrow B$}]{$A \longleftarrow B$}++(Bu0);
-			\draw (Bd8) -- node[rectangle, right, draw=none, label = right : {$A \longrightarrow B$}]{$A \longrightarrow B$}++ (Au2);
-		\end{tikzpicture}
-
 	}
+	
 
 
 \end{enumerate}
