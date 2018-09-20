@@ -34,7 +34,7 @@
 	\vfill
 
 % Bottom of the page
-	{\large Jueves 30 de Agosto del 2018 \par}
+	{\large Jueves 20 de septiembre del 2018 \par}
 \end{titlepage}
 
 \pagebreak
@@ -49,164 +49,97 @@
 \begin{enumerate}
 	%Ejercicio 1
 	\item {
-		Dados los procesos $A$ y $B$, diseña un algoritmo para el ataque coordinado
-		proximado (aproximate agreement) en el que para llegar al acuerdo deben
-		decidir	valores que estén a distancia a lo más $\frac{1}{2^k}$ y utilice menos
-		rondas de comunicación que el algoritmo visto en clase.\\
+		Considere el siguiente algoritmo para resolver el consense en un sistema
+		con $n$ procesos y con a lo más $f$ procesos fallidos.\\
+		\[\includegraphics[width=0.5\textwidth]{consensus.png}\]
 
-		El algoritmo propuesto es el siguiente:\\
+		\begin{enumerate} [label = \alph*]
+			\item {
+				Argumenta por qué es necesario ejecutar $f+1$ rondas para llegar a un acuedo.\\
 
-		\begin{algorithmic}[1]
-			\Require $id \in \{A,B\},\ init \in \{0, 1\},\ k \in \mathbb{N}$
-			\Ensure $v_A^k\ \& \ v_B^k$ tales que $|v_A^k\ - \ v_B^k|\ \leq\ \dfrac{1}
-				{2^k}$
-			\Function{\textbf{ Modelo:}$\{A\leftrightarrow B, A \rightarrow B, 
-				A \leftarrow B\}$}{$init$}			
-				\State $v\ \leftarrow init$
-				\For{r = 0 \textbf{to} k + 1}{}
-					\State $send(v)$
-					\State $msg \leftarrow$ receive()
-					\If{$msg \ne null$}
-						\If{$msg = v$}
-							\State break
-						\Else	
-							\State $v \leftarrow \dfrac{v + msg}{2}$
-						\EndIf
-					\EndIf
-				\EndFor
-				\State \Return$v$
-			\EndFunction
-		\end{algorithmic}
+				Los errores del modelo son únicamente de tipo crash, esto es que una vez fallado
+				proceso no vuelve a funcionar.\\
+				Esto significa que la cantidad de procesos vivos se queda igual o disminuye.
+				Y cómo los procesos son donde está guardad la información, entonces la
+				información que se puede obtener en cada ronda se queda igual o disminuye.\\
+				Entonces, si en una ronda no muere ningún proceso, todos los procesos obtendrán
+				toda la información disponible, y en cualquier ronda posterior habrá igual o
+				menos información disponible.
+
+				Notemos que si uno o varios procesos mueren antes de enviar cualquier
+				tipo de información, entonces la información nueva que tenían se pierde.\\
+				Si eran los únicos procesos vivos que tenían esa información, entonces esa
+				información se puede ignorar, pues al no tenerla nadie es como si nunca
+				hubiera existido. \\
+				Si la información la tiene otro proceso que no ha muerto,
+				entonces durante esa misma ronda el otro proceso habrá enviado esa información
+				a todos los demás.\\
+				De cualquier manera, la muerte de los procesos no causa inconsistencias en
+				el resultado final, pues todos siguen recibiendo la misma información.\\
+				Lo que puede causar inconsistencia en la decisión, es que un proceso
+				muera mientras está enviando información que sólo ese proceso tiene.\\
+				Esto pasa porque parte de los procesos tienen información que la otra
+				parte no tiene.\\
+
+				Entonces siempre y cuando haya una ronda donde algún proceso muera antes
+				de enviar algo o nunca muera, entonces al final todos los procesos obtendrán
+				la misma información, por lo que se llega a un consenso.\\
+				Entonces en el caso extremo en cada ronda mueren procesos mientras están
+				enviando infrmación, y el caso que requiere más rondas es cuando exactamente
+				un proceso muere de esta manera cada ronda.\\
+				Entonces después de $f$ rondas es posible que en cada ronda
+				un proceso con nueva información haya muerto mientras enviaba la información
+				a otro proceso, por lo que algunos procesos tendrían más información que otros.\\
+				Como ya murieron $f$ procesos, entonces ya no puede moriri más procesos.
+				Al realizar otra ronda, aseguramos que en esa ronda ningún proceso
+				va a morir, y todos lor procesos vivos obtendrán toda la información
+				disponible es esa ronda. Entonce todos tendrán la misma información y
+				podrán llegar a un consenso.\\
+			}
+			\item{
+				Modifica el algoritmo de la figura 1 para resolver el consenso en
+				$min(t+2, f+1)$ donde $t$ es la cantidad de procesos que fallan en la
+				ejecución.
+			}
+			\item{
+				Muestra una ejecución para 4 procesos donde se ejecutan el máximo de
+				rondas del algoritmo propuesto.
+			}
+			\item{
+				Muestra una ejecución para 4 procesos donde se ejecuten el mínimo de
+				rondas del algoritmo propueesto.
+			}
+		\end{enumerate}
+
 	}
-	
 
-	\textbf{Demostración:}\\
-	S.P.G. proponemos a la variable $\is{P}$ dónde $V$ representa la
-	invariante de ciclo y el vector $\{P, x, r\}$ en el subíndice representa el
-	nombre del proceso ($P \in \{A,B\}$), su	valor actual y el número de ronda
-	actual	respectivamente.\\\\
-	
-	Por el teorema visto con Karla en clase sabemos que en la ronda $r$ hay
-	comunicación perfecta, entonces $\ v_A^k\  =\  v_B^k\ $ en la ronda $r + 1$.\\
-	Así, proponemos $\is{P}$  en una ronda caualquiera $r$. Este proceso, cómo estamos
-	suponiendo que la comunicación es perfecta, es equivalente para $P = A$ y $P = B$.
-	Así, si observamos la trayectoria de $x$ tenemos que se evalúa el primer 'if' a 
-	verdadero. Supongamos que el segundo 'if' se evalúa a falso, pues el caso
-	contrario es equivalente a lo que sucedería en la siguiente ronda cómo vamos a
-	ver. Entonces, el nuevo valor de $x = \dfrac{v + msg}{2}$. Esto para ambos
-	procesos. De esta manera, en la ronda $r+1$ si la comunicación vuelve a ser
-	perfecta, cómo el valor de $x$ para ambos, $A,B$, es $x = \dfrac{v + msg}{2}$,
-	entonces el se cumple el primer y el segundo 'if' y se rompe el ciclo. Siempre que
-	$r < k + 1$, entonces el algoritmo terminará antes de $k+1$ rondas suponiendo que
-	haya una ronda de comunicación perfecta.\\
-	Observemos también que si la comunicación no es perfecta pero ambos procesos
-	tienen el mismo valor, entonces el proceso que recicbió el mensaje termina su 
-	ejecución pero el que no lo recibió ejecutará las $k+1$ rondas devolviendo al
-	final su valor, que es el mismo que el del otro proceso.
-	
-	
-	Ahora comprobemos que si la comunicación no es perfecta, entonces los valores de 
-	los procesos separados el uno del otro a un factor de distancia de $\dfrac{1}{2}$
-	el uno del otro. (Esto es sucede en cualquier ronda durante la ejecución del
-	algoritmo. Sean	$P_1 \in \{A,B\},\ P_2 \in \{A,B\}-P_1$. Supongamos que el modelo
-	de comunicación	es $P_1\rightarrow P_2$ (esto es equivalente si $P_1 = A\ \vee\
-	P_1 = B$) para la ronda actual $r$. Supongamos que $P_1$ tiene un valor	$x_1$
-	cualquiera.	Observamos que al no recibir mensaje, no cumple con la condición del
-	primer 'if', entonces conserva su mismo valor $x_1$. Por otro lado, sabemos	que
-	$P_2$ sí recibió el valor de $P_1$ y su valor es $x_2' = \dfrac{x_2+x_1}{2}$.
-	Suponemos que el algoritmo se ha ejecutado con valores válidos y que en la ronda
-	$r-1, |x_1-x_2| = \dfrac{1}{2}$. Tenemos luego que 
-	$$|x_1-x_2'| = |x_1 -\dfrac{x_2+x_1}{2}| = |\dfrac{2x_1}{2}-\dfrac{x_2+x_1}{2}|
-	= |\dfrac{x_1-x_2}{2}|$$
-	Pero $x_1-x_2 = \dfrac{1}{2}$ Entonces,
-	$$|x_1-x_2'| = \dfrac{\dfrac{1}{2}}{2} = \dfrac{1}{4}$$
-	Así podemos ver que la distancia entre los valores de cada proceso de una
-	ronda a otra se redujo por un factor de $\dfrac{1}{2}$.\\\\
-	
-	Por lo tanto, el algoritmo es correcto para producir un approximate agreement a
-	una distancia de $\dfrac{1}{2^k}$ entre los valores de cada proceso o de terminar
-	antes de las $k$ rondas si os valores de los procesos son iguales.\\\\
 
 
 	%Ejercicio 2
 	\item {
-		Dibuja la gráfica del protocolo que diseñaste para 2 rondas para $k = 2$.
-		Para cada vértice indica el valor de salida y para cada arista indica el
-		patrón de mensajes recibidos.\\\\
-		
-		En la gráfica, los números cercanos a los vértices son el estado final de
-		procesos, y las flechas indican la secuencia de comunicación que hubo,
-		siendo el primer paso el más cercano a la gráfica.\\
-		Las partes laterales de la gráfica son exactamente iguales a los de la
-		gráfica obtenida con el acuerdo aproximado visto en clase. Esto es porque
-		es imposible llegar a un punto en el que ambos procesos tienen un mismo
-		valor y alguno de ellos lo sabe en menos de dos rondas.
-		Aunque de realizar más rondas se notaría este patrón de menos posibles casos
-		en las regiones donde hay al menos una ronda de comunicación perfecta, y
-		los casos dejaría de subdividirse cuando lleguen a dos rondas de comunicación
-		perfecta.
-		Pero ya en dos rondas, se nota como en la parte superior y inferior, que
-		corresponden a cuando los procesos tienen entradas iguales, hay menos posibles
-		casos.
-		Esto sucede de dos maneras.
-		Puede ser que en la primera ronda haya comunicación perfecta, por lo que
-		ambos procesosse detienen sin realizar la segunda ronda.
-		Esto corresponde a la arista central, que se puede ver sólo tiene una ronda
-		de comunicación registrada.
-		O puede ser que haya algún mensaje se pierda, por lo que un proceso se
-		detendría pero el otro seguiría con la siguiete ronda. Entonces si hay algún
-		error de comunicación, la única posibibilidad en la siguieteronda es que
-		el proceso que no recibió mensaje lo envía. Por esto es que se reducen los
-		casos.\\
+		Sean $A$ y $B$ dos procesos conectados por dos canales unidireccionales.
+		La secuancia $G_t$ en el tiempo $t$ corresponde a $m_1, ..., m_k, n_1, ..., n_l$
+		donde los $m_i$ corresponden a los mensajes enviados de $A$ hacia $B$ y $n_i$
+		los enviados de $B$ a $A$, donde $k_1$ es el mensaje más reciente enviado
+		por el canal.
 
-		\begin{tikzpicture}[scale = 2]
-			\tikzstyle{every node} = [draw, shape = circle]
-			\foreach \i/\s in {0/$A \longrightarrow B$, 2/$A\longleftarrow B$}{
-				\node at (\i, 9) (Bu\i) [label = above : {1}] {$B$};
-				\node at (\i + 1, 9) (Au\i) [label = above : {1}] {$A$};
-				\ifthenelse{\i = 2}{\draw (Au0) -- node[above,draw=none]{$A\longleftrightarrow B$}++(Bu\i);}{}
-				\draw (Au\i) --node[above, draw=none, label = above : {\s}]{\s}++ (Bu\i) ;
-				\node at (\i, 0) (Al\i) [label = below : {0}] {$A$};
-				\node at (\i + 1, 0) (Bl\i) [label = below : {0}] {$B$};
-				\ifthenelse{\i = 2}{\draw (Bl0) -- node[below,draw=none]{$A\longleftrightarrow B$}++ (Al\i);}{}
-				\draw (Al\i) --node[below, draw=none, label = below : {\s}]{\s}++ (Bl\i);
+		\begin{enumerate} [label = \alph*]
+			\item {
+				¿Qué cadenas de bits no son válidas al ejecutar el protocolo?
 			}
-			\foreach \i/\j/\k in {2/0/1, 4/2/2, 6/4/2, 8/6/3}{
-
-				\node at (0, \i) (Ai\i) [label = left : {\k/4}] {$A$};
-				\node at (0, \i - 1) (Bi\i) [label = left : {\k/4}] {$B$};
-
-				\ifthenelse{\i = 4}{\draw (Ai\j) -- node[rectangle, left, draw=none, label = left : {$A \longleftarrow B$}]{$A \longrightarrow B$}++ (Bi\i);}{}
-				\ifthenelse{\i = 6}{\draw (Ai\j) -- node[rectangle, left, draw=none, label = left : {$A \longleftrightarrow B$}]{$A \longleftrightarrow B$}++ (Bi\i);}{}
-				\ifthenelse{\i = 8}{\draw (Ai\j) -- node[rectangle, left, draw=none, label = left : {$A \longrightarrow B$}]{$A \longleftarrow B$}++ (Bi\i);}{}
-
-				\ifthenelse{\i = 2}{\draw (Ai\i) -- node[rectangle, left, draw=none, label = left : {$A \longleftrightarrow B$}]{$A \longrightarrow B$}++ (Bi\i);}{}
-				\ifthenelse{\i = 4}{\draw (Ai\i) -- node[rectangle, left, draw=none, label = left : {$A \longleftarrow B$}]{$A \longleftrightarrow B$}++ (Bi\i);}{}
-				\ifthenelse{\i = 6}{\draw (Ai\i) -- node[rectangle, left, draw=none, label = left : {$A \longrightarrow B$}]{$A \longleftrightarrow B$}++ (Bi\i);}{}
-				\ifthenelse{\i = 8}{\draw (Ai\i) -- node[rectangle, left, draw=none, label = left : {$A \longleftrightarrow B$}]{$A \longleftarrow B$}++ (Bi\i);}{}
-				%\draw (Ai\i) -- node[rectangle, left, draw=none, label = left : {\s}]{\s} (Bi\i);
-
-				\node at (3, \i - 1) (Ad\i) [label = right : {\k/4}] {$A$};
-				\node at (3, \i) (Bd\i) [label = right : {\k/4}] {$B$};
-
-				\ifthenelse{\i = 4}{\draw (Bd\j) -- node[rectangle, right, draw=none, label = right : {$A \longrightarrow B$}]{$A \longleftarrow B$}++ (Ad\i);}{}
-				\ifthenelse{\i = 6}{\draw (Bd\j) -- node[rectangle, right, draw=none, label = right : {$A \longleftrightarrow B$}]{$A \longleftrightarrow B$}++ (Ad\i);}{}
-				\ifthenelse{\i = 8}{\draw (Bd\j) -- node[rectangle, right, draw=none, label = right : {$A \longleftarrow B$}]{$A \longrightarrow B$}++ (Ad\i);}{}
-
-				\ifthenelse{\i = 2}{\draw (Ad\i) -- node[rectangle, right, draw=none, label = right : {$A \longleftrightarrow B$}]{$A \longleftarrow B$}++ (Bd\i);}{}
-				\ifthenelse{\i = 4}{\draw (Ad\i) -- node[rectangle, right, draw=none, label = right : {$A \longrightarrow B$}]{$A \longleftrightarrow B$}++ (Bd\i);}{}
-				\ifthenelse{\i = 6}{\draw (Ad\i) -- node[rectangle, right, draw=none, label = right : {$A \longleftarrow B$}]{$A \longleftrightarrow B$}++ (Bd\i);}{}
-				\ifthenelse{\i = 8}{\draw (Ad\i) -- node[rectangle, right, draw=none, label = right : {$A \longleftrightarrow B$}]{$A \longrightarrow B$}++ (Bd\i);}{}
-				%\draw (Ad\i) -- node[rectangle, right, draw=none, label = right : {\l}]{\l}++ (Bd\i);
+			\item{
+				¿Cuándo hay un cambio de bits en la coloración?
 			}
-			\draw (Al0) -- node[rectangle, left, draw=none, label = left : {$A \longrightarrow B$}]{$A \longrightarrow B$}++ (Bi2);
-			\draw (Bl2) -- node[rectangle, right, draw=none, label = right : {$A \longleftarrow B$}]{$A \longleftarrow B$}++(Ad2);
-			\draw (Ai8) -- node[rectangle, left, draw=none, label = left : {$A \longleftarrow B$}]{$A \longleftarrow B$}++(Bu0);
-			\draw (Bd8) -- node[rectangle, right, draw=none, label = right : {$A \longrightarrow B$}]{$A \longrightarrow B$}++ (Au2);
-		\end{tikzpicture}
+			\item{
+				Ejecuta el protocolo de forma que en la coloración hayan al menos 4 unos.
+			}
+		\end{enumerate}
 
 	}
 
+	\item{
+		Escribe un resumen de la clase y plática impartidas por Michel Raynal.
+	}
 
 \end{enumerate}
 \end{document}
