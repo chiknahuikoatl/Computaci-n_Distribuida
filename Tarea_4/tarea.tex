@@ -334,6 +334,50 @@
 
 	\item{
 		Escribe un resumen de la clase y plática impartidas por Michel Raynal.
+
+		"God made bits, everything else is the work of man" -Michel Raynal\\
+		La informática es el área de estudio dedicada al estudio de que es computable
+		o no. Es decir que se puede lograr siguiendo una serie determinada finita de pasos.\\
+		Esto incluye todo lo relacionado con algoritmos y computabilidad.\\
+		También se puede ver como la formalización matemática de la tecnología.\\
+		Dentro de esto, vive el área de los sistemas distribuidos, que involucran
+		a varios procesos, máquinas de Turing, independientes que se comunican de
+		alguna manera que puede ser memoria compartida (computación concurrrente)
+		o mensajes por un canal de comunicación.\\
+		A difenrencia de la computación en paralelo, la independecnia de los procesos
+		es algo impuesto más que una elección de diseño, en donde no se conoce el
+		estado global del sistema y todas las decisiones son locales.\\
+		Con esta definición puede haber una gran cantidad de configuraciones, como
+		la dirección de los canales de comunicación, el tipo de errores de canal o errores
+		de procesos, la gráfica asociada a todos los proceosos con los canales de comunicación,
+		o la sincronía de la comunicación.\\
+		Los errores de proceso pueden ser de tipo "crash", donde cuando un proceso
+		falla nunca se vuelve a recuperar, o bizantinos, cuando un proceso tiene un
+		comportamiento no predecible.\\
+		Los errores de cnal pueden ser de pérdida de mensajes, de intercambio de mensajes
+		o de modificación de mensajes.\\
+		En todo los casos, cada procesos tiene tres estados: enviar, recibir y ejecutar.
+		En un modelo síncrono, se tiene que todas las acciones se ejecutan siguiendo
+		un reloj global. Se puede garantizar que si un mensaje no llega en ciertos ciclos,
+		entonces nunca va a llegar.\\
+		Mientras que en un modelo asíncrono las acciones se ejecutan después de la llegada
+		de algún mensaje, y no hay garantía sobre cunado algo va a llegar.\\
+		Hay dos grandes problemas.\\
+		Luego ¿cómo se define un problema en estos modelos?
+		Deben de tener dos propiedades que su solución debe de cumplir, que son
+		"safety" que es una restricción sobre lo que no debe de pasar, y "liveness" que es
+		una manera de asegurar que se tiene que realizar algo.
+		Entonces una solución es un algoritmo tal que existe una demostración que
+		prueba que el algoritmo cumples esas dos propiedades para cualquier posible
+		ejecución del algoritmo.\\
+		En general, en un modelo sin errores, todo problema es relativamente sencillo
+		de resolver. Por lo que en general se busca el modelo con más errores donde
+		aun es posible resolver un problema.
+		Hay dos problemas en especial que se vieron durante la plática.
+		El primero es el ataque coordinado.
+
+		El otro es el problema del consenso
+
 	}
 
 \end{enumerate}
