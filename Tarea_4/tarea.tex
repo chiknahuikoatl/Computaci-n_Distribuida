@@ -12,10 +12,8 @@
 \usepackage{calrsfs}
 \usepackage{ifthen}
 \usepackage{algpseudocode}
-\usepackage{cancel}
-%\usepackage[linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
-\usepackage{tikz}
-\usetikzlibrary{arrows}
+\usepackage{cancel}	
+\usetikzlibrary{arrows, matrix}
 
 \begin{document}
 
@@ -310,20 +308,91 @@
 	%Ejercicio 2
 	\item {
 		Sean $A$ y $B$ dos procesos conectados por dos canales unidireccionales.
-		La secuancia $G_t$ en el tiempo $t$ corresponde a $m_1, ..., m_k, n_1, ..., n_l$
+		La secuencia $G_t$ en el tiempo $t$ corresponde a $m_1, ..., m_k, n_1, ..., n_l$
 		donde los $m_i$ corresponden a los mensajes enviados de $A$ hacia $B$ y $n_i$
 		los enviados de $B$ a $A$, donde $k_1$ es el mensaje más reciente enviado
 		por el canal.
 
 		\begin{enumerate} [label = \alph*]
 			\item {
-				¿Qué cadenas de bits no son válidas al ejecutar el protocolo?
+				¿Qué cadenas de bits no son válidas al ejecutar el protocolo?\\
+				Las cadenas que no son válidas en el protocolo son aquellas que:
+				\begin{enumerate}
+					\item[i]{
+						Por la manera en la que está definido el algoritmo, tenemos que
+						ninguna cadena puede iniciar con $1$.
+					}
+					\item[ii]{
+						Tampoco puede haber alguna cadena en la que haya más de un cambio en la
+						 coloración, por ejemplo $001100$.\\
+						Esta cadena no es válida porque, según el algoritmo, $A$ no cambia de 
+						valor hasta que que recibe un bit de $B$ con el valor que le está 
+						enviando. Entonces, $A$ está enviando un mensaje con un valor, $B$ lo 
+						recibe y $B$ lo retransmite ese bit. Mientras tanto, no hay cambios 
+						todavía en el valor que $A$ está transmitiendo. Hasta este punto, si es 
+						la priemra iteración, la cadena tiene un mismo color. Cuando $A$ recibe 
+						el bit con el color que le está enviando $B$, cambia su valor y empieza a 
+						transmitirlo. En este punto hay dos colores en la gráfica: el nuevo valor 
+						que transmite $A$ y el valor anterior que estaba transmitiendo $A$ y que 
+						ahora transmite $B$. Si iteramos sobre este proceso, podemos observar que 
+						solamente hay dos colores en la gráfica en cualquier momento mientras se 
+						esté ejecutando el algoritmo.
+					}
+					\item[iii]{
+						La longitud de bits de un mismo color solamente es menor a dos cuando es 
+						el primer bit en una cadena después de un cambio de coloración o el 
+						último bit de confirmación de un mensaje. De otro modo la cadena no es 
+						válida.\\
+						Sabemos por el inciso anterior que solamente puede haber dos colores en 
+						la cadena en cualquier momento dado. Esto significa que $A$ no cambia su
+						valor mientras que no reciba de $B$ un bit con el color que está 
+						transmitiendo. Entonces, para el primer caso, si es el primer bit 
+						transmitido en la ejecución del algoritmo, la longitud de la cadena es 1 
+						y solamente hay un color en la cadena. El bit que le sucede 
+						inmediatamente tiene el mismo valor porque $B$ recibió y transmitió el 
+						bit recibido de $A$ antes de que $A$ pudiera enviar un siguiente mensaje
+						o $A$ volvió a transmitir un mensaje con el mismo bit. Observando ahora 
+						el segundo caso vemos que $B$ está transmitiendo los valores que recibe 
+						de $A$. Entonces, una vez que $B$ envió el mensaje y lo retransmitió a 
+						$A$, va a seguir recibiendo ese mismo valor de $A$ hasta que $A$ reciba
+						el bit que le está enviando a $B$. Entonces, tenemos que el valor de la 
+						cadena se va recorriendo mientras $B$ transmite y $A$ recibe. De esta 
+						manera podemos observar que los bits del canal de $A$ a $B$ no cambian 
+						mientras que los bits de $B$ a $A$ van recorriendo el valor hasta que 
+						solamente queda un bit de valor distinto antes de llegar a $A$ y se 
+						cumple la propiedad anterior que solamente hay un cambio de color en la 
+						cadena en cualquier momento de la ejecución del algoritmo. En el momento 
+						en el que $A$ recibe este bit, la cadena es de un mismo color y 
+						regresamos a un caso inicial.\\
+						Cómo el proceso no crea mensajes podemos asegurar que no va a haber un 
+						bit solo de color distinto en la cadena excepto por los casos mencionados
+						anteriormente.
+					}
+				\end{enumerate}
 			}
 			\item{
-				¿Cuándo hay un cambio de bits en la coloración?
+				¿Cuándo hay un cambio de bits en la coloración?\\
+				Hay un cambio en la coloración cuando $A$ recibe un mensaje de $B$ con el bit que
+				está transmitiendo, cómo lo vimos en el el inciso $2.a.ii$.
 			}
 			\item{
 				Ejecuta el protocolo de forma que en la coloración hayan al menos 4 unos.
+				El estado en el que la coloración tenga al menos cuatro unos se da solamente en 
+				el momento antes de que $A$ reciba la confirmación de $B$ en una ronda par y si
+				los canales son suficientemente lentos para que en cualquier momento dado haya al 
+				menos dos mensajes en el canal sin tomar en cuenta los mensajes perdidos. \\
+				\begin{tikzpicture}
+  \matrix (m) [matrix of math nodes,row sep=3em,column sep=4em,minimum width=2em]
+  {
+     1 & 1 \\
+     1 & 1 \\};
+  \path[-stealth]
+    (m-1-1) edge node [left] {$A$} (m-2-1)
+            edge node [below] {$...$} (m-1-2)
+    (m-2-2) edge node [below] {$...$} (m-2-1)
+    (m-1-2) edge node [right] {$B$} (m-2-2);
+\end{tikzpicture}
+				
 			}
 		\end{enumerate}
 
