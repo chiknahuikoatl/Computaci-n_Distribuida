@@ -8,7 +8,16 @@
 \usepackage{algpseudocode}
 \usetikzlibrary{graphs, shapes, snakes, graphdrawing}
 
+\algblock[Name]{Start}{End}
+\algblockdefx[NAME]{START}{END}%
+[2][Unknown]{Start #1(#2)}%
+{Ending}
+\algblockdefx[NAME]{}{OTHEREND}%
+[1]{Until (#1)}
+
 \begin{document}
+
+\newcommand{\upon}[1]{\textbf{Upon} #1 \textbf{do}}
 
 \begin{titlepage}
 	\centering
@@ -53,25 +62,40 @@
 		hijos para enviarsela al padre sin repetirla.\\
 
 			\begin{algorithmic}[1]
-				\Require $id \in \{A,B\},\ init \in \{0, 1\},\ k \in \mathbb{N}$
-				\Ensure $v_A^k\ \& \ v_B^k$ tales que $|v_A^k\ - \ v_B^k|\ \leq\ \dfrac{1}
-					{2^k}$
-				\Function{\textbf{ Modelo:}$\{A\leftrightarrow B, A \rightarrow B,
-					A \leftarrow B\}$}{$init$}
-					\State $v\ \leftarrow init$
-					\For{r = 0 \textbf{to} k + 1}{}
-						\State $send(v)$
-						\State $msg \leftarrow$ receive()
-						\If{$msg \ne null$}
-							\If{$msg = v$}
-								\State break
-							\Else
-								\State $v \leftarrow \dfrac{v + msg}{2}$
-							\EndIf
-						\EndIf
-					\EndFor
-					\State \Return$v$
-				\EndFunction
+				\State $children \ \leftarrow \emptyset$
+				\State $nonChildren \ \leftarrow \emptyset$
+				\If{$p_{id}\ =\ root$}
+					\State $parent\ \leftarrow\ root$
+					\State $send M$ to all neighbors
+				\Else
+					\State $parent\ \leftarrow\ \bot$
+				\EndIf
+				\State \upon{receiving $M$ from $p$}
+				\Start
+					\If{$parent\ =\ \bot$}
+						\State $parent\ \leftarrow\ p$
+						\State $send M$ to all neighbors except $p$
+					\Else
+						\State $send nack$ to $p$
+					\EndIf
+				\End
+				\State \upon{receiving $nack$ from $p$}
+				\Start
+					\State $nonChildren\ \leftarrow\ nonChildren\ \cup\ {p}$
+				\End
+				\textbf{When} $children\ \cup\ nonChildren\ =\ allMyNeighbours
+							\textbf{do}$
+				\Start
+					\If{$p_{id}\ =\ root$}
+						\State END
+					\Else
+						\State $send\ ack\ to\ parent$
+					\EndIf
+				\upon{receiving $ack$ from $k$}
+				\Start
+					\State $add\ k\ to\ children$
+				\End
+				\End
 			\end{algorithmic}
 		}
 
