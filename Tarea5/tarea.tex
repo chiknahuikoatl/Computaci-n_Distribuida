@@ -5,6 +5,7 @@
 \usepackage{enumitem}
 \usepackage{fontspec}
 \usepackage{tikz}
+\usepackage{amsmath}
 \usetikzlibrary{graphs, shapes, snakes, graphdrawing}
 
 \begin{document}
@@ -53,10 +54,22 @@
 		\item{
 			Demuestre por inducción que en el algoritmo PI, cada nodo $v$ recibe el
 			mensaje $M$ por primera vez en a lo más $d(root, v)$.\\
+
+			Por inducción sobre el orden en el que los nodos reciben $M$.\\
+			Caso base\\
+			Sea $v \in V$ el primer nodo que recibe $M$. Lo recibe en $t(v)$.
+
+			Hipótesisi de inducción.\\
+			Todos los nodos que reciben $M$ antes del lugar $k$ cumplen que
+			$d(root, v) = t(v)$.\\
+
+			Paso inductivo\\
+			Sea $v \in V$ el vértice que recibe $M$ en el lugar $k$.
+
 		}
 		%Ejercio 4
 		\item{
-			Se dice que una digráfica $G = (V, E)$ tiene raiz $r$ si $r \in V$ y cada
+			Se dice que una digráfica $G = (V, E)$ tiene raiz $r \in V$ y cada
 			vértice $v \in V$ es alcanzable desde $r$, es decir, existe un camino
 			dirigido alcanzable desde $r$ (un camino dirigido que empieza en $r$ y
 			termina en $v$).\\
@@ -81,14 +94,77 @@
 
 				\item{
 					$G$ tiene una raíz $r$ y el quitar cualquier arista interumpe la
-					condición.
+					condición.\\
 				}
 				\item{
 					La versión no dirigida de $G$ es conexa y $G$ tiene un vértice $r$ para
 					el cual $\delta_{in}(t) = 0$ mientras que para cualquier otro vértice
-					$v$ $\delta(v)_{in} = 1$.
+					$v$ $\delta(v)_{in} = 1$.\\
 				}
 			\end{enumerate}
+
+			$a \implies b$\\
+			Sea $G$ un árbol dirigido. Por definición, significa que tiene una raíz,
+			esto es un vértice desde el cuál hay un camino a cualquier otro vértice de
+			$G$.\\
+			Sólo falta ver que ese camino es único.\\
+
+			Primero, notemos que esos camino son trayectorias, pues si uno de estos
+			caminos, dígamos $c = (r = v_1, ..., v_n)$ tuviera un vértice repetido,
+			digamos $v_i = v_j, i < j$, entonces $c' = (r = v_1, ..., v_i = v_j, ... v_n)$
+			sería un cliclo en la versión no dirigida de $G$, por lo que la versión
+			no dirigida de $G$ no sería un árbol.\\
+
+			Luego, tomemos dos de estas trayectorias $c_1 = (r = v_1, ..., v_n = u)$ y
+			$c_2 = (r = w_1, ..., w_m = u)$ y supongamos que son diferentes.\\
+			Sea $v_i = w_j \in V$ el primer vértice no raíz que hay en común entre
+			$c_1$ y $c_2$, cuya existencia se puede garantizar porque en el caso
+			extremo este vértice es $u$.\\
+			Entonces, en la versión no dirigida de $G$, consideremos el camino
+			$c_3 = (r = v_1, v_2, ..., v_i = w_j, w_{j-1}, ..., w_2, w_1 = r)$.\\
+			Cómo los $v_k$ provienen de una trayectoria, entonces no se repiten entre
+			sí, al igual que los $w_l$.\\
+			Además, como $v_i = w_j$ es el primer vértice en común entre las
+			trayectorias originales, entonces los $v_k$ y  los $w_l$ no tienen ningún
+			otro vértice en común.
+			Entonces $c_3$ es una trayectoria, y comienza  y termina en el mismo
+			vertice, por lo que es un ciclo.\\
+			Entonces, la versión no dirigida de $G$ no es un árbol, lo cuál no es
+			posible. Esta contradicción surge de suponer que $c_1$ y $c_2$ eran
+			diferentes. Entonces, cualesquiera dos caminos entre la raiz y un mismo
+			vértice son en realidad el mismo.\\
+			Entoces el camino dirigido entre la raíz y cualquier vértice es único.\\
+
+			$b \implies c$\\
+			Sea $G$ una gráfica dirigida con una raíz $r$ y cuyos caminos entre la raíz y
+			cualquier otro vértice son únicos.\\
+			Veamos que $\delta(r)_{in} = 0$. Por contradicción, supongamos que
+			$\delta(r)_{in} < 0$. Entonces sea $v \in N^+(r)$. Como $r$ es raíz,
+			entonces existe un camino, que ya sabemos es trayectoria,
+			$c = (r = v_1, ..., v)$. Entonces, $c' = (r = v_1, ..., v, r)$ es un
+			ciclo en la versión no dirigida de $G$, pero esta debe de er un árbol.
+			Entonces $\delta(r)_{in} = 0$.\\
+			Luego, veamos cuál es el grado interior de los demás vértices.
+			Sea $w \in V$. Como hay un camino $c_1 = (r = w_1, ..., w_n = w)$,
+			entonces al menos un vértice $w_{n-1}$ incide en $w$, por lo que
+			$\delta(w)_{in} \geq 1$.\\
+			Luego, supongamos que $\delta(w)_{in} > 1$. Entonces sean
+			 $u_1, u_2 \in N^+(w), u_1 \neq u_2$.\\
+			Como $r$ es raíz, entonces existen caminos únicos $s_1 = (r = x_1, ..., x_n = u_1)$
+			y $s_2 = (r = y_1, ..., y_n = u_2)$.\\
+			Tanto $s_1$ como  $s_2$ inciden es $w$, entonces
+			$s_1 = (r = x_1, ..., x_n = u_1, w)$ $s_2 = (r = y_1, ..., y_n = u_2, w)$
+			son dos caminos de la raiz a $w$ diferentes, pues al menos $x_n = u_1 \neq y_n = u_2$.
+			Pero los caminos desde la raíz son únicos. Esta contradicción surge de
+			asumir que $\delta(w)_{in} > 1$.\\
+			Por lo tanto, $\delta(w)_{in} = 1$.\\
+
+			$c \implies d$
+			Sea $G$ una gráfica que tiene una raíz $r$ para la cual $\delta(r)_{in} = 0$,
+			y para cualquier otro vértice  $v \in V$, $\delta_{in}(v) = 1$.
+			Cómo $G$ tiene raíz, sólo falta demostrar que $G-\{e\}, e \in E$ no tiene
+			raíz.
+			Sea $e = (v, w) \in E$. 
 		}
 	\end{enumerate}
 \end{document}
