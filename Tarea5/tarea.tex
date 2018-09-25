@@ -6,9 +6,21 @@
 \usepackage{fontspec}
 \usepackage{tikz}
 \usepackage{amsmath}
+\usepackage{algpseudocode}
+
+\algblock[Name]{Start}{End}
+\algblockdefx[NAME]{START}{END}
+[2][Unknown]{Start #1(#2)}
+{Ending}
+\algblockdefx[NAME]{}{OTHEREND}
+[1]{Until (#1)}
+
 \usetikzlibrary{graphs, shapes, snakes, graphdrawing}
+\usegdlibrary{layered, force}
 
 \begin{document}
+
+	\newcommand{\upon}[1]{\textbf{Upon} #1 \textbf{do}}
 
 	\begin{titlepage}
 		\centering
@@ -198,10 +210,13 @@
 
 			$c \implies d$
 			Sea $G$ una gráfica que tiene una raíz $r$ para la cual $\delta(r)_{in} = 0$,
-			y para cualquier otro vértice  $v \in V$, $\delta_{in}(v) = 1$.
+			y para cualquier otro vértice  $v \in V$, $\delta_{in}(v) = 1$.\\
 			Cómo $G$ tiene raíz, sólo falta demostrar que $G-\{e\}, e \in E$ no tiene
-			raíz.
-			Sea $e = (v, w) \in E$.
+			raíz.\\
+			Sea $e = (v, w) \in E$. Si $v = r$, entonces $(v, w)$ era el camino único
+			entre $v$ y $w$. Entonces ya no hay un camino entre $v$ y $w$. Entonces
+			$r$ ya no es raíz.\\
+			Si $r \neq w$
 		}
 	\end{enumerate}
 \end{document}
