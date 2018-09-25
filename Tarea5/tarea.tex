@@ -48,6 +48,43 @@
 			información de todos los puntos de control. \\
 			Escribe un algoritmo para que cada nodo recolecte la información de sus
 			hijos para enviarsela al padre sin repetirla.\\
+
+			\begin{algorithmic}[1]
+				\State $children \ \leftarrow \emptyset$
+				\State $nonChildren \ \leftarrow \emptyset$
+				\If{$p_{id}\ =\ root$}
+					\State $parent\ \leftarrow\ root$
+					\State $send M$ to all neighbors
+				\Else
+					\State $parent\ \leftarrow\ \bot$
+				\EndIf
+				\State \upon{receiving $M$ from $p$}
+				\Start
+					\If{$parent\ =\ \bot$}
+						\State $parent\ \leftarrow\ p$
+						\State $send M$ to all neighbors except $p$
+					\Else
+						\State $send nack$ to $p$
+					\EndIf
+				\End
+				\State \upon{receiving $nack$ from $p$}
+				\Start
+					\State $nonChildren\ \leftarrow\ nonChildren\ \cup\ {p}$
+				\End
+				\textbf{When} $children\ \cup\ nonChildren\ =\ allMyNeighbours
+							\textbf{do}$
+				\Start
+					\If{$p_{id}\ =\ root$}
+						\State END
+					\Else
+						\State $send\ ack\ to\ parent$
+					\EndIf
+				\upon{receiving $ack$ from $k$}
+				\Start
+					\State $add\ k\ to\ children$
+				\End
+				\End
+			\end{algorithmic}
 			}
 
 		%Ejercio 3
@@ -164,7 +201,7 @@
 			y para cualquier otro vértice  $v \in V$, $\delta_{in}(v) = 1$.
 			Cómo $G$ tiene raíz, sólo falta demostrar que $G-\{e\}, e \in E$ no tiene
 			raíz.
-			Sea $e = (v, w) \in E$. 
+			Sea $e = (v, w) \in E$.
 		}
 	\end{enumerate}
 \end{document}
