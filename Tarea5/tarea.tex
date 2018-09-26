@@ -106,7 +106,10 @@
 
 			Por inducción sobre el orden en el que los nodos reciben $M$.\\
 			Caso base\\
-			Sea $v \in V$ el primer nodo que recibe $M$. Lo recibe en $t(v)$.
+			Sea $v \in V$ el primer nodo que recibe $M$. Digamos que lo recibe en $t(v)$.\\
+			Como es el primero en obtenerla, tenemos que
+			Supongamos por contradicción que $t(v) > d(root, v)$. Entonces, tenemos que
+
 
 			Hipótesisi de inducción.\\
 			Todos los nodos que reciben $M$ antes del lugar $k$ cumplen que
@@ -147,7 +150,7 @@
 				}
 				\item{
 					La versión no dirigida de $G$ es conexa y $G$ tiene un vértice $r$ para
-					el cual $\delta_{in}(t) = 0$ mientras que para cualquier otro vértice
+					el cual $\delta_{in}(r) = 0$ mientras que para cualquier otro vértice
 					$v$ $\delta(v)_{in} = 1$.\\
 				}
 			\end{enumerate}
@@ -185,13 +188,13 @@
 			Entoces el camino dirigido entre la raíz y cualquier vértice es único.\\
 
 			$b \implies c$\\
-			Sea $G$ una gráfica dirigida con una raíz $r$ y cuyos caminos entre la raíz y
+			Sea $G$ una digráfica dirigida con una raíz $r$ y cuyos caminos entre la raíz y
 			cualquier otro vértice son únicos.\\
 			Veamos que $\delta(r)_{in} = 0$. Por contradicción, supongamos que
 			$\delta(r)_{in} < 0$. Entonces sea $v \in N^+(r)$. Como $r$ es raíz,
-			entonces existe un camino, que ya sabemos es trayectoria,
-			$c = (r = v_1, ..., v)$. Entonces, $c' = (r = v_1, ..., v, r)$ es un
-			ciclo en la versión no dirigida de $G$, pero esta debe de er un árbol.
+			entonces existe un camino, $c = (r = v_1, ..., v)$. \\
+			Entonces, $c' = (r = v_1, ..., v, r)$ contiene un ciclo en la versión no
+			dirigida de $G$, pero esta debe de er un árbol.\\
 			Entonces $\delta(r)_{in} = 0$.\\
 			Luego, veamos cuál es el grado interior de los demás vértices.
 			Sea $w \in V$. Como hay un camino $c_1 = (r = w_1, ..., w_n = w)$,
@@ -208,15 +211,106 @@
 			asumir que $\delta(w)_{in} > 1$.\\
 			Por lo tanto, $\delta(w)_{in} = 1$.\\
 
-			$c \implies d$
-			Sea $G$ una gráfica que tiene una raíz $r$ para la cual $\delta(r)_{in} = 0$,
+			$c \implies d$\\
+			Sea $G$ una digráfica que tiene una raíz $r$ para la cual $\delta(r)_{in} = 0$,
 			y para cualquier otro vértice  $v \in V$, $\delta_{in}(v) = 1$.\\
 			Cómo $G$ tiene raíz, sólo falta demostrar que $G-\{e\}, e \in E$ no tiene
 			raíz.\\
 			Sea $e = (v, w) \in E$. Si $v = r$, entonces $(v, w)$ era el camino único
 			entre $v$ y $w$. Entonces ya no hay un camino entre $v$ y $w$. Entonces
 			$r$ ya no es raíz.\\
-			Si $r \neq w$
+			Si $r \neq w$, $\delta_{in}(w) = 1$, esto es que sólo un vértice
+			incide en $w$, y cómo $v$ incide en $w$, por lo que $v$ es el único vértice
+			que incide en $w$.\\
+			Por esto en $G-\{e\}$, ningún vértice incide en $w$. Por lo tanto
+			no hay ningún camino que llega a $w$.
+			Por lo tanto, $G-\{e\}$ no puede tener raíz.\\
+
+			$d \implies e$\\
+			Sea $G$ una digráfica que tiene un raíz $r$ y cualquier arista que quites
+			hace que $G$ ya no tenga raíz.\\
+			Consideremos la versión no dirigida de $G$, digamos $G'$. Entonces, se
+			mantiene que existen caminos $c_u = (u_0 = r, ..., u_n = u)$
+			entre $r$ y cualquier otro vértice $u$ de $G'$.\\
+			Entonces, entre cualquier $v, w \in V(G')$ se tiene que
+			$c = (v = v_n, v_{n-1}, ..., v_1=r=w_1, w_2, ..., w_m)$ es un camino entre
+			$v$ y $w$ en $G'$, pues no es dirigida.\\
+			Por lo tanto, la verisón no dirigida $G'$ de $G$ es conexa.\\
+			Luego, veamos que $\delta_{in}(r) = 0$.
+			Supongamos que no, entonces $\delta_{in}(r) \geq 0$. Entonces sea
+			$v \in N^+(r)$, por lo que $(v, r)\in E$.\\
+			Consideremos a $G - {(v, r)}$, que no debe de tener raíz, por lo que debe
+			de existir algún vértice $w$ para el que todo camino en $G$ contenía a $(v, r)$.
+			Sea $c = (r = u_1, u_2, ..., u_k = v, u_{k+1} = r, ..., u_n = w)$ uno de
+			esos caminos, y que sea de longitud mínima.\\
+			Entonces, $c' = (u_{k+1} = r, u_{k+1} = r, ..., u_n = w)$ es un camino entre
+			$r$ y $w$ de longitud menos a $c$. Esta contradicción surge de asumir que
+			todos los caminos entre $r$ y $v$ pasaban por $(r, v)$. Entonces debe existir
+			algún camino que no pasaba por $(r, v)$ en $G$. Entonces, en $G - {(v, r)}$
+			sí hay un camino entre $r$ y $w$. Entonces $r$ sigue siendo raíz, pero esto
+			no es posible. Esto surge de suponer que $\delta_{in}(r) \geq 0$.
+			Entonces $\delta_{in}(r) = 0$.\\
+			Ahora veamos que $v$ $\delta(v)_{in} = 1$ para cualquier vértice diferente
+			de $r$.\\
+			Supongamos que no, entonces sea $(w, v), (u, v) \in E, w \neq u$.\\
+			Como $r$ es raíz, entonces existen $c_1 = (r = u_1, ..., u_n = u, v)$ y
+			$c_2 = (r = w_1, ..., w_n=w, v)$, digamos de longitud mínima. Notemos que
+			son trayectorias, pues de repetir alguna vértice $a$ se podría
+			crear otro camino que no incluya a todos los vértices en la sucesión entre
+			la primera y la segunda aparición de $a$ que tendría longitus menor.\\
+			Consideremos $G - {(w, v)}$, que no debe de tener raíz. Entonces debe de
+			existir algún vértice $x$ tal que todos sus caminos en $G$ pasan por
+			$(w, v)$. Sea $c_3 = (r = x_1, ..., x_j = w, v = x_{j+1}, ..., x_n = x)$
+			unos de esos caminos, y de longitud mínima.\\
+			Pero tenemos que $c_4 = (r = u_1, ..., u_n = u, v = x_{j+1}, x_{j+2}, ..., x_n = x)$
+			es un camino entre $r$ y $x$, y como ambos son trayectorias y ambos contienen
+			a $v$ y en esa aparición de $v$ no está $w$ pegado a $v$, entonces no
+			contiene a $(w, v)$, lo cual no es posible. Esta contradicción surge de
+			suponer que todos los caminos pasan por $(w, v)$. Entonces hay un camino
+			entre $r$ y $x$ en  $G - {(w, v)}$, por lo que $r$ sigue siendo raíz en
+			$G - {(w, v)}$, lo cuál no es posible.\\
+			Esto surge de suponer que $v$ $\delta(v)_{in} > 1$.\\
+			Por lo tanto, $v$ $\delta(v)_{in} = 1$ para cualquier $v$ diferente de la
+			raíz.\\
+
+			$e \implies a$\\
+			Sea $G$ digráfica tal que la versión no dirigida de $G$ es conexa y $G$
+			tiene un vértice $r$ para el cual $\delta_{in}(r) = 0$ mientras que para
+			cualquier otro vértice $v$ $\delta(v)_{in} = 1$.\\
+			Primero, veamos que $r$ es raíz.\\
+			Como la versión no dirigida de $G$ es conexa, entones ahí existe un camino
+			entre $r$ y cualquier otro vértice $v$, digamos $c = (r = v_1, ..., v_n = v)$.
+			Veamos que este también es un camino entre $r$ y $v$ en $G$.\\
+			Como $\delta_{in}(r) = 0$, entonces $r$ no puede tener vértices que le incidan,
+			por lo tanto $(r, v_2) \in V(G)$. Y como $\delta(v)_{in} = 1$, y $v_2$ ya
+			tiene una arista que le incide, debe de pasa que $(v_2, v_3) \in V(G)$.\\
+			Y así sucesivamente. Entonces $(v_j, v_{j+1}) \in V(G), 0 \leq j < n$.\\
+			Entonces, efectivamente $c$ es un camino entre $r$ y $v$ en $G$.\\
+			Por lo tanto, existe un camino entre $r$ y cualquier vértice $v$.\\
+			Entonces $r$ es raíz.\\
+			Luego, veamos que la versión no dirigida de $G$ es un árbol.\\
+			Como la versión no dirigida de $G$, $G'$ es conexa, sólo falta mostrar que
+			$G'$ no tiene ciclos.\\
+			Supongamos que tiene algún ciclo $c = (v_1, ..., v_n, v_1)$ en $G'$.\\
+			Entonces, es $G$ este ciclo puede ser de varias formas. Digamos $c$ también
+			es un ciclo válido en $G$, es decir que $(v_j, v_{j+1}) \in E(G)$.\\
+			No puede incluir a $r$, pues de ser así un vértice incidiría en $r$, lo
+			cual no es posible. Entonces, para tener un camino entre $r$ y alguno de
+			los vértices de $c$, alguno de los vértices del camino debe de tener una
+			adyacencia con un vértice que no sea del ciclo, además del vértice al que
+			es adyacente dentro del ciclo. Entonces tendría al menos dos vértices que
+			le son adyacentes, lo cual no es posible. Entonces el $c$ no puede estar
+			en $G'$.\\
+			Entonces, si los no se cumple que $(v_j, v_{j+1}) \in E(G), 0 \leq j < n$,
+			entonces existe algún $v_j \in V(G)$ que no cumples que
+			$(v_j, v_{j+1})\in E(G)$. Y como $v_j$ y $v_{j+1}$ son adyacente en $G'$,
+			tiene que pasar que $(v_{j+1}, v_j)\in E(G)$.
+			Pero además $(v_{j-1}, v_j)\in E(G)$, por lo que $\delta(v)_{in} \geq 2$.
+			Lo cuál no es posible, por lo que $c$ no puede existir en $G'$.
+			Entonces, $G´$ es acíclica, por lo que es un árbol.
+			Entonces, $G$ tiene raíz y su versión acíclica es un árbol, por lo que es
+			$G$ es un árbol dirigido.
+
 		}
 	\end{enumerate}
 \end{document}
