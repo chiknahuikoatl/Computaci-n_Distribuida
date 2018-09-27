@@ -52,7 +52,34 @@
 			Considere la gráfica $G$. Propón retardos y ejecuta el algoritmo PIF con
 			$p_1$ como raíz.\\
 
-			\begin{figure}
+			La Figura 1 es la gráfica dada para el ejercicio.\\
+			La Figura 2 es la misma gráfica con pesos asignados para simular retardos
+			y con $p_1$ cómo raíz.\\
+			De las Figuras 3-7 obtenemos la siguiente tabla:
+			\begin{center}
+				 \begin{tabular}{||c c c c||}
+				 \hline
+				 $r$ & \leftarrow & $p_1$ & $t_0$ \\
+				 \hline
+				 $p_1$ & \leftarrow & $p_6$ & $t_1$ \\
+				 \hline
+				 $p_1$ & \leftarrow & $p_2$ & $t_3$ \\
+				 \hline
+				 $p_6$ & \leftarrow & $p_5$ & $t_2$ \\
+				 \hline
+				 $p_2$ & \leftarrow & $p_2$ & $t_3$ \\
+				 \hline
+				 $p_6$ & \leftarrow & $p_4$ & $t_4$ \\ [1ex]
+				 \hline
+				\end{tabular}
+			\end{center}
+			De la cual podemos formar el árbol dirigido de la Figura 8, el cual nos
+			muestra el árbol óptimo de propagación de PIF.\\
+			De esto, sumando el peso de las aristas de cada rama del árbol, tenemos que
+			la propagación tarda 4 unidades de tiempo y todo el algoritmo $PIF$, ahora con
+			retroalimentación tarda 8 unidades de tiempo.
+			\newpage
+			\begin{figure}[h!]
 				\begin{center}
 					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
 		                    semithick]
@@ -79,7 +106,7 @@
 				\end{center}
 			\end{figure}
 
-			\begin{figure}
+			\begin{figure}[h!]
 				\begin{center}
 					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
 		                    semithick]
@@ -92,20 +119,178 @@
 					\node[state] (E) [below right of=A] {$p_6$};
 					\node[state] (F) [above right of=E] {$p_5$};
 
-					\path 	(A) edge              node {4} (B)
-					        	edge              node {6} (F)
-								edge 			  node {1} (E)
+					\path 	(A) edge              node {2} (B)
+					        	edge              node {3} (F)
+								edge			  node {1} (E)
 					    	(B) edge 			  node {1} (C)
-					        	edge              node {7} (D)
+					        	edge              node {3} (D)
 					    	(C) edge              node {2} (D)
 					    	(E) edge 			  node {3} (D)
-								edge 			  node {5} (F)
-							(F) edge 			  node {3} (D);
+								edge 			  node {1} (F)
+							(F) edge 			  node {2} (D);
 					\end{tikzpicture}
 					\caption{Grafica Inicial con Pesos Elegidos Aleatoriamente para Simular
-							 Retardos.}
+							 Retardos. Con $p_1$ inicializado cómo raíz en $t_0=0$}
 				\end{center}
 			\end{figure}
+
+			\begin{figure}[h!]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+		                    semithick]
+					\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+					\node[state] (A)                    {$p_1$};
+					\node[state] (B) [above right of=A] {$p_2$};
+					\node[state] (C) [right of=B] 		{$p_3$};
+					\node[state] (D) [below right of=C] {$p_4$};
+					\node[state] (E) [below right of=A] {$p_6$};
+					\node[state] (F) [above right of=E] {$p_5$};
+
+					\path 	(A) edge              node {2} (B)
+					        	edge              node {3} (F)
+								edge[blue]		  node {1} (E)
+					    	(B) edge 			  node {1} (C)
+					        	edge              node {3} (D)
+					    	(C) edge              node {2} (D)
+					    	(E) edge 			  node {3} (D)
+								edge 			  node {1} (F)
+							(F) edge 			  node {2} (D);
+					\end{tikzpicture}
+					\caption{Primer paso de la ejecución en $t_1=1$.}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[h!]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+		                    semithick]
+					\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+					\node[state] (A)                    {$p_1$};
+					\node[state] (B) [above right of=A] {$p_2$};
+					\node[state] (C) [right of=B] 		{$p_3$};
+					\node[state] (D) [below right of=C] {$p_4$};
+					\node[state] (E) [below right of=A] {$p_6$};
+					\node[state] (F) [above right of=E] {$p_5$};
+
+					\path 	(A) edge[green]              node {2} (B)
+					        	edge              node {3} (F)
+								edge[blue]			  node {1} (E)
+					    	(B) edge 			  node {1} (C)
+					        	edge              node {3} (D)
+					    	(C) edge              node {2} (D)
+					    	(E) edge		      node {3} (D)
+								edge[green] 	  node {1} (F)
+							(F) edge 			  node {2} (D);
+					\end{tikzpicture}
+					\caption{Segundo paso de la ejecución en $t_2=2$.}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[h!]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+		                    semithick]
+					\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+					\node[state] (A)                    {$p_1$};
+					\node[state] (B) [above right of=A] {$p_2$};
+					\node[state] (C) [right of=B] 		{$p_3$};
+					\node[state] (D) [below right of=C] {$p_4$};
+					\node[state] (E) [below right of=A] {$p_6$};
+					\node[state] (F) [above right of=E] {$p_5$};
+
+					\path 	(A) edge[green]       node {2} (B)
+					        	edge[red]         node {3} (F)
+								edge[blue]		  node {1} (E)
+					    	(B) edge[red]		  node {1} (C)
+					        	edge              node {3} (D)
+					    	(C) edge              node {2} (D)
+					    	(E) edge 			  node {3} (D)
+								edge[green] 	  node {1} (F)
+							(F) edge 			  node {2} (D);
+					\end{tikzpicture}
+					\caption{Tercer paso de la ejecución en $t_3=3$.}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[h!]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+		                    semithick]
+					\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+					\node[state] (A)                    {$p_1$};
+					\node[state] (B) [above right of=A] {$p_2$};
+					\node[state] (C) [right of=B] 		{$p_3$};
+					\node[state] (D) [below right of=C] {$p_4$};
+					\node[state] (E) [below right of=A] {$p_6$};
+					\node[state] (F) [above right of=E] {$p_5$};
+
+					\path 	(A) edge[green]       node {2} (B)
+					        	edge[red]         node {3} (F)
+								edge[blue]		  node {1} (E)
+					    	(B) edge[red]		  node {1} (C)
+					        	edge              node {3} (D)
+					    	(C) edge              node {2} (D)
+					    	(E) edge[violet]	  node {3} (D)
+								edge[green] 	  node {1} (F)
+							(F) edge        	  node {2} (D);
+					\end{tikzpicture}
+					\caption{Cuarto paso de la ejecución en $t_4=4$.}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[h!]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+		                    semithick]
+					\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+					\node[state] (A)                    {$p_1$};
+					\node[state] (B) [above right of=A] {$p_2$};
+					\node[state] (C) [right of=B] 		{$p_3$};
+					\node[state] (D) [below right of=C] {$p_4$};
+					\node[state] (E) [below right of=A] {$p_6$};
+					\node[state] (F) [above right of=E] {$p_5$};
+
+					\path 	(A) edge[green]       node {2} (B)
+					        	edge[red]         node {3} (F)
+								edge[blue]		  node {1} (E)
+					    	(B) edge[red]		  node {1} (C)
+					        	edge[orange]      node {3} (D)
+					    	(C) edge[orange]   	  node {2} (D)
+					    	(E) edge[violet]	  node {3} (D)
+								edge[green] 	  node {1} (F)
+							(F) edge[orange]	  node {2} (D);
+					\end{tikzpicture}
+					\caption{Quinto paso de la ejecución en $t_5=5$.}
+				\end{center}
+			\end{figure}
+			\begin{figure}[h!]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+		                    semithick]
+					\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+					\node[state] (A)                    {$p_1$};
+					\node[state] (B) [above right of=A] {$p_2$};
+					\node[state] (C) [right of=B] 		{$p_3$};
+					\node[state] (D) [below right of=C] {$p_4$};
+					\node[state] (E) [below right of=A] {$p_6$};
+					\node[state] (F) [above right of=E] {$p_5$};
+
+					\path 	(A) edge		      node {2} (B)
+					        	edge	          node {1} (E)
+					    	(B) edge			  node {1} (C)
+					    	(E) edge			  node {3} (D)
+								edge		 	  node {1} (F);
+					\end{tikzpicture}
+					\caption{Quinto paso de la ejecución en $t_5=5$.}
+				\end{center}
+			\end{figure}
+			\newpage
 		}
 
 		%Ejercicio 2
