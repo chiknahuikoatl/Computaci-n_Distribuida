@@ -130,7 +130,7 @@
 							(F) edge 			  node {2} (D);
 					\end{tikzpicture}
 					\caption{Grafica Inicial con Pesos Elegidos Aleatoriamente para Simular
-							 Retardos. Con $p_1$ inicializado cómo raíz en $t_0=0$}
+							 Retardos. Con $p_1$ Inicializado cómo Raíz en $t_0=0$}
 				\end{center}
 			\end{figure}
 
@@ -157,7 +157,7 @@
 								edge 			  node {1} (F)
 							(F) edge 			  node {2} (D);
 					\end{tikzpicture}
-					\caption{Primer paso de la ejecución en $t_1=1$.}
+					\caption{Primer Paso de la Ejecución en $t_1=1$.}
 				\end{center}
 			\end{figure}
 
@@ -184,7 +184,7 @@
 								edge[green] 	  node {1} (F)
 							(F) edge 			  node {2} (D);
 					\end{tikzpicture}
-					\caption{Segundo paso de la ejecución en $t_2=2$.}
+					\caption{Segundo Paso de la Ejecución en $t_2=2$.}
 				\end{center}
 			\end{figure}
 
@@ -211,7 +211,7 @@
 								edge[green] 	  node {1} (F)
 							(F) edge 			  node {2} (D);
 					\end{tikzpicture}
-					\caption{Tercer paso de la ejecución en $t_3=3$.}
+					\caption{Tercer Paso de la Ejecución en $t_3=3$.}
 				\end{center}
 			\end{figure}
 
@@ -238,7 +238,7 @@
 								edge[green] 	  node {1} (F)
 							(F) edge        	  node {2} (D);
 					\end{tikzpicture}
-					\caption{Cuarto paso de la ejecución en $t_4=4$.}
+					\caption{Cuarto Paso de la Ejecución en $t_4=4$.}
 				\end{center}
 			\end{figure}
 
@@ -265,7 +265,7 @@
 								edge[green] 	  node {1} (F)
 							(F) edge[orange]	  node {2} (D);
 					\end{tikzpicture}
-					\caption{Quinto paso de la ejecución en $t_5=5$.}
+					\caption{Quinto Paso de la Ejecución en $t_5=5$.}
 				\end{center}
 			\end{figure}
 			\begin{figure}[h!]
@@ -287,7 +287,7 @@
 					    	(E) edge			  node {3} (D)
 								edge		 	  node {1} (F);
 					\end{tikzpicture}
-					\caption{Quinto paso de la ejecución en $t_5=5$.}
+					\caption{Árbol Generado por el Algoritmo PIF.}
 				\end{center}
 			\end{figure}
 			\newpage
@@ -374,21 +374,21 @@
 			mensaje $M$ por primera vez en a lo más $d(root, v)$.\\
 
 			\textbf{Caso Base: }\\
-			Supongamos que $v$ es el primer nodo en recibir el me nwsaje en tiempo $t$
-			Supongamos que $d(r,v)\neq t$ entonces, $d(r,v) < t$ ya que no hay pesos
+			Supongamos que $v$ es el primer nodo en recibir el mensaje en tiempo $t$.\\
+			Supongamos que $d(r,v)\neq t$, entonces $d(r,v) < t$ ya que no hay pesos
 			negativos en las aristas, entonces, existe $T=(r=v_0,v_1,...,v_k=v)$ tal que
 			\[t'= \sum_{i=0}^{k-1} w(v_i,v_{i+1})\  <t,\ v_i\neq v_k\]
-			Suponemos que no hay aristas de peso cero.\\
-			$d(v_0,v_1)<t$, lo que implica que $v$ recibe $M$ antes.\\
+			Suponemos que no hay aristas de peso cero. Entonces, $d(v_0,v_1)<t$,
+			lo que implica que $v$ recibe $M$ primero.\\
 			\textbf{Hipótesis de Inducción:}\\
 			Supongamos que para los primeros $k$ vértices en llegarles el mensaje
 			se cumple que $d(r,v)=t(v)$\\
 			\textbf{Paso Inductivo: }\\
 			P.D. Si $v'$ es el $k-1$ en recibir el mensaje, entonces $d(r,v') = t(v')$
 			Sea $T=(r=v_0,v_1,...,v_n=v'$ de longitud mínima, Entonces
-			\[\sum_{i=0}^{n-1}w(v_i,v_{i+1})\ =\ d(r,v'),\ T'= (r=v_0,v_1,...,v_{n-1})\]
+			\[\sum_{i=0}^{n-1}w(v_i,v_{i+1})\ =\ d(r,v')\ y \ T'= (r=v_0,v_1,...,v_{n-1})\]
 			es de longitud mínima.
-			$v_{n-1}$ recibió $M$ antes $t(v_{n-1})=d(r,v_{n-1})$ por \textbf{H.I.}.
+			Sabemos que $v_{n-1}$ recibió $M$ antes $t(v_{n-1})=d(r,v_{n-1})$ por \textbf{H.I.}
 			Entonces,
 			\[t(v_n) \leq t(v_{n-1})+w(v_{n-1},v_n)=w(T')+w(v_{n-1},v_n)=w(T)=d(r,v')
 				\geq t(v')\]
@@ -396,8 +396,8 @@
 			Afirmamos entonces que $d(r,v')\geq t(v')$.\\
 			Supongamos que $d(r,v')<t(v')$, entonces existe $T=(r=v_0,...,v_s=v')$
 			tal que $w(T)<t(v')$. Entonces, $r$ podría mandar a $M$ a través de $T$
-			en un tiempo menor. Esto contradice lo que habíamos supuesto y por lo tanto
-			la propiedad se cumple.
+			en un tiempo menor. Esto contradice nuestra hipótesis y por lo tanto
+			$d(r,v')\leq t(v')$.
 		}
 		%Ejercio 4
 		\item{
