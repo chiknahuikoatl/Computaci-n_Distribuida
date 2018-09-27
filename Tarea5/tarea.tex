@@ -304,42 +304,69 @@
 			hijos para enviarsela al padre sin repetirla.\\
 
 			\begin{algorithmic}[1]
-				\State $children \ \leftarrow \emptyset$
-				\State $nonChildren \ \leftarrow \emptyset$
-				\If{$p_{id}\ =\ root$}
-					\State $parent\ \leftarrow\ root$
-					\State $send M$ to all neighbors
-				\Else
-					\State $parent\ \leftarrow\ \bot$
-				\EndIf
-				\State \upon{receiving $M$ from $p$}
-				\Start
-					\If{$parent\ =\ \bot$}
-						\State $parent\ \leftarrow\ p$
-						\State $send M$ to all neighbors except $p$
-					\Else
-						\State $send nack$ to $p$
-					\EndIf
-				\End
-				\State \upon{receiving $nack$ from $p$}
-				\Start
-					\State $nonChildren\ \leftarrow\ nonChildren\ \cup\ {p}$
-				\End
-				\textbf{When} $children\ \cup\ nonChildren\ =\ allMyNeighbours
-							\textbf{do}$
-				\Start
+				\Function{collectInformation}{population}
+					\State $children \ \leftarrow \emptyset$
+					\State $nonChildren \ \leftarrow \emptyset$
+					\State $totalPopulation \ \leftarrow population$
 					\If{$p_{id}\ =\ root$}
-						\State END
+						\State $parent\ \leftarrow\ root$
+						\State $send$ $M$ to all neighbors
 					\Else
-						\State $send\ ack\ to\ parent$
+						\State $parent\ \leftarrow\ \bot$
 					\EndIf
-				\upon{receiving $ack$ from $k$}
-				\Start
-					\State $add\ k\ to\ children$
-				\End
-				\End
+					\State \upon{receiving $M$ from $p$}
+					\Start
+						\If{$parent\ =\ \bot$}
+							\State $parent\ \leftarrow\ p$
+							\State $send$ $M$ to all neighbors except $p$
+						\Else
+							\State $send$ $nack$ to $p$
+						\EndIf
+					\End
+					\State \upon{receiving $nack$ from $p$}
+					\Start
+						\State $nonChildren\ \leftarrow\ nonChildren\ \cup\ {p}$
+					\End\\
+					\textbf{When} $children\ \cup\ nonChildren\ =\ allMyNeighbours
+							\	\textbf{do}$
+					\Start
+						\If{$p_{id}\ =\ root$}
+							\State $return$ $totalPopulation$
+						\Else
+							\State $send\ (ack, totalPopulation)\ to\ parent$
+						\EndIf\\
+					\textbf{End}\\
+					\upon{receiving $(ack, pPopulation)$ from $k$}
+					\Start
+						\State $add\ k\ to\ children$
+						\State $totalPopulation = totalPopulation + pPopulation$
+					\End
+					\End
+				\EndFunction
 			\end{algorithmic}
+			El algoritmo es básicamente $PIF$, que ya se sabe que es correcto. \\
+			El propósito de $PIF$ es primero enviar
+			un mensaje a todos los nodos. Cada nodo lleva la cuenta de quien es su
+			padre y quienes son sus hijos. El padre es el nodo del que reciben el mensaje
+			por primera vez, por lo que sólo tiene uno.\\
+			Cuando recibe confirmación de todos sus hijos, lo que se cumple por
+			vacuidad cuando los nodos son hojas, entonces envía un mensaje de
+			confirmación a su padre.\\
+			En esta modificación del algoritmo, cada nodo representa un punto de control.\\
+			Cada nodo recibe como parámetro la población que vive en su radio.\\
+			Los mensajes de confirmación se cambian por parejas, donde el primer elemento
+			es el mensaje de confirmación y el segundo es la población acumulada de
+			ese nodo y todos los hijos de ese nodo.\\
+			Cada vez que se recibe ese mensaje de alguno de los hijos, la
+			población acumulada del hijo su suma a la población acumulada del padre.
+			Entonces, lo que se envía a su padre es la población inicial del nodo más
+			la población acumulada de cada uno de sus hijos.\\
+			Como sólo se envía una vez la población acumulada al padre, entonces se
+			garantiza que nunca se cuenta dos veces a la misma población.\\
+			Al terminar la raíz, el valor que devuelve es la suma de la población
+			acumulada de todos sus hijos más su población, que es la población total.\\
 			}
+
 
 		%Ejercio 3
 		\item{
