@@ -1,4 +1,4 @@
-#Repositorio para las tareas de Computación Distribuida.
+##Repositorio para las tareas de Computación Distribuida.
 
 Profesor: Sergio Rajsbaum Gorodezky
 Grupo: 7055
