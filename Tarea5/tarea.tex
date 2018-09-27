@@ -1,7 +1,6 @@
 \documentclass[12pt,a4paper]{report}
 
 \usepackage[utf8x]{inputenc}
-\usepackage[latin1]{inputenc}
 \usepackage[left=2cm, right=2cm, top=5cm]{geometry}
 \usepackage{enumitem}
 \usepackage{fontspec}
@@ -52,6 +51,61 @@
 		\item {
 			Considere la gráfica $G$. Propón retardos y ejecuta el algoritmo PIF con
 			$p_1$ como raíz.\\
+
+			\begin{figure}
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+		                    semithick]
+					\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+					\node[state] (A)                    {$p_1$};
+					\node[state] (B) [above right of=A] {$p_2$};
+					\node[state] (C) [right of=B] 		{$p_3$};
+					\node[state] (D) [below right of=C] {$p_4$};
+					\node[state] (E) [below right of=A] {$p_6$};
+					\node[state] (F) [above right of=E] {$p_5$};
+
+					\path 	(A) edge              node {} (B)
+					        	edge              node {} (F)
+								edge 			  node {} (E)
+					    	(B) edge 			  node {} (C)
+					        	edge              node {} (D)
+					    	(C) edge              node {} (D)
+					    	(E) edge 			  node {} (D)
+								edge 			  node {} (F)
+							(F) edge 			  node {} (D);
+					\end{tikzpicture}
+					\caption{Grafica Inicial.}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+		                    semithick]
+					\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+					\node[state] (A)                    {$p_1$};
+					\node[state] (B) [above right of=A] {$p_2$};
+					\node[state] (C) [right of=B] 		{$p_3$};
+					\node[state] (D) [below right of=C] {$p_4$};
+					\node[state] (E) [below right of=A] {$p_6$};
+					\node[state] (F) [above right of=E] {$p_5$};
+
+					\path 	(A) edge              node {4} (B)
+					        	edge              node {6} (F)
+								edge 			  node {1} (E)
+					    	(B) edge 			  node {1} (C)
+					        	edge              node {7} (D)
+					    	(C) edge              node {2} (D)
+					    	(E) edge 			  node {3} (D)
+								edge 			  node {5} (F)
+							(F) edge 			  node {3} (D);
+					\end{tikzpicture}
+					\caption{Grafica Inicial con Pesos Elegidos Aleatoriamente para Simular
+							 Retardos.}
+				\end{center}
+			\end{figure}
 		}
 
 		%Ejercicio 2
