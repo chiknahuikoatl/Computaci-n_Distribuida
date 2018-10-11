@@ -144,10 +144,23 @@
 			\end{align*}
 			Pues la ronda $i$ tarda a lo más $2i$ unidades de tiempo, $i$ unidades
 			para llegar a el nodo $i$ de la trayectoria de la raíz a $v$, y otras
-			$i$ unidades para volver a la raíz.
+			$i$ unidades para volver a la raíz.\\
 			Este es el último nodo que es agregado al árbol, precisamente porque su
 			distancia a la raíz es el diámetro en el peor caso. Entonces este algoritmo
-			tiene complejidad en tiepo de $O(Diam(G)^2)$.
+			tiene complejidad en tiepo de $O(Diam(G)^2)$.\\
+			En cuanto a la complejidad en mensajes, se tiene que en cada ejecución,
+			las aristas que se recorren por primera vez son únicamente las que están
+			en el nuevo alcance. Cada una de estas aristas recibe el mensaje con
+			la distancia y con el alcance, y devuelve un $ack$ o un $nack$. Como esto
+			sólo pasa en la ronda donde son descubiertas, entonces se envían
+			$2|E|$ mensajes. Luego, para recorrer el resto de la gráfica hasta
+			la raíz se utilizan las trayectorias ya definidas por el subárbol
+			descubierto en ejecuciones anterior, que tiene a lo más $|V|-1$ aristas.
+			Como este recorrido se hace en cada ejecución, y hay $Diam(G)$ ejecuciones,
+			entonces el resto de los mensajes son $(|V|-1)(Diam(G))$.\\
+			Entonces, hay a lo más $2|E| + (|V|-1)(Diam(G)) \in O(|E| + |V|Diam(G))$
+			mensajes.\\
+			Entonces, la complejidad en mensajes es $O(|E| + |V|Diam(G))$.
 		}
 		\item {
 			Explicar por qué el algorítmo Awerbuch $DFS$ tiene complejidad de tiempo
