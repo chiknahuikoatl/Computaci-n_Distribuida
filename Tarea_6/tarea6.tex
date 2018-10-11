@@ -46,6 +46,33 @@
 			$|V|$ instancias del algoritmo $PIF$ cuya complejidad ser
 			$O(|E|+|V|\cdot Diam(G))$ en mensajes y $O(Diam(G)^2)$ en tiempo.
 
+			La idea de este algoritmo es recorrer la gráfica por capas por medio de
+			una ejecución del $PIF$ por capa.\\
+			Cada ejecución tiene el propósito de tomar el árbol de la ejecución
+			anterior y agregarle todos los nodos a distancia una más que la ejecución
+			anterior.\\
+			Para hacer esto, el mensaje que se envía para decubrir son los valores de
+			la distancia acumulada y el límite de distancia para esa ejecución en
+			particular.\\
+			Igualmente que en el otro $BFS$ distribuido, se actualiza la distancia a
+			uno más de lo recibido si eso es mejor o igual a lo actual.\\
+			Pero sólo se envía esa información a los vecinos en caso de que ellos
+			aun estén en el alcance de la ejecución.\\
+			Además, si no se es una de las hojas del árbol de la ejecución anterior,
+			ni siquiera se envía a todos los vecinos, si no a todos los hijos, que ya
+			se conocen desde al menos la ejecución anterior.\\
+			En el caso de las hojas del árbol final o de los nodos intermedios del
+			árbol de una ejecución dada, se envía la confirmación en cuanto se tiene
+			la información de todos los vecinos, .\\
+			Para las hojas del árbol de la ejecución, se envía la confirmación en
+			cuanto se entera de que es el límite del alcance de esa ejecución.\\
+			Como confirmación se envía el conjunto de nodos en su subárbol.\\
+			Cuando esto llega a la raíz, es el conjunto de todos los nodos que ya son parte
+			del árbol.\\
+			Si aun faltan nodos, entonces se aumenta el alcance y se inicia
+			una nueva ejecución del $PIF$.
+			Si se tiene a todos los nodos en el árbol, entonces el algorítmo acaba.
+
 			\begin{algorithmic}[1]
 				\Initially
 					\State $children \gets \emptyset$
@@ -108,6 +135,19 @@
 					\EndIf
 				\EndAsSoon
 			\end{algorithmic}
+			Con un tiempo normalizado, se tiene que el tiempo para llegar a el nodo $v$
+			que está a distancia del diámetro es
+			\begin{align*}
+				2+4+6+8+...+2\cdot Diam(G) &= 2 (1+2+3+4+...+Diam(G))\\
+																	 &= 2\frac{Diam(G)(Diam(G)+1)}{2}\\
+																	 &= Diam(G)(Diam(G)+1) \in O(Diam(G)^2)
+			\end{align*}
+			Pues la ronda $i$ tarda a lo más $2i$ unidades de tiempo, $i$ unidades
+			para llegar a el nodo $i$ de la trayectoria de la raíz a $v$, y otras
+			$i$ unidades para volver a la raíz.
+			Este es el último nodo que es agregado al árbol, precisamente porque su
+			distancia a la raíz es el diámetro en el peor caso. Entonces este algoritmo
+			tiene complejidad en tiepo de $O(Diam(G)^2)$.
 		}
 		\item {
 			Explicar por qué el algorítmo Awerbuch $DFS$ tiene complejidad de tiempo
