@@ -9,7 +9,7 @@
 \usepackage{algpseudocode}
 \algblockdefx[Initially]{Initially}{EndInitially}{\textbf{initially do}}{\textbf{end initially}}
 \algblockdefx[Upon]{Upon}{EndUpon}[1]{\textbf{upon #1}}{\textbf{end upon}}
-\algblockdefx[AsSoon]{AsSoon}{EndAsSoon}[1]{\textbf{upon #1}}{\textbf{end as soon}}
+\algblockdefx[AsSoon]{AsSoon}{EndAsSoon}[1]{\textbf{as soon as #1}}{\textbf{end as soon}}
 
 \usetikzlibrary{graphs, shapes, graphdrawing}
 \usegdlibrary{layered, force}
@@ -47,51 +47,66 @@
 			$O(|E|+|V|\cdot Diam(G))$ en mensajes y $O(Diam(G)^2)$ en tiempo.
 
 			\begin{algorithmic}[1]
-				\Require $p_{id}, root$
-				\Statex
 				\Initially
 					\State $children \gets \emptyset$
-					\State $nonChildren \gets \emptyset$
-					\State $currentBound \gets 0$
+					\State $acks \gets \emptyset$
+					\State $nacks \gets \emptyset$
+					\State $discovered \gets \emptyset$
 					\If{$p_{id} = root$}
 						\State $distance \gets 0$
 						\State $parent \gets p_{id}$
 						\State $currentBound \gets 1$
-						\State send $(distance, 1)$ to $neighbors\setminus \{p\}$
+						\State send $(distance, currentBound)$ to $neighbors$
 					\Else
 						\State $parent \gets \bot$
 						\State $distance \gets \infty$
 					\EndIf
 				\EndInitially
 				\Statex
+
 				\Upon{receiving $(distance_p, bound)$ from $p$}
-					\If{$distance_p + 1 < distance$}
-						\State $distance \gets distance_p + 1$
+					\If{$distance_p + 1 \leq distance$}
 						\State $parent \gets p$
-						\If{$bound - 1 < distance$}
-							\State send $(distance, bound)$ to $children$
-						\ElsIf{$bound - 1 = distance$}
-							\State send $(distance, bound)$ to $neighbors\setminus \{p\}$
-						\Else
-							\State send $(ack, bound)$ to $parent$
-						\EndIf
+						\State $distance \gets distance_p + 1$
 					\Else
 						\State send $nack$ to $p$
 					\EndIf
-				\EndUpon
-				\Statex
-				\Upon{receiving $(ack, bound)$ from $p$}
-					\If{$p_{id} = root$}
-
-					\Else
+					\If{$distance -1 < bound $}
+						\State send $(distance, bound)$ to $children$
+					\ElsIf{$distance -1 = bound $}
+						\State send $(distance, bound)$ to $neighbors \setminus \{p\}$
+					\ElsIf{$distance = bound$}
+						\State send $(ack, discovered)$ to $p$
 					\EndIf
-					\State $children \gets children \cup \{p\}$
 				\EndUpon
 				\Statex
+
+				\Upon{receiving $(ack, discovered_p)$ from $p$}
+					\State $discovered = discovered \cup discovered_p$
+					\State $acks = acks \cup \{p\}$
+					\State $children = children \cup \{p\}$
+				\EndUpon
+				\Statex
+
 				\Upon{receiving $nack$ from $p$}
-					\State $nonChildren \gets nonChildren \cup \{p\}$
+					\State $nacks \gets nacks \cup \{p\}$
 				\EndUpon
 				\Statex
+
+				\AsSoon{$acks \cup nack = neighbors$}
+					\State $acks \gets \emptyset$
+					\If{$p_{id} = root$}
+						\If{$discovered = V$}
+							\State return
+						\EndIf
+						\If{$acks = children$}
+							\State $currentBound \gets currentBound + 1$
+							\State send $(distance, currentBound)$ to $neighbors$
+						\EndIf
+					\Else
+						\State send $(ack, discovered)$ to $parent$
+					\EndIf
+				\EndAsSoon
 			\end{algorithmic}
 		}
 		\item {
