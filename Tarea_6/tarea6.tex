@@ -1,6 +1,6 @@
 \documentclass[12pt,a4paper]{report}
 
-\usepackage[left=2cm, right=2cm, top=5cm]{geometry}
+\usepackage[left=2cm, right=2cm, top=4cm, bottom=2cm]{geometry}
 \usepackage{enumitem}
 \usepackage{fontspec}
 \usepackage{tikz}
@@ -33,7 +33,7 @@
 		 \includegraphics[width=0.5\textwidth]{escudo_f-ciencias.png}
 		\vfill
 
-		{\large Jueves 1 de octubre del 2018 \par}
+		{\large Jueves 11 de octubre del 2018 \par}
 	\end{titlepage}
 
 	\pagebreak
@@ -157,7 +157,7 @@
 			la raíz se utilizan las trayectorias ya definidas por el subárbol
 			descubierto en ejecuciones anterior, que tiene a lo más $|V|-1$ aristas.
 			Como este recorrido se hace en cada ejecución, y hay $Diam(G)$ ejecuciones,
-			entonces el resto de los mensajes son $(|V|-1)(Diam(G))$.\\
+			entonces el resto de los mensajes son a los más $(|V|-1)(Diam(G))$.\\
 			Entonces, hay a lo más $2|E| + (|V|-1)(Diam(G)) \in O(|E| + |V|Diam(G))$
 			mensajes.\\
 			Entonces, la complejidad en mensajes es $O(|E| + |V|Diam(G))$.
@@ -193,6 +193,31 @@
 					\path[-] (p5) edge (p6);
 				\end{tikzpicture}
 			\end{center}
+
+			Para la complejidad en tiempo, se puede considerar dos fases.
+			Primero, cuando un vértice recibe el mensaje que va creando
+			el árbol. Le avisa a sus vecinos y espera su confirmación. Esto tarda dos
+			unidades de tiempo por cada vértice, es decir $2|V|$. \\
+			Además, el mensaje que crea el árbol pasa por todas las aristas de árbol
+			dos veces exactamente, una al ser enviado a un nuevo nodo, y otra de
+			regreso para confirmar que el árbol en esa parte ya quedó. \\
+			Como el árbol tiene $|V|-1$ aristas, esto implica que esa fase tarda
+			$2|V|-2$ unidades de tiempo.
+			Entonces toma en total $2|V|+2|V|-2 = 4|V|-2 \in O(|V|)$ de tiempo.\\
+			Para la complejidad en tiempo, también se pueden considerar dos casos para
+			las aristas.\\
+			Primero, que una arista $e$ no sea parte del árbol. Entonces ambos de sus
+			vértices adyacentes recibieron el mensaje del árbol por alguna otra arista.
+			Cuando esto pasó, ambos mandaron un aviso por $e$ y el otro les confirmó
+			también por $e$. Esto son cuatro mensajes por cada arista que no esté en
+			el árbol.
+			Ahora, para alguna arista $(u, v)$ que sí está en el árbol. Cuando el
+			mensaje le llegó a $u$, este mandó un aviso a $v$ y esté le confirmó.
+			Ahí ya van 2 mensajes. Luego, $u$ le mandó el mensaje del árbol a $v$.
+			Eventualmente, cuando el subárbol de $v$ está listo, $v$ le manda un
+			aviso de terminado a $u$. Entonces son 4 mensajes por cada arista que sí
+			está en el árbol. Entonces son 4 mensajes por arista.
+			$4|E| \in O(|E|)$.
 		}
 		\item {
 			Ver el video y mediante una lista de puntos explicar las ideas que se
