@@ -1,19 +1,15 @@
 \documentclass[12pt,a4paper]{report}
 
-%\usepackage[utf8x]{inputenc}
 \usepackage[left=2cm, right=2cm, top=5cm]{geometry}
 \usepackage{enumitem}
 \usepackage{fontspec}
 \usepackage{tikz}
 \usepackage{amsmath}
-\usepackage{algpseudocode}
 
-\algblock[Name]{Start}{End}
-\algblockdefx[NAME]{START}{END}
-[2][Unknown]{Start #1(#2)}
-{Ending}
-\algblockdefx[NAME]{}{OTHEREND}
-[1]{Until (#1)}
+\usepackage{algpseudocode}
+\algblockdefx[Initially]{Initially}{EndInitially}{\textbf{initially do}}{\textbf{end initially}}
+\algblockdefx[Upon]{Upon}{EndUpon}[1]{\textbf{upon #1}}{\textbf{end upon}}
+\algblockdefx[AsSoon]{AsSoon}{EndAsSoon}[1]{\textbf{upon #1}}{\textbf{end as soon}}
 
 \usetikzlibrary{graphs, shapes, graphdrawing}
 \usegdlibrary{layered, force}
@@ -51,8 +47,51 @@
 			$O(|E|+|V|\cdot Diam(G))$ en mensajes y $O(Diam(G)^2)$ en tiempo.
 
 			\begin{algorithmic}[1]
-				\If{something}
-				\EndIf
+				\Require $p_{id}, root$
+				\Statex
+				\Initially
+					\State $children \gets \emptyset$
+					\State $nonChildren \gets \emptyset$
+					\State $currentBound \gets 0$
+					\If{$p_{id} = root$}
+						\State $distance \gets 0$
+						\State $parent \gets p_{id}$
+						\State $currentBound \gets 1$
+						\State send $(distance, 1)$ to $neighbors\setminus \{p\}$
+					\Else
+						\State $parent \gets \bot$
+						\State $distance \gets \infty$
+					\EndIf
+				\EndInitially
+				\Statex
+				\Upon{receiving $(distance_p, bound)$ from $p$}
+					\If{$distance_p + 1 < distance$}
+						\State $distance \gets distance_p + 1$
+						\State $parent \gets p$
+						\If{$bound - 1 < distance$}
+							\State send $(distance, bound)$ to $children$
+						\ElsIf{$bound - 1 = distance$}
+							\State send $(distance, bound)$ to $neighbors\setminus \{p\}$
+						\Else
+							\State send $(ack, bound)$ to $parent$
+						\EndIf
+					\Else
+						\State send $nack$ to $p$
+					\EndIf
+				\EndUpon
+				\Statex
+				\Upon{receiving $(ack, bound)$ from $p$}
+					\If{$p_{id} = root$}
+
+					\Else
+					\EndIf
+					\State $children \gets children \cup \{p\}$
+				\EndUpon
+				\Statex
+				\Upon{receiving $nack$ from $p$}
+					\State $nonChildren \gets nonChildren \cup \{p\}$
+				\EndUpon
+				\Statex
 			\end{algorithmic}
 		}
 		\item {
