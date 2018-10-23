@@ -5,6 +5,11 @@
 \usepackage{fontspec}
 \usepackage{tikz}
 \usepackage{amsmath}
+\usepackage{algpseudocode}
+
+%Eventos
+\algblockdefx[Initially]{Initially}{EndInitially}{\textbf{initially do}}{\textbf{end initially}}
+\algblockdefx[Upon]{Upon}{EndUpon}[1]{\textbf{upon #1}}{\textbf{end upon}}
 
 \begin{document}
 	%Portada
@@ -103,6 +108,22 @@
 			tarda a lo más $D$, en tiempo real.\\
 			Propón un algoritmo para que $B$ estime el tiempo de llegada de un
 			mensaje de $A$, si este manda mensajes cada $T$ unidades de tiempo.
+
+			\begin{algorithmic}[1]
+				\Initially
+				 	\State maxDelay = 0
+					\State lastSeen = 0
+				\EndInitially
+				\Statex
+
+				\Upon{receiving $m$ from $A$}
+					\If{getTime() - lastSeen > maxDelay}
+						\State maxDelay = getTime() - lastSeen
+					\EndIf
+					\State lastSeen = getTime()
+					\State print('next message at', getTime() + maxDelay)
+				\EndUpon
+			\end{algorithmic}
 		}
 	\end{enumerate}
 
