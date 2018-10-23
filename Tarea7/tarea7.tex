@@ -42,23 +42,41 @@
 				\item {
 					¿Cuánto vale el retardo máximo de $c$ a $e$ en términos de
 					las $B$s? Es decir, dado $real(c)-real(e) \leq x$, ¿cuánto
-					vale $x$?
+					vale $x$?\\
+					$B_{cd} + B_{de}$
 				}
 
 				%b
-				item {
+				\item {
 					Anotar los eventos con los relojes escalares y los relojes
-					vectoriales.
+					vectoriales.\\
+					$a:1, b:2, c:3, d:4, e:5$\\
+					$a:(1, 0, 0), b:(1, 1, 0), c:(1, 1, 1), d:(1, 2, 1), e:(2, 2, 1s)$
 				}
 
 				%c
 				\item {
-					¿Cuáles son eventos concurrentes y cuáles no?
+					¿Cuáles son eventos concurrentes y cuáles no?\\
+					Existe una trayectoria que pasa por todos los eventos, por
+					lo que ningún par de eventos es concurrente.
 				}
 
 				%d
 				\item {
-					Describe todos los cortes consistentes de $\alpha$.
+					Describe todos los cortes consistentes de $\alpha$.\\
+					Si en evento está en $S$, entonces ninguno de los eventos
+					que causa puede estar en $T$. Entonces, para generar los
+					eventos en $S$, se toma un evento y todos los que este causa,
+					poniendo a todos los demás en $T$.\\
+					\begin{tabular}{| l | c |}
+						\hline
+  						S & T \\ \hline
+  						e & a, b, c, d \\ \hline
+  						d, e & a, b, c \\ \hline
+						c, d, e & a, b \\ \hline
+						a, b, c, d, e & a \\
+						\hline
+					\end{tabular}
 				}
 			\end{enumerate}
 		}
