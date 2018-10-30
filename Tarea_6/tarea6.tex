@@ -1,10 +1,14 @@
 \documentclass[12pt,a4paper]{report}
 
 \usepackage[left=2cm, right=2cm, top=4cm, bottom=2cm]{geometry}
-\usepackage{enumitem}
+\usepackage[utf8x]{inputenc}
 \usepackage{fontspec}
-\usepackage{tikz}
+\usepackage{enumitem}
 \usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{float}
+%\usepackage{pgf}
+\usetikzlibrary{arrows,automata}
 
 \usepackage{algpseudocode}
 \algblockdefx[Initially]{Initially}{EndInitially}{\textbf{initially do}}{\textbf{end initially}}
@@ -167,36 +171,6 @@
 			$O(V)$ ($4|V|-2$) y en mensajes $O(E)$ ($4|E|$). Presentar un ejemplo
 			de ejecución en la siguiente gráfica
 
-			\begin{center}
-				\begin{tikzpicture}[node distance = 3cm]
-					\begin{scope}[every node/.style = {circle, draw}]
-						\node (p1) {$p_1$};
-						\node (p2) [above right of = p1] {$p_2$};
-						\node (p3) [right of = p2] {$p_3$};
-						\node (p4) [below right of = p3] {$p_4$};
-						\node (p5) [left of = p4] {$p_4$};
-						\node (p6) [below right of = p1] {$p_6$};
-					\end{scope}
-
-					\path[-] (p1) edge (p2);
-					\path[-] (p1) edge (p5);
-					\path[-] (p1) edge (p6);
-
-					\path[-] (p2) edge (p3);
-					\path[-] (p2) edge (p4);
-
-					\path[-] (p3) edge (p4);
-
-					\path[-] (p4) edge (p5);
-					\path[-] (p4) edge (p6);
-
-					\path[-] (p5) edge (p6);
-				\end{tikzpicture}
-			\end{center}
-<<<<<<< HEAD
-			
-=======
-
 			Para la complejidad en tiempo, se puede considerar dos fases.
 			Primero, cuando un vértice recibe el mensaje que va creando
 			el árbol. Le avisa a sus vecinos y espera su confirmación. Esto tarda dos
@@ -221,12 +195,604 @@
 			aviso de terminado a $u$. Entonces son 4 mensajes por cada arista que sí
 			está en el árbol. Entonces son 4 mensajes por arista.
 			$4|E| \in O(|E|)$.
->>>>>>> 54ce716173f27b93130501dbcbf8d366bd27b35e
+
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}[node distance = 3cm]
+						\begin{scope}[every node/.style = {circle, draw}]
+							\node (p1) {$p_1$};
+							\node (p2) [above right of = p1] {$p_2$};
+							\node (p3) [right of = p2] {$p_3$};
+							\node (p4) [below right of = p3] {$p_4$};
+							\node (p5) [left of = p4] {$p_4$};
+							\node (p6) [below right of = p1] {$p_6$};
+						\end{scope}
+
+						\path[-] (p1) edge (p2);
+						\path[-] (p1) edge (p5);
+						\path[-] (p1) edge (p6);
+
+						\path[-] (p2) edge (p3);
+						\path[-] (p2) edge (p4);
+
+						\path[-] (p3) edge (p4);
+
+						\path[-] (p4) edge (p5);
+						\path[-] (p4) edge (p6);
+
+						\path[-] (p5) edge (p6);
+					\end{tikzpicture}
+					\caption{Grafica G}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+						semithick]
+						\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+						\node[label={\tiny $p\leftarrow r$}][state] (A) {$p_1$};
+						\node[state] (B) [above right of=A] {$p_2$};
+						\node[state] (C) [right of=B] 		{$p_3$};
+						\node[state] (D) [below right of=C] {$p_4$};
+						\node[state] (E) [below right of=A] {$p_6$};
+						\node[state] (F) [above right of=E] {$p_5$};
+
+						\path[->]
+						(A) edge[red]		  node  {v} (B)
+							edge[red]         node  {v} (F)
+							edge[red]		  node  {v} (E);
+						\path
+						(B) edge 			  node  {} (C)
+							edge              node  {} (D)
+						(C) edge              node  {} (D)
+						(E) edge 			  node  {} (D)
+							edge 			  node  {} (F)
+						(F) edge 			  node  {} (D);
+					\end{tikzpicture}
+					\caption{Primer paso del algoritmo. La raíz se autoasigna cómo padre
+							 y manda v (visitado) a todos los nodos.}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+						semithick]
+						\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+						\node[label={\tiny $p\leftarrow r$}][state] (A) {$p_1$};
+						\node[state] (B) [above right of=A] {$p_2$};
+						\node[state] (C) [right of=B] 		{$p_3$};
+						\node[state] (D) [below right of=C] {$p_4$};
+						\node[state] (E) [below right of=A] {$p_6$};
+						\node[state] (F) [above right of=E] {$p_5$};
+
+						\path[<-]
+						(A) edge[blue]		  node  {a} (B)
+							edge[blue]        node  {a} (F)
+							edge[blue]		  node  {a} (E);
+						\path
+						(B) edge 			  node  {} (C)
+							edge              node  {} (D)
+						(C) edge              node  {} (D)
+						(E) edge 			  node  {} (D)
+							edge 			  node  {} (F)
+						(F) edge 			  node  {} (D);
+					\end{tikzpicture}
+					\caption{Los nodos que reciben v devuelven a (ack).}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+						semithick]
+						\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+						\node[label={\tiny $p\leftarrow r$}][state] (A) {$p_1$};
+						\node[state] (B) [above right of=A] {$p_2$};
+						\node[state] (C) [right of=B] 		{$p_3$};
+						\node[state] (D) [below right of=C] {$p_4$};
+						\node[state] (E) [below right of=A] {$p_6$};
+						\node[state] (F) [above right of=E] {$p_5$};
+
+						\path[->]
+						(A) edge[violet]	  node  {t} (B);
+						\path
+						(A)	edge    	      node  {} (F)
+							edge			  node  {} (E)
+						(B) edge 			  node  {} (C)
+							edge              node  {} (D)
+						(C) edge              node  {} (D)
+						(E) edge 			  node  {} (D)
+							edge 			  node  {} (F)
+						(F) edge 			  node  {} (D);
+					\end{tikzpicture}
+					\caption{La raíz envía t (token) a un nodo.}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+						semithick]
+						\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+						\node[label={\tiny $p\leftarrow r$}][state] (A) {$p_1$};
+						\node[label={\tiny $p\leftarrow p_1$}][state][state] (B) [above right of=A] {$p_2$};
+						\node[state] (C) [right of=B] 		{$p_3$};
+						\node[state] (D) [below right of=C] {$p_4$};
+						\node[state] (E) [below right of=A] {$p_6$};
+						\node[state] (F) [above right of=E] {$p_5$};
+
+						\path
+						(A)	edge    	      node  {} (F)
+							edge			  node  {} (E)
+						(C) edge              node  {} (D)
+						(E) edge 			  node  {} (D)
+							edge 			  node  {} (F)
+						(F) edge 			  node  {} (D);
+						\path[->]
+						(B) edge[red]			  node  {v} (C)
+							edge[red]              node  {v} (D);
+						\path[->]
+						(A) edge[violet]		  node  {t} (B);
+					\end{tikzpicture}
+					\caption{El nodo $p_2$ recibe t, asigna a $p_1$ cómo su padre y envía v
+							 a todos sus vecinos.}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+						semithick]
+						\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+						\node[label={\tiny $p\leftarrow r$}][state] (A) {$p_1$};
+						\node[label={\tiny $p\leftarrow p_1$}][state][state] (B) [above right of=A] {$p_2$};
+						\node[state] (C) [right of=B] 		{$p_3$};
+						\node[state] (D) [below right of=C] {$p_4$};
+						\node[state] (E) [below right of=A] {$p_6$};
+						\node[state] (F) [above right of=E] {$p_5$};
+
+						\path
+						(A)	edge    	      node  {} (F)
+							edge			  node  {} (E)
+						(C) edge              node  {} (D)
+						(E) edge 			  node  {} (D)
+							edge 			  node  {} (F)
+						(F) edge 			  node  {} (D);
+						\path[<-]
+						(B) edge[blue]			    node  {a} (C)
+							edge[blue]              node  {a} (D);
+						\path[->]
+						(A) edge[violet]			node  {t} (B);
+					\end{tikzpicture}
+					\caption{Los vecinos de $p_2$ le regresan a.}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+						semithick]
+						\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+						\node[label={\tiny $p\leftarrow r$}][state] (A) {$p_1$};
+						\node[label={\tiny $p\leftarrow p_1$}][state] (B) [above right of=A] {$p_2$};
+						\node[state] (C) [right of=B]{$p_3$};
+						\node[state] (D) [below right of=C] {$p_4$};
+						\node[state] (E) [below right of=A] {$p_6$};
+						\node[state] (F) [above right of=E] {$p_5$};
+
+						\path
+						(A)	edge    	      node  {} (F)
+							edge			  node  {} (E)
+						(B)	edge              node  {} (D)
+						(C) edge              node  {} (D)
+						(E) edge 			  node  {} (D)
+							edge 			  node  {} (F)
+						(F) edge 			  node  {} (D);
+						\path[->]
+						(B) edge[violet]		    node  {t} (C)
+						(A) edge[violet]			node  {t} (B);
+					\end{tikzpicture}
+					\caption{El nodo $p_2$ envía t, a uno de sus vecinos.}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+						semithick]
+						\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+						\node[label={\tiny $p\leftarrow r$}][state] (A) {$p_1$};
+						\node[label={\tiny $p\leftarrow p_1$}][state] (B) [above right of=A] {$p_2$};
+						\node[label={\tiny $p\leftarrow p_2$}][state] (C) [right of=B]{$p_3$};
+						\node[state] (D) [below right of=C] {$p_4$};
+						\node[state] (E) [below right of=A] {$p_6$};
+						\node[state] (F) [above right of=E] {$p_5$};
+
+						\path
+						(A)	edge    	      node  {} (F)
+							edge			  node  {} (E)
+						(B)	edge              node  {} (D)
+						(E) edge 			  node  {} (D)
+							edge 			  node  {} (F)
+						(F) edge 			  node  {} (D);
+						\path[->]
+						(C) edge[red]              node  {v} (D)
+						(B) edge[violet]		    node  {t} (C)
+						(A) edge[violet]			node  {t} (B);
+					\end{tikzpicture}
+					\caption{El nodo $p_3$ recibe t, asigna a $p_2$ cómo su padre y envía v
+							 a todos sus vecinos.}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+						semithick]
+						\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+						\node[label={\tiny $p\leftarrow r$}][state] (A) {$p_1$};
+						\node[label={\tiny $p\leftarrow p_1$}][state] (B) [above right of=A] {$p_2$};
+						\node[label={\tiny $p\leftarrow p_2$}][state] (C) [right of=B]{$p_3$};
+						\node[state] (D) [below right of=C] {$p_4$};
+						\node[state] (E) [below right of=A] {$p_6$};
+						\node[state] (F) [above right of=E] {$p_5$};
+
+						\path
+						(A)	edge    	      node  {} (F)
+							edge			  node  {} (E)
+						(B)	edge              node  {} (D)
+						(E) edge 			  node  {} (D)
+							edge 			  node  {} (F)
+						(F) edge 			  node  {} (D);
+						\path[<-]
+						(C) edge[blue]              node  {a} (D);
+						\path[->]
+						(B) edge[violet]		    node  {t} (C)
+						(A) edge[violet]			node  {t} (B);
+					\end{tikzpicture}
+					\caption{Los vecinos de $p_3$ le devuelven a.}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+						semithick]
+						\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+						\node[label={\tiny $p\leftarrow r$}][state] (A) {$p_1$};
+						\node[label={\tiny $p\leftarrow p_1$}][state] (B) [above right of=A] {$p_2$};
+						\node[label={\tiny $p\leftarrow p_2$}][state] (C) [right of=B]{$p_3$};
+						\node[state] (D) [below right of=C] {$p_4$};
+						\node[state] (E) [below right of=A] {$p_6$};
+						\node[state] (F) [above right of=E] {$p_5$};
+
+						\path
+						(A)	edge    	      node  {} (F)
+							edge			  node  {} (E)
+						(B)	edge              node  {} (D)
+						(E) edge 			  node  {} (D)
+							edge 			  node  {} (F)
+						(F) edge 			  node  {} (D);
+						\path[->]
+						(C) edge[violet]            node  {t} (D)
+						(B) edge[violet]		    node  {t} (C)
+						(A) edge[violet]			node  {t} (B);
+					\end{tikzpicture}
+					\caption{El nodo $p_3$ envía t, a uno de sus vecinos.}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+						semithick]
+						\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+						\node[label={\tiny $p\leftarrow r$}][state] (A) {$p_1$};
+						\node[label={\tiny $p\leftarrow p_1$}][state] (B) [above right of=A] {$p_2$};
+						\node[label={\tiny $p\leftarrow p_2$}][state] (C) [right of=B]{$p_3$};
+						\node[label={\tiny $p\leftarrow p_3$}][state] (D) [below right of=C] {$p_4$};
+						\node[state] (E) [below right of=A] {$p_6$};
+						\node[state] (F) [above right of=E] {$p_5$};
+
+						\path
+						(A)	edge    	      node  {} (F)
+							edge			  node  {} (E)
+						(B)	edge              node  {} (D)
+						(E) edge 			  node  {} (D)
+							edge			  node  {} (F);
+						\path[->]
+						(D) edge[red] 			  node  {v} (F)
+						(D) edge[red] 			  node  {v} (E)
+						(C) edge[violet]            node  {t} (D)
+						(B) edge[violet]		    node  {t} (C)
+						(A) edge[violet]			node  {t} (B);
+					\end{tikzpicture}
+					\caption{El nodo $p_4$ recibe t, asigna a $p_3$ cómo su padre y envía v
+							 a todos sus vecinos no visitados.}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+						semithick]
+						\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+						\node[label={\tiny $p\leftarrow r$}][state] (A) {$p_1$};
+						\node[label={\tiny $p\leftarrow p_1$}][state] (B) [above right of=A] {$p_2$};
+						\node[label={\tiny $p\leftarrow p_2$}][state] (C) [right of=B]{$p_3$};
+						\node[label={\tiny $p\leftarrow p_3$}][state] (D) [below right of=C] {$p_4$};
+						\node[state] (E) [below right of=A] {$p_6$};
+						\node[state] (F) [above right of=E] {$p_5$};
+
+						\path
+						(A)	edge    	      node  {} (F)
+							edge			  node  {} (E)
+						(B)	edge              node  {} (D)
+						(E) edge 			  node  {} (D)
+							edge			  node  {} (F);
+						\path[->]
+						(E) edge[blue] 			  node  {a} (D)
+						(F) edge[blue] 			  node  {a} (D);
+						\path[->]
+						(C) edge[violet]            node  {t} (D)
+						(B) edge[violet]		    node  {t} (C)
+						(A) edge[violet]			node  {t} (B);
+					\end{tikzpicture}
+					\caption{Los vecinos de $p_4$ le devuelven a.	}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+						semithick]
+						\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+						\node[label={\tiny $p\leftarrow r$}][state] (A) {$p_1$};
+						\node[label={\tiny $p\leftarrow p_1$}][state] (B) [above right of=A] {$p_2$};
+						\node[label={\tiny $p\leftarrow p_2$}][state] (C) [right of=B]{$p_3$};
+						\node[label={\tiny $p\leftarrow p_3$}][state] (D) [below right of=C] {$p_4$};
+						\node[state] (E) [below right of=A] {$p_6$};
+						\node[state] (F) [above right of=E] {$p_5$};
+
+						\path
+						(A)	edge    	      node  {} (F)
+							edge			  node  {} (E)
+						(B)	edge              node  {} (D)
+						(E) edge 			  node  {} (F)
+						(E) edge 			  node  {} (D);
+						\path[->]
+						(D) edge[violet] 			node  {t} (F)
+						(C) edge[violet]            node  {t} (D)
+						(B) edge[violet]		    node  {t} (C)
+						(A) edge[violet]			node  {t} (B);
+					\end{tikzpicture}
+					\caption{El nodo $p_4$ le envía t a algún vecino.}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+						semithick]
+						\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+						\node[label={\tiny $p\leftarrow r$}][state] (A) {$p_1$};
+						\node[label={\tiny $p\leftarrow p_1$}][state] (B) [above right of=A] {$p_2$};
+						\node[label={\tiny $p\leftarrow p_2$}][state] (C) [right of=B]{$p_3$};
+						\node[label={\tiny $p\leftarrow p_3$}][state] (D) [below right of=C] {$p_4$};
+						\node[state] (E) [below right of=A] {$p_6$};
+						\node[label={\tiny $p\leftarrow p_4$}][state] (F) [above right of=E] {$p_5$};
+
+						\path
+						(A)	edge    	      node  {} (F)
+							edge			  node  {} (E)
+						(B)	edge              node  {} (D)
+						(E) edge 			  node  {} (D)
+							edge			  node  {} (F)
+						(D) edge 			  node  {} (F);
+						\path[->]
+						(F) edge[red] 			    node  {v} (E)
+						(D) edge[violet]            node  {t} (F)
+						(C) edge[violet]            node  {t} (D)
+						(B) edge[violet]		    node  {t} (C)
+						(A) edge[violet]			node  {t} (B);
+					\end{tikzpicture}
+					\caption{El nodo $p_5$ recibe t, asigna a $p_4$ cómo su padre y envía v
+							 a todos sus vecinos no visitados.}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+						semithick]
+						\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+						\node[label={\tiny $p\leftarrow r$}][state] (A) {$p_1$};
+						\node[label={\tiny $p\leftarrow p_1$}][state] (B) [above right of=A] {$p_2$};
+						\node[label={\tiny $p\leftarrow p_2$}][state] (C) [right of=B]{$p_3$};
+						\node[label={\tiny $p\leftarrow p_3$}][state] (D) [below right of=C] {$p_4$};
+						\node[state] (E) [below right of=A] {$p_6$};
+						\node[label={\tiny $p\leftarrow p_4$}][state] (F) [above right of=E] {$p_5$};
+
+						\path
+						(A)	edge    	      node  {} (F)
+							edge			  node  {} (E)
+						(B)	edge              node  {} (D)
+						(E) edge 			  node  {} (D)
+							edge			  node  {} (F)
+						(D) edge 			  node  {} (F);
+						\path[->]
+						(E) edge[blue] 			    node  {a} (F)
+						(D) edge[violet]            node  {t} (F)
+						(C) edge[violet]            node  {t} (D)
+						(B) edge[violet]		    node  {t} (C)
+						(A) edge[violet]			node  {t} (B);
+					\end{tikzpicture}
+					\caption{Los vecinos de $p_5$ le devuelven a.}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+						semithick]
+						\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+						\node[label={\tiny $p\leftarrow r$}][state] (A) {$p_1$};
+						\node[label={\tiny $p\leftarrow p_1$}][state] (B) [above right of=A] {$p_2$};
+						\node[label={\tiny $p\leftarrow p_2$}][state] (C) [right of=B]{$p_3$};
+						\node[label={\tiny $p\leftarrow p_3$}][state] (D) [below right of=C] {$p_4$};
+						\node[label={\tiny $p\leftarrow p_5$}][state] (E) [below right of=A] {$p_6$};
+						\node[label={\tiny $p\leftarrow p_4$}][state] (F) [above right of=E] {$p_5$};
+
+						\path
+						(A)	edge    	      node  {} (F)
+							edge			  node  {} (E)
+						(B)	edge              node  {} (D)
+						(E) edge 			  node  {} (D)
+							edge			  node  {} (F)
+						(D) edge 			  node  {} (F);
+						\path[->]
+						(F) edge[violet] 			node  {t} (E)
+						(D) edge[violet]            node  {t} (F)
+						(C) edge[violet]            node  {t} (D)
+						(B) edge[violet]		    node  {t} (C)
+						(A) edge[violet]			node  {t} (B);
+					\end{tikzpicture}
+					\caption{El nodo $p_6$ recibe t y asigna a $p_5$ cómo su padre.}
+				\end{center}
+			\end{figure}
+
+			Cómo en la figura 16, $p_6$ ya no tiene vecinos a quienes enviarle v, tiene que
+			devolver el token a su padre. Esto mismo hacen todos los otros nodos hasta llegar
+			a la raíz.
+
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+						semithick]
+						\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+						\node[label={\tiny $p\leftarrow r$}][state] (A) {$p_1$};
+						\node[label={\tiny $p\leftarrow p_1$}][state] (B) [above right of=A] {$p_2$};
+						\node[label={\tiny $p\leftarrow p_2$}][state] (C) [right of=B]{$p_3$};
+						\node[label={\tiny $p\leftarrow p_3$}][state] (D) [below right of=C] {$p_4$};
+						\node[label={\tiny $p\leftarrow p_5$}][state] (E) [below right of=A] {$p_6$};
+						\node[label={\tiny $p\leftarrow p_4$}][state] (F) [above right of=E] {$p_5$};
+
+						\path
+						(A)	edge    	      node  {} (F)
+							edge			  node  {} (E)
+						(B)	edge              node  {} (D)
+						(E) edge 			  node  {} (D)
+							edge			  node  {} (F)
+						(D) edge 			  node  {} (F);
+						\path[<-]
+						(F) edge[violet] 			node  {$t_0$} (E)
+						(D) edge[violet]            node  {$t_1$} (F)
+						(C) edge[violet]            node  {$t_2$} (D)
+						(B) edge[violet]		    node  {$t_3$} (C)
+						(A) edge[violet]			node  {$t_4$} (B);
+					\end{tikzpicture}
+					\caption{El token regresa hasta la raíz.}
+				\end{center}
+			\end{figure}
+
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}[-,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+						semithick]
+						\tikzstyle{every state}=[fill=none,draw=black,text=black]
+
+						\node[label={\tiny $p\leftarrow r$}][state] (A) {$p_1$};
+						\node[label={\tiny $p\leftarrow p_1$}][state] (B) [above right of=A] {$p_2$};
+						\node[label={\tiny $p\leftarrow p_2$}][state] (C) [right of=B]{$p_3$};
+						\node[label={\tiny $p\leftarrow p_3$}][state] (D) [below right of=C] {$p_4$};
+						\node[label={\tiny $p\leftarrow p_5$}][state] (E) [below right of=A] {$p_6$};
+						\node[label={\tiny $p\leftarrow p_4$}][state] (F) [above right of=E] {$p_5$};
+
+						\path
+						(F) edge[violet] 			node  {} (E)
+						(D) edge[violet]            node  {} (F)
+						(C) edge[violet]            node  {} (D)
+						(B) edge[violet]		    node  {} (C)
+						(A) edge[violet]			node  {} (B);
+					\end{tikzpicture}
+					\caption{Árbol formado al final de la ejecución del algoritmo.}
+				\end{center}
+			\end{figure}
+
 		}
+
 		\item {
 			Ver el video y mediante una lista de puntos explicar las ideas que se
 			exponon. Cada punto no debe tener más de un par de líneas.
 			The Physics and Philosophy of Time - with Carlo Rovelli https://youtu.be/-6rWqJhDv7M
+
+			Nuestras experiencias son una secuencia de momentos en una dirección,
+			el pasado está dado; tenemos regitros y estudios de él, deja rastros y
+			memorias.
+			El tiempo es un paquete de propiedades combinadas que si se separan,
+			no queda nada. La implicación de las tres juntas forma algo muy fuerte.
+			Aunque según
+			nuestra percepción, el tiempo transcurre de la misma manera para todos.
+			La linea de tiempo no es acertada, pues el tiempo no es fijo
+			para todo en el universo.\\
+			Uno sabe su definición de "ahora", pero no puedo decir que ahora veo algo;
+			veo la versión del tiempo que tarda en llegar eso a mí. Entonces, no hay
+			definición de ahora mas que restringida al tiempo en que tarda en ir y
+			venir la luz. Así, se puede definir el ahora cómo $c\cdot\Delta t$
+			Fuera de este radio, no hay un "ahora" objetivo. Existe
+			una serie de eventos relacionados entre sí, pero no con un orden
+			matemático.\\
+			Ayer está fijo y lo conocemos, mañana no sabemos; pero para todas las
+			ecuaciones fundamentales de física no hay distinción entre el presente y el
+			futuro. La entropía, entonces no es solamente una cantidad fundamental,
+			sino también manera en la que las cosas están desordenadas. Este orden
+			esta dado por el observador, no por las cosas en sí. Entonces, la entropía está
+			dada segun la descripción del sistema y depende de la manera en la que se
+			interactúa con el sistema. Así, la distinción entre el pasado y el futuro
+			es el orden en el pasado que no encontramos en el futuro.
+			Sin entropía (desorden) no tendríamos estos rastros del
+			pasado, no habría marca de lo que sucedió. Es el orden mayor del pasado
+			que da cabida al desorden que marca los sucesos.\\
+			Cómo el reloj es un objeto cuántico, puede estar en una superposición. Así,
+			toda nuestra percepción actual del tiempo desaparece en perspectiva de la
+			gravedad cuántica. A un nivel básico, el tiempo es una cuenta de cambios,
+			según Aristóteles. Kant, por otro lado propone que es algo que fluye
+			uniformemente independientemente de que haya o no cambios. Einstein propone
+			que son objetos dinámicos, un campo gravitacional.\\
+			Si la
+			velocidad de la luz es infinita, entonces podemos hablar en términos de
+			un mismo momento.\\
+			La baja entropía del pasado no es entonces por su origen sino por la
+			perspectiva que nosotros tenemos de él. Así, el flujo del tiempo no está
+			descrito por las leyes de la física sino por nuestra percepción.
+			La linea del tiempo es una metáfora para nuestras memorias del pasado y lo
+			que anticipamos para el futuro. Nosotros somos la máquina del tiempo, no
+			el universo.\\
+			El tiempo no es neutral para nosotros. El impulso del cerebro que controla
+			nuestra manera de interactuar está orientada en el tiempo. El tiempo, para
+			nosotros es la conección emocional a los eventos que fluyen, que están en
+			el pasado. El tiempo es todas estas capas que se generan desde nosotros.
+			Afuera de estas capas, solamente existe una vaga forma de temporalidad.
+			De esta manera, el tiempo es toda esta relación de las emociones que
+			hemos relacionado.
 		}
 	\end{enumerate}
 \end{document}
