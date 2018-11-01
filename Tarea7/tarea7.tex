@@ -48,40 +48,73 @@
 					¿Cuánto vale el retardo máximo de $c$ a $e$ en términos de
 					las $B$s? Es decir, dado $real(c)-real(e) \leq x$, ¿cuánto
 					vale $x$?\\
-					$B_{cd} + B_{de}$
+					Sólo existe un camino dirigido de $c$ a $e$, por lo que la
+					cota está dada únicamente por los retardos máximos de las
+					aristas de ese camino.
+					$x = B_{cd} + B_{de}$
 				}
 
 				%b
 				\item {
 					Anotar los eventos con los relojes escalares y los relojes
 					vectoriales.\\
-					$a:1, b:2, c:3, d:4, e:5$\\
-					$a:(1, 0, 0), b:(1, 1, 0), c:(1, 1, 1), d:(1, 2, 1), e:(2, 2, 1s)$
+					Suponinendo que el mensaje de $a$ a $e$ es lo último en
+					llegar.\\
+					Reloj escalar\\
+					\begin{tabular}{| c | c | c | c |}
+						\hline
+  						tiempo & $P_0$ & $P_1$ & $P_2$ \\ \hline
+  						 1 & 1 & 0 & 0\\ \hline
+  						 2 & 1 & 2 & 0\\ \hline
+						 3 & 1 & 3 & 0\\ \hline
+						 4 & 1 & 3 & 4\\ \hline
+						 5 & 1 & 3 & 5\\ \hline
+						 6 & 1 & 6 & 5\\ \hline
+						 7 & 1 & 7 & 5\\ \hline
+						 8 & 8 & 7 & 5\\ \hline
+						 9 & 9 & 7 & 5\\ \hline
+
+						\hline
+					\end{tabular}\\
+					Reloj vectorial\\
+					\begin{tabular}{| c | c | c | c |}
+						\hline
+  						tiempo & $P_0$ & $P_1$ & $P_2$ \\ \hline
+  						 1 & (1, 0 ,0) & (0, 0 ,0) & (0, 0 ,0)\\ \hline
+  						 2 & (1, 0 ,0) & (1, 1 ,0) & (0, 0 ,0)\\ \hline
+						 3 & (1, 0 ,0) & (1, 2 ,0) & (0, 0 ,0)\\ \hline
+						 4 & (1, 0 ,0) & (1, 2 ,0) & (1, 2 ,1)\\ \hline
+						 5 & (1, 0 ,0) & (1, 2 ,0) & (1, 2 ,2)\\ \hline
+						 6 & (1, 0 ,0) & (1, 3 ,2) & (1, 2 ,2)\\ \hline
+						 7 & (1, 0 ,0) & (1, 4 ,2) & (1, 2 ,2)\\ \hline
+						 8 & (2, 4 ,2) & (1, 4 ,2) & (1, 2 ,2)\\ \hline
+						 9 & (3, 4 ,2) & (1, 4 ,2) & (1, 2 ,2)\\ \hline
+
+						\hline
+					\end{tabular}
 				}
 
 				%c
 				\item {
 					¿Cuáles son eventos concurrentes y cuáles no?\\
 					Existe una trayectoria que pasa por todos los eventos, por
-					lo que ningún par de eventos es concurrente.
+					lo que para todo par de eventos, alguno de ellos causó al
+					otro. Entonces no hay eventos concurrentes.
 				}
 
 				%d
 				\item {
 					Describe todos los cortes consistentes de $\alpha$.\\
-					Si en evento está en $S$, entonces ninguno de los eventos
-					que causa puede estar en $T$. Entonces, para generar los
-					eventos en $S$, se toma un evento y todos los que este causa,
-					poniendo a todos los demás en $T$.\\
-					\begin{tabular}{| l | c |}
-						\hline
-  						S & T \\ \hline
-  						e & a, b, c, d \\ \hline
-  						d, e & a, b, c \\ \hline
-						c, d, e & a, b \\ \hline
-						a, b, c, d, e & a \\
-						\hline
-					\end{tabular}
+					Dígamos que $a$ está en alguno de los dos conjuntos. \\
+					Entonces ni $b$ ni $e$ pueden estar es ese mismo conjunto,
+					por lo que ambos están en el otro. \\
+					Esto implica que $c$ y $d$ tienen que estar en el mismo
+					conjunto que $a$. \\
+					Pero hay un arco que va de $c$ a $d$, por lo que no pueden
+					estar en el mismo conjunto. \\
+					Pero por construcción esta configuración es la única que
+					evita conflictos entre $a$, $e$ y $b$.\\
+					Entonces, no hay cortes consistentes de $\alpha$.
 				}
 			\end{enumerate}
 		}
@@ -107,21 +140,35 @@
 			pero ambos tienen un $drift$ acotado. Un mensaje de $A$ a $B$
 			tarda a lo más $D$, en tiempo real.\\
 			Propón un algoritmo para que $B$ estime el tiempo de llegada de un
-			mensaje de $A$, si este manda mensajes cada $T$ unidades de tiempo.
+			mensaje de $A$, si este manda mensajes cada $T$ unidades de tiempo.\\
+			La idea es iniciar con una estimación mínima de cuando va a llegar
+			el próximo mensaje, y si el tiempo real es mayor a la estimación,
+			entonces se actualiza la estimación.\\
+			Cómo el $drfit$ está acotado, entonces eventualmente se llegará a
+			un retardo máximo para la estimación.
 
 			\begin{algorithmic}[1]
 				\Initially
-				 	\State maxDelay = 0
+				 	\State maxDelay = 1
 					\State lastSeen = 0
+					\State suspecting = false
 				\EndInitially
 				\Statex
 
 				\Upon{receiving $m$ from $A$}
-					\If{getTime() - lastSeen > maxDelay}
-						\State maxDelay = getTime() - lastSeen
+					\If{suspecting}
+						\State suspecting = false
+						\State maxDelay = clock.curretTime()-lastSeen
+						\State print("no longer suspecting")
 					\EndIf
 					\State lastSeen = getTime()
-					\State print('next message at', getTime() + maxDelay)
+					\State print("next message at most at", getTime() + maxDelay)
+				\EndUpon
+				\Statex
+
+				\Upon{$maxDelay < clock.curretTime()-lastSeen$}
+					\State suspecting = true
+					\State print("suspecting from process A")
 				\EndUpon
 			\end{algorithmic}
 		}
