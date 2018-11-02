@@ -56,14 +56,20 @@
 				Anotar los eventos con los relojes escalares y los relojes
 				vectoriales.\\
 				$a:1, b:2, c:3, d:4, e:5$\\
-				$a:(1, 0, 0), b:(1, 1, 0), c:(1, 1, 1), d:(1, 2, 1), e:(2, 2, 1s)$
+				$a:(1, 0, 0), b:(1, 1, 0), c:(1, 1, 1), d:(1, 2, 1), e:(2, 2,
+                1)$
 			}
 
 			%c
 			\item {
 				¿Cuáles son eventos concurrentes y cuáles no?\\
-				Existe una trayectoria que pasa por todos los eventos, por
-				lo que ningún par de eventos es concurrente.
+				El evento $a\rightarrow e $ es concurrente con cualquier otro
+                evento, pues no hay una trayectoria que una esta arista con
+                cualquier otra en la gráfica de causalidad. Por otro lado,
+                ningún evento que suceda en la trayectoria $T=\{a,b,c,d,e\}$ es
+                concurrente co algún otro evento, pues hay una trayectoria
+                dirigida de algún evento en la trayectoria a cualquier otro que
+                suceda después.
 			}
 
 			%d
@@ -93,6 +99,43 @@
 		Un evento causó a otro si existe un camino dirigido que inicia en
 		el primer evento y acaba en el segundo.\\
 		Demuestra que $e$ causó a $e'$ si y sólo si $L(e) < L(e')$.
+    \begin{itemize}
+        \item[\rightarrow]{
+            Sabemos que si $e$ causó a $e'$ entonces $e$ tuvo que haber
+            modificado su reloj vectorial aumentadolo en $1$ antes de enviarlo.
+            Entonces, el reloj vectorial para el evento $e$ antes de que
+            sucediera el siguiente evento es menor que el del evento que causó,
+            pues tuvo que aumentar el contador de su evento antes de que se
+            ejecutara. Así, si un evento $e$ causó a un evento $e'$, entonces,
+            particularmente el reloj vectorial que el evento $e$ envió a $e'$
+            es menor que el que tiene $e'$, aún cuándo $e$ no haya causado
+            directamente a $e'$ (es decir que si $e$ es el evento $n$, entonces
+            $e'$ sería el evento $n+1$), pues según cómo están definidos estos
+            relojes, el reloj solamente puede ir aumentando los valores de cada
+            entrada.\\
+            Por lo tanto, si $e$ causó a $e'$, entonces $L(e) < L(e')$.
+        }
+        \item[\leftarrow]{
+            Que $L(e) < L(e')$ significa que cada entrada del vector $L(e)$ es
+            menor o igual que cada entrada del vector $L(e')$. Esto implica que,
+            cómo ningún proceso puede aumentar el contador de otro proceso,
+            entonces para que $L(e) < L(e')$, el proceso de $e$ tuvo que haber
+            aumentado su contador en algún momento antes que $e'$ fuera
+            ejecutado.\\
+            Basados en esto, sabemos que $e$ causó a $e'$ porque de no ser así
+            no habría manera de que el reloj de $e'$ sea mayor que el reloj de
+            $e$, pues ningún evento anterior a $e'$ hubiera aumentado el
+            valor del proceso en el que ocurrió $e$. Entonces, al $e$ aumentar
+            el valor del proceso en el que ocurrió en el reloj vectorial lo pasa
+            al siguiente evento. Si este evento es $e'$, la propiedad se cumple.
+            De otra manera, por inducción notamos que cómo el reloj del evento
+            anterior a $e'$ es menor que el de $e'$ el reloj del evento anterior
+            a este es menor y eventualmente tendríamos que llegar al evento
+            $e$, pues si no, no habría manera de que $e'$ hubiera podido recibir
+            el reloj aumentado que $e$ envió.
+            Por lo tanto, si $L(e) < L(e')$, entonces $e$ causó a $e'$.
+        }
+    \end{itemize}
 	}
 
 	%3
@@ -200,7 +243,7 @@
 
 			\Upon{receiving $m$ from $A$}
 				\If{getTime() - lastSeen > maxDelay}
-					\State maxDelay = getTime() - lastSeen
+				    \State maxDelay = getTime() - lastSeen
 				\EndIf
 				\State lastSeen = getTime()
 				\State print('next message at', getTime() + maxDelay)
