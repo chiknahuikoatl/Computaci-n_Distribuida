@@ -1,0 +1,255 @@
+\documentclass[12pt,a4paper]{report}
+
+\usepackage[left=2cm, right=2cm, top=4cm, bottom=2cm]{geometry}
+\usepackage{enumitem}
+\usepackage{fontspec}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{algpseudocode}
+
+%Eventos
+\algblockdefx[Initially]{Initially}{EndInitially}{\textbf{initially do}}{\textbf{end initially}}
+\algblockdefx[Upon]{Upon}{EndUpon}[1]{\textbf{upon #1}}{\textbf{end upon}}
+
+\begin{document}
+	%Portada
+\begin{titlepage}
+	\centering
+	{\scshape\LARGE Universidad Nacional Autónoma de México \par}
+	\vspace{1cm}
+	{\scshape\Large Computación Distribuida\par}
+	\vspace{1.5cm}
+	{\huge\bfseries Tarea 7\par}
+	\vspace{.5cm}
+	{\Large\itshape Edgar Quiroz Castañeda \par}
+	\vspace{.5cm}
+	{\Large\itshape Jerónimo Almeida Rodríguez \par}
+	\vfill
+	 \includegraphics[width=0.5\textwidth]{escudo_f-ciencias.png}
+	\vfill
+
+	{\large Jueves 1 de noviembre del 2018 \par}
+\end{titlepage}
+
+\pagebreak
+\setlength{\voffset}{-0.75in}
+\setlength{\headsep}{5pt}
+
+%Ejercicios
+\begin{enumerate}
+	%1
+	\item {
+		Considera la ejecución $\alpha$ de la Figura 1. Los retardos máximos
+		para cada uno de los eventos son $B_{i, j}$, donde $i$ es el evento
+		que envía y $j$ el que recibe.
+		\begin{enumerate}
+			%a
+			\item {
+				¿Cuánto vale el retardo máximo de $c$ a $e$ en términos de
+				las $B$s? Es decir, dado $real(c)-real(e) \leq x$, ¿cuánto
+				vale $x$?\\
+				$B_{cd} + B_{de}$
+			}
+
+			%b
+			\item {
+				Anotar los eventos con los relojes escalares y los relojes
+				vectoriales.\\
+				$a:1, b:2, c:3, d:4, e:5$\\
+				$a:(1, 0, 0), b:(1, 1, 0), c:(1, 1, 1), d:(1, 2, 1), e:(2, 2,
+                1)$
+			}
+
+			%c
+			\item {
+				¿Cuáles son eventos concurrentes y cuáles no?\\
+				El evento $a\rightarrow e $ es concurrente con cualquier otro
+                evento, pues no hay una trayectoria que una esta arista con
+                cualquier otra en la gráfica de causalidad. Por otro lado,
+                ningún evento que suceda en la trayectoria $T=\{a,b,c,d,e\}$ es
+                concurrente co algún otro evento, pues hay una trayectoria
+                dirigida de algún evento en la trayectoria a cualquier otro que
+                suceda después.
+			}
+
+			%d
+			\item {
+				Describe todos los cortes consistentes de $\alpha$.\\
+				Si en evento está en $S$, entonces ninguno de los eventos
+				que causa puede estar en $T$. Entonces, para generar los
+				eventos en $S$, se toma un evento y todos los que este causa,
+				poniendo a todos los demás en $T$.\\
+				\begin{tabular}{| l | c |}
+					\hline
+						S & T \\ \hline
+						e & a, b, c, d \\ \hline
+						d, e & a, b, c \\ \hline
+					    c, d, e & a, b \\ \hline
+					    a, b, c, d, e & a \\
+					\hline
+				\end{tabular}
+			}
+		\end{enumerate}
+	}
+
+	%2
+	\item {
+		Sea $G = (V, E)$ la gráfica dirigida de causalidad de una ejecución
+		$\alpha$, $e, e' \in V$ y $L$ un reloj vectorial.\\
+		Un evento causó a otro si existe un camino dirigido que inicia en
+		el primer evento y acaba en el segundo.\\
+		Demuestra que $e$ causó a $e'$ si y sólo si $L(e) < L(e')$.
+    \begin{itemize}
+        \item[\rightarrow]{
+            Sabemos que si $e$ causó a $e'$ entonces $e$ tuvo que haber
+            modificado su reloj vectorial aumentadolo en $1$ antes de enviarlo.
+            Entonces, el reloj vectorial para el evento $e$ antes de que
+            sucediera el siguiente evento es menor que el del evento que causó,
+            pues tuvo que aumentar el contador de su evento antes de que se
+            ejecutara. Así, si un evento $e$ causó a un evento $e'$, entonces,
+            particularmente el reloj vectorial que el evento $e$ envió a $e'$
+            es menor que el que tiene $e'$, aún cuándo $e$ no haya causado
+            directamente a $e'$ (es decir que si $e$ es el evento $n$, entonces
+            $e'$ sería el evento $n+1$), pues según cómo están definidos estos
+            relojes, el reloj solamente puede ir aumentando los valores de cada
+            entrada.\\
+            Por lo tanto, si $e$ causó a $e'$, entonces $L(e) < L(e')$.
+        }
+        \item[\leftarrow]{
+            Que $L(e) < L(e')$ significa que cada entrada del vector $L(e)$ es
+            menor o igual que cada entrada del vector $L(e')$. Esto implica que,
+            cómo ningún proceso puede aumentar el contador de otro proceso,
+            entonces para que $L(e) < L(e')$, el proceso de $e$ tuvo que haber
+            aumentado su contador en algún momento antes que $e'$ fuera
+            ejecutado.\\
+            Basados en esto, sabemos que $e$ causó a $e'$ porque de no ser así
+            no habría manera de que el reloj de $e'$ sea mayor que el reloj de
+            $e$, pues ningún evento anterior a $e'$ hubiera aumentado el
+            valor del proceso en el que ocurrió $e$. Entonces, al $e$ aumentar
+            el valor del proceso en el que ocurrió en el reloj vectorial lo pasa
+            al siguiente evento. Si este evento es $e'$, la propiedad se cumple.
+            De otra manera, por inducción notamos que cómo el reloj del evento
+            anterior a $e'$ es menor que el de $e'$ el reloj del evento anterior
+            a este es menor y eventualmente tendríamos que llegar al evento
+            $e$, pues si no, no habría manera de que $e'$ hubiera podido recibir
+            el reloj aumentado que $e$ envió.
+            Por lo tanto, si $L(e) < L(e')$, entonces $e$ causó a $e'$.
+        }
+    \end{itemize}
+	}
+
+	%3
+	\item {
+		Lee los primeros 5 sueños del libro \textit{Einstein's Dream}.
+		Redacta un pequeño resumen de cada uno de ellos.
+        \begin{itemize}
+            \item{\textbf{14 April 1905}\\
+                En este primer sueño, se relata una linea de tiempo circular,
+                es decir que todo lo que secede, sucedió y está por suceder ya
+                lo hizo una cantidad desconocida de veces. Según el cuento, la
+                gente, en general no es consciente de esto y vive su vida
+                atesorando cada momento cómo si nunca fuera a volver, celebrando
+                la unicidad de una primera vez cómo si nunca mas volviera a
+                suceder, sufriendo la pérdida de un ser querido cómo si nunca
+                más lo fueran a volver a ver.\\
+                Pero, de vez en cuando, algunos escogidos recuerdan en
+                tormentosos sueños aquellos errores que cometieron y
+                malfortunios que vivieron ya tantas veces y que no van a poder
+                hacer nada para cambiarlos.\\
+            }
+            \item{\textbf{16 April 1905}\\
+                En este sueño, el tiempo es cómo un riachuelo, fluye en una
+                dirección pero a veces arrastra algo inesperado.\\
+                Tal es el caso de una viajera anónima del futuro que quedó
+                atrapada en este flujo. El problema es que esta viajera sabe
+                que levantar una partícula de polvo puede tener efectos tan
+                catastróficos cómo la creación de la Union Europea en las
+                décadas por venir o la falta de ella. Atormentada por esto,
+                encuentra un rincón oscuro dónde no pueda hacer nada que afecte
+                el futuro de dónde ha venido.\\
+                La gente pasa y, cómo a muchos desafortunados cómo ella, los ven
+                y se conmiseran de ellos, sabiendo que no hay manera de
+                ayudarlos, pues al hacerlo pueden afectar un futuro que ellos
+                mismos no conocen.\\
+            }
+            \item{\textbf{19 April 1905}\\
+                Este escrito nos relata la historia de un hombre y los mundos
+                que se bifurcan a partir de una decisión que toma.\\
+                En el primer mundo, decide asentarse, trabajar duro, disfrutar
+                momentos con sus amigos. Un día conoce a una mujer, la corteja
+                a lo largo de unos meses y envejecen juntos.\\
+                En el segundo mundo, decide hablar con la mujer de sus sueños.
+                Su sonrisa, su risa, su elocuencia al hablar lo enamoran. Lo
+                convence de cambiar de ciudad para vivir con ella y viven una
+                vida apacionada. Él es feliz.\\
+                En el tercer mundo, igual que en el segundo, decide hablar con
+                ella, pero ella lo rechaza.\\
+                Así se desarrolla la vida en este universo. Cada decisión que se
+                toma se bifurca en otros mundos en los que la historia se
+                desarrolla de manera diferente; y hay una infinidad de ellos.\\
+            }
+            \item{\textbf{24 April 1905}\\
+                En el cuarto sueño vemos dos interpretación del tiempo. En la
+                primera, el tiempo se mide de manera "orgánica", es decir, las
+                personas que viven bajo esta métrica de tiempo, comen cuándo
+                están hambrientas, trabajan cuándo se despiertan y, en general,
+                viven el momento cuando llega. Los relojes existen, pero ellos
+                solamente los usan cómo ornamentos; no se rigen por ellos.\\
+                por otro lado, están aquellas personas que viven regidas por un
+                tiempo "mecánico"; se lavantan puntualmente a las 7:00,
+                desayunan y se van a trabajar, almuerzan a mediodía y cenan en
+                la noche. Incluso tienen horarios para convivir. Ellos creen que
+                los impulsos naturales, cómo el hambre solamente son impulsos
+                químicos que deben ser sometidos a este horario mecánico.\\
+                Se puede vivir en cualquiera de ellos, pero no en ambos. Los dos
+                son verdaderos, pero son distintos.
+            }
+            \item{\textbf{26 April 1905}\\
+                Aquí el autor nos cuenta un sueño que, de los cinco que había
+                que leer para esta tarea, creo que es el que mejor podemos
+                aplicar al mundo actual. En este sueño, se malinterpretó un
+                resultado científico y la gente empezó a creer que entre más
+                alto vivía, podría preservar su juventud por más tiempo. Así,
+                la gente se empezó a mover de los valles hacia las montañas y
+                el estatus social estaba determinado por que tan alto alguien
+                vivía.\\
+                A pesar de las complicaciones que conlleva vivir en las alturas
+                cómo que el aire es muy delgado y los alimentos son más escasos
+                y hay menos variedad. Por esta razón, la gente de las alturas
+                se ve más vieja de lo que es en realidad.\\
+                Hay a quienes no les importa esta regla social y prefieren vivir
+                en el momento y disfrutar de lo que las planicies ofrecen:
+                árboles que den sombra, lagos dónde nadar, etc. \\
+                Con todo esto, la gente de este sueño vive regida por esta norma
+                social de vivir lo más alto posible.
+            }
+        \end{itemize}
+	}
+
+	%4
+	\item {
+		Sean $A$ y $B$ dos procesos cuyos relojes no están sincronizados,
+		pero ambos tienen un $drift$ acotado. Un mensaje de $A$ a $B$
+		tarda a lo más $D$, en tiempo real.\\
+		Propón un algoritmo para que $B$ estime el tiempo de llegada de un
+		mensaje de $A$, si este manda mensajes cada $T$ unidades de tiempo.
+
+		\begin{algorithmic}[1]
+			\Initially
+			 	\State maxDelay = 0
+				\State lastSeen = 0
+			\EndInitially
+			\Statex
+
+			\Upon{receiving $m$ from $A$}
+				\If{getTime() - lastSeen > maxDelay}
+				    \State maxDelay = getTime() - lastSeen
+				\EndIf
+				\State lastSeen = getTime()
+				\State print('next message at', getTime() + maxDelay)
+			\EndUpon
+		\end{algorithmic}
+	}
+\end{enumerate}
+
+\end{document}
