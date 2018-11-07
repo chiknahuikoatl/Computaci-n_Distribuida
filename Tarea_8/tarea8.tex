@@ -83,7 +83,11 @@
     algoritmo de Consenso basado en S mostrado en la figura dada.
 }
 \item[5]{Presente una ejecucion con $t=\tfrac{n}{2}$ en la que el algoritmo
-    de la figura dada falla.
+    de la figura dada falla.\\
+    Digamos que en una ronda $i$ fallan los $\tfrac{n}{2}$ procesos. Entonces
+    los demás procesos se quedarían esperando en la línea $(8)$ pero solo pueden
+    recibir $\tfrac{n}{2}-1$ mensajes que es menos de la mayoría. Entonces, el
+    algoritmo no acaba.
 }
 \item[6]{Lea los siguientes 5 sueños de Einstein del libro.
     \begin{itemize}[label=$\bullet$]
