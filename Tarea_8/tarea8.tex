@@ -39,14 +39,45 @@
 \begin{itemize}
 \item[1]{Considere el algoritmo 3PC visto en clase. Indique el mínimo y el
     máximo número de rondas posibles en una ejecución del algoritmo (cada
-    ronda consiste en una fase de env ́ıo de mensajes, ya sea del
-    coordinador o de los demas).
+    ronda consiste en una fase de envío de mensajes, ya sea del
+    coordinador o de los demas).\\
+    La ejecución con el mínimo número de rondas es cuándo el coordinador quiere
+    abortar. No envía mensajes a nadie y elige ABORT y los otros procesos eligen
+    lo mismo al no recibir mensaje del coordinador. Todo esto sucede en cero
+    rondas.\\
+    La ejecución en el mayor número de rondas es cuándo todos los procesos
+    están de acuerdo en ejecutar. Primero el coordinador envía mensaje a todos
+    los procesos pidiendo su voto. Segundo, todos los procesos envían que sí
+    quieren ejecutar. Tercero, el coordinador envía un mensaje PRE-COMMIT a
+    todos los proceso. Cuarto, todos los procesos envían un ACK al coordinador
+    y quinto, el coordinador envía COMMIT y ejecuta. Los otros procesos al
+    recibir COMMIT del coordinador ejecutan. Todo esto se hace en cinco rondas.
 }
 \item[2]{Describa 2 ejecuciones diferentes en las que el algoritmo de 3PC
-    falla.
+    falla.\\
+    Una ejecución en la que el algoritmo falla es cuándo el coordinador falla
+    en la última ronda y envía COMMIT a algunos procesos pero no alcanza a
+    enviar COMMIT a todos los procesos. Entonces algunos procesos hacen commit y
+    otros abort y la base de datos queda en un estado inconsistente.
+    La segunda ejecución en la que falla es cuando un proceso falla antes de
+    recibir el commit final. Entonces, ese proceso no se ejecuta aunque los
+    otros procesos sí se hayan ejecutado, resultando así en una base de datos
+    con estado inconsistente.
 }
 \item[3]{Explique 5 razones por las cuales es deseable evitar programar con
     timeouts.
+    \begin{itemize}
+        \item[1]{Estimar los timeouts ideales puede ser complicado.}
+        \item[2]{Al estar ligado al reloj físico de la computadora, depende del
+            hardware y por lo tanto no es portable.}
+        \item[3]{Cómo hay que mantener un timeout para cada pareja de procesos,
+            no es escalable.}
+        \item[4]{Son difíciles de programar.}
+        \item[5]{En una red, la variabilidad de los retardos puede ser muy
+            grande y por lo tanto difícil de acotar.}
+        \item[6]{Cómo los retardos crecen arbitrariamente, pueden ser muy
+            grandes, haciendo el sistema muy propenso a errores.}
+    \end{itemize}
 }
 \item[4]{Explique de manera intuitiva la demostracion de correctez del
     algoritmo de Consenso basado en S mostrado en la figura dada.
