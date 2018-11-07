@@ -1,0 +1,59 @@
+\documentclass[12pt,a4paper]{report}
+
+\usepackage[left=2cm, right=2cm, top=4cm, bottom=2cm]{geometry}
+\usepackage{enumitem}
+\usepackage{fontspec}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{algpseudocode}
+
+%Eventos
+\algblockdefx[Initially]{Initially}{EndInitially}{\textbf{initially do}}{\textbf{end initially}}
+\algblockdefx[Upon]{Upon}{EndUpon}[1]{\textbf{upon #1}}{\textbf{end upon}}
+
+\begin{document}
+	%Portada
+\begin{titlepage}
+	\centering
+	{\scshape\LARGE Universidad Nacional Autónoma de México \par}
+	\vspace{1cm}
+	{\scshape\Large Computación Distribuida\par}
+	\vspace{1.5cm}
+	{\huge\bfseries Tarea 8\par}
+	\vspace{.5cm}
+	{\Large\itshape Edgar Quiroz Castañeda \par}
+	\vspace{.5cm}
+	{\Large\itshape Jerónimo Almeida Rodríguez \par}
+	\vfill
+	 \includegraphics[width=0.5\textwidth]{escudo_f-ciencias.png}
+	\vfill
+
+	{\large Jueves 8 de noviembre del 2018 \par}
+\end{titlepage}
+
+\pagebreak
+\setlength{\voffset}{-0.75in}
+\setlength{\headsep}{5pt}
+
+%Ejercicios
+\begin{itemize}
+    \item[1]{Considere el algoritmo 3PC visto en clase. Indique el mínimo y el
+        máximo número de rondas posibles en una ejecución del algoritmo (cada
+        ronda consiste en una fase de env ́ıo de mensajes, ya sea del
+        coordinador o de los demas).
+    }
+    \item[2]{Describa 2 ejecuciones diferentes en las que el algoritmo de 3PC
+        falla.
+    }
+    \item[3]{Explique 5 razones por las cuales es deseable evitar programar con
+        timeouts.
+    }
+    \item[4]{Explique de manera intuitiva la demostracion de correctez del
+        algoritmo de Consenso basado en S mostrado en la figura dada.
+    }
+    \item[5]{Presente una ejecucion con $t=\tfrac{n}{2}$ en la que el algoritmo
+        de la figura dada falla.
+    }
+    \item[6]{Lea los siguientes 5 sueños de Einstein del libro.}
+\end{itemize}
+\end{document}
