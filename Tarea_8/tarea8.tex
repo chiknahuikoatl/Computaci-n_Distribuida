@@ -5,6 +5,7 @@
 \usepackage{fontspec}
 \usepackage{tikz}
 \usepackage{amsmath}
+\usepackage{amsfonts}
 \usepackage{algpseudocode}
 
 %Eventos
@@ -81,6 +82,18 @@
 }
 \item[4]{Explique de manera intuitiva la demostracion de correctez del
     algoritmo de Consenso basado en S mostrado en la figura dada.
+    \begin{itemize}[label=$\circ$]
+        \item{\textbf{Terminación}\\
+            Por definición de $\Diamond S$  sabemos que hay un proceso que
+            funciona de manera correcta, es decir que no presenta fallas.
+            Sabemos que este proceso va a enviar una elección válida a todos los
+            demás procesos. Cómo este proceso no falla, entonces, por la línea
+            10 del algoritmo, sabemos que todos los procesos van a recibir un
+            valor válido y van a terminar.
+        }
+        \item{\textbf{Validez}\\}
+        \item{\textbf{Correctez}\\}
+    \end{itemize}
 }
 \item[5]{Presente una ejecucion con $t=\tfrac{n}{2}$ en la que el algoritmo
     de la figura dada falla.\\
