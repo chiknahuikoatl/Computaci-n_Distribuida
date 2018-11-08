@@ -84,15 +84,32 @@
     algoritmo de Consenso basado en S mostrado en la figura dada.
     \begin{itemize}[label=$\circ$]
         \item{\textbf{Terminación}\\
-            Por definición de $\Diamond S$  sabemos que hay un proceso que
-            funciona de manera correcta, es decir que no presenta fallas.
+            Por definición de $\Diamond S$ evenualmente habrá  un proceso correcto no sospechado por ningún otro proceso.
+			Después de que esto pase, eventualmente llegará la ronda donde este
+			proceso va a ser coordinador.
             Sabemos que este proceso va a enviar una elección válida a todos los
-            demás procesos. Cómo este proceso no falla, entonces, por la línea
-            10 del algoritmo, sabemos que todos los procesos van a recibir un
-            valor válido y van a terminar.
+            demás procesos. Cómo este proceso no es sospechado, entonces, por
+			la línea 10 del algoritmo, sabemos que todos los procesos van a
+			recibir un sólo valor en el conjunto y van a terminar.
         }
-        \item{\textbf{Validez}\\}
-        \item{\textbf{Correctez}\\}
+        \item{\textbf{Validez}\\
+			El valor final de cada procesos es $est$, que bien puede ser el
+			valor inicial del procesos, o algún valor que haya recibido.
+			Cómo a su vez los procesos sólo envían el valor que tienen en $est$,
+			entonces $est$ forzosamente es el valor de algún proceso.
+			Por lo tanto el valor final en válido.
+		}
+        \item{\textbf{Correctez}\\
+			Notemos que si en alguna ronda un proceso no sospecha del coordinador,
+			entonces va a actualizar su valor al del coordinador.
+			En particular, en la ronda garantizada en \textbf{Terminación} en la
+			que ningún proceso sospecha del coordinador, todos los procesos van
+			a actualizar su valor al del coordinador, justo antes de acabar $T_1$.
+			Entonces, al pasar a $T_2$, el valor recibido es el último valor de
+			$est$ de algún proceso, que para todos los procesos es el valor del
+			coordinador.
+			Por lo tanto, todos los procesos devuelven el mismo valor.
+		}
     \end{itemize}
 }
 \item[5]{Presente una ejecucion con $t=\tfrac{n}{2}$ en la que el algoritmo
