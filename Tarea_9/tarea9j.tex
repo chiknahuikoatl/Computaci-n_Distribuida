@@ -1,0 +1,95 @@
+\documentclass[12pt,a4paper]{report}
+
+\usepackage[left=2cm, right=2cm, top=4cm, bottom=2cm]{geometry}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{algpseudocode}
+
+\begin{document}
+\begin{center}
+	\textsc{\huge Computación Distribuida\\ Tarea 9\\}
+	\textbf{Jerónimo Almeida}
+\end{center}
+%Ejercicios
+\begin{itemize}
+\item[1)]{\textbf{Population Protocols por “Equipo 12"}\\
+    Esta familia de algoritmos busca que un conjunto de procesos se
+    coordinen para trabajar en un tarea específica, pero cada uno ejecutando
+    tareas no necesariamente iguales. Los procesos encuentran por ellos mismos
+    una estructura para trabajar en ella y autonomamente trabajan en ella, esto
+    porque cada proceso tiene conociemiento de su posición dentro de la
+    población. Estos algoritmos, al ser relativamente nuevos, no han sido tan
+    estudiados y por ende existen ciertos casos en los que no se sabe cómo se
+    van a ejecutar. Una desventaja de usar estos algoritmos es que son
+    inherentemente lentos, pues son muchas componentes que se están comunicando, pero tienen la ventaja de la modularidad.\\
+    En la presentación, se definió que una colonia no es solo los pobladores,
+    sino también las interacciones que hay entre ellos. Una de las aplicaciones
+    potenciales es la de unir pequeños robots para que hagan tareas en
+    conjunto.
+}
+\item[2)]{\textbf{Teorema CAP por “La Flautita de Barro”}\\
+    El teorema plantea las siguientes tres condiciones para un sistema
+    distribuido:\\
+    Consistencia. Se refiere a que todos los procesos tiene los mismos
+    valores.\\
+    Accesibilidad. Esto ess que se puede acceder al sistema en cualquier
+    momento.\\
+    Partición. Significa a que hay comunicación entre todos los procesos del
+    sistema.\\
+    Aunque se demostró que estas tres propiedades no se pueden cumplir al mismo
+    tiempo. Se garantiza que el sistema eventualmente sea correcto. Esto hace
+    que el sistema vaya convergiendo a un estado correcto. Usualmente lo que se
+    hace es sacrificar temporalmente alguna de estas propiedades para que el
+    sistema eventualmente sea correcto. Otra solución es segmentar las tareas
+    que cada una pueda dar prioridad a la propiedad que más le favorezca tener
+    disponible. Así, dependiendo de los requerimientos del sistema, se modela un
+    algoritmo que favoreca a la propiedad que sea más importante para el
+    sistema.
+}
+\item[3)]{\textbf{Minimun Spanning Trees por “Kruskal”}\\
+    Se sabe que el algoritmo de Kruskal no se puede usar en un sitema
+    distribuido para encontrar un árbol generador de peso mínimo porque no se
+    puede ejecutar concurrentemente y porque es necesario saber los pesos de
+    todas las aristas de la gráfica. \\
+    Para ejecutar este algoritmo, cada proceso necesita tres estados: básico,
+    rama y rechazado; ademaś de que se envían siete distintos tipos de
+    mensajes-esto porque cómo no hay memoria compartida, la manera de
+    comunicarse es por medio de mensajes. Este algoritmo funciona creado
+    fragmentos locales de peso mínimo y va uniendo los fragmentos hasta que el
+    árbol esté completo. Se compara nivel e id y, basado en eso, si las
+    componentes son compatibles, se unen. Un nivel cero implica que el nodo no
+    se ha unido con alguien más. Al unir dos componentes, se toma el nivel más
+    alto. De esta manera se va construyendo el árbol; uniendo componetes, cada
+    una con peso mínimo, hasta que se forma el árbol.
+}
+\item[4)]{\textbf{Vertex coloring in log*(n) time por “Lambda”}\\
+    El problema de coloración inicia con Euler en el siglo 18. Se busca con
+    este algoritmo, colorear una gráfica tan rápido cómo sea posible. Esto es
+    posible en un sistema distribuido. La complejidad de este algoritmo es log*
+    que crece tan lento que parece constante. El objetivo es que en un tiempo
+    extremadamente rápido, cada nodo sepa su color. Todos los nodos necesitan
+    un identificador único y cada proceso debe hacer su cómputo localmente.
+    Para que un nodo cambie de color, toma el color de su nodo anterior, lo
+    modifica y lo "adopta". Y así, cómo cada nodo ejecuta este último paso de
+    manera concurrente es por lo que este algoritmo es tan rápido.
+}
+\item[5)]{\textbf{Snapshots por "AAR Snapshots"}\\
+    Este algoritmo se dedica a crear una "fotografía" de todo un sistema en un
+    momento dado. Funciona enviando un marcador desde un nodo inicial a todos
+    los procesos vecinos. Al recibir el marcador, se guarda el estado del
+    proceso y el de sus canales de entrada. Cuándo todos los proceso reciben el
+    marcador, el algoritmo termina. Se crean pequeñas imágenes locales que se
+    unen para mostrar el estado global, es decir, el estado de todos los
+    procesos en el sistema. Una de las aplicaciones es para saber si el
+    programa está funcionando correctamente. Lo que se quiere es ver si el
+    estado en un cierto punto (moomento) de la ejecución es consistente con lo
+    que se espera planeado obtener. Es muy importante ser muy precisos al
+    momento de ejecutar este algoritmo pues si no se hace correctamente puede
+    hacer que parezca que el sistema está funcionando de una manera diferenta a
+    la que lo está haciendo en realidad.
+}
+\end{itemize}
+\end{document}
