@@ -15,10 +15,6 @@
     urlcolor=cyan,
 }
 
-
-\bibliographystyle{alpha}
-\bibliography{bibfile}
-
 \begin{document}
 
 \begin{titlepage}
@@ -52,22 +48,18 @@
         14/12/2018
 \end{center}
 
-Los algoritmos Autorregulables son aquellos que, después de definido un estado
-válido, todos los procesos que ejecuten dicho algoritmo tienden después de
-algún tiempo a alcanzarlo sin importar el estado actual en el que se encuentren,
-es decir, que pueden iniciar en cualquier estado arbitrario no válido o después
-de que haya ocurrido algún error, el proceso llegue a un estado válido .
 
 
 
 \section{Introducción}{
+    Los algoritmos autorregulables son aquellos tienen la propiedad de que todos los procesos que ejecuten dicho algoritmo tiendan eventualmente a alcanzar un estado válido sin importar el estado actual en el que se encuentren, es decir, que pueden iniciar en cualquier estado arbitrario no válido o en caso de que haya ocurrido algún error que altere el estado, que el proceso llegue a un estado válido. Este estado válido se define en términos de los requerimientos del sistema.
 \subsection{Motivación}{
-    Que el sistema se recupere de un error sin intervención humana, es decir que
-    dado un estado global arbitrario (particularmente erróneo), dar un algoritmo
-    que haga que el estado global eventualmente se vuelva válido.
+    Con un algoritmo autorregulable buscamos que el sistema se recupere de un error sin intervención humana, es decir que dado un estado global arbitrario (particularmente uno que sea erróneo), dar un algoritmo que haga que el estado global eventualmente se vuelva válido.\\
+    \indent Saludos
 }
 \subsection{Especificación}{
-    Texto de relleno
+    De los algoritmos autorregulables, sabemos que en general, un proceso no puede determinar "desde adentro" si el estado en el que está es válido o no, por lo que tener una bandera o indicador de la validez del estado no es la mejor opción, ya que algún agente malicioso podría cambiar esta bandera y hacer que el proceso crea que ha alcanzado un estado válido aunque esto no sea cierto. Esta es la razón por la que estos algoritmos no terminan, pues de hacerlo podrían terminar en un estado que no sea válido. En cambio, lo que hacen es que convergen hacia un estado válido, es decir que el proceso, por medio de esta subrutina, modifica su estado de tal manera que con cada ejecución se acerque mas a lo que es el estado válido. De esto, tenemos la garantía de que eventualmente el estado global del sistema va a ser válido. De igual manera, sabemos que una vez alcanzado un estado válido, mientras no hayan errores, este estado válido se mantendrá por el resto de la ejecución. Una ventaja de que el proceso no termine, es que si algun proceso comete un error, puede recuperarse de ese error y regresar a un estado válido.
+
 }
 \subsection{Modelo}{}
 }
