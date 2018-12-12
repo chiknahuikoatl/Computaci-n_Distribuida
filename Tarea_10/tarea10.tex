@@ -129,9 +129,30 @@
         esperar que eventualmente converga a un estado válido.\\
         La regla es entonces
         \[P(v) \leftarrow min_{w \in N(v)}(P(w)) + 1\]
+        Pero lamentablemente un estado arbitrario no siempre converge a un estado
+        válido.\\
+        Consideremos el anillo $C = (1, 2, 3, 4, 3, 1)$, que por simplidad
+        vamos a representar como 12343.\\
+        Iniciando en 2 y ejecutando los procesos en sentido horario tenemos que
+        \begin{align*}
+            &1\textbf{2}343 \\
+            &12\textbf{3}43 \\
+            &123\textbf{4}3 \\
+            &1234\textbf{2} \\
+            &\textbf{3}2342 \\
+            &3\textbf{4}342 \\
+            &34\textbf{5}42
+        \end{align*}
+        Entonces se llega al anillo $C_2 = (3, 4, 5, 4, 2, 3)$ que si se representa
+        iniciando en 2 es $C_2 = (2, 3, 4, 5, 4, 2)$ que es exactamente el mismo
+        anillo que al inicio, si se aumenta 1 a cada nodo.\\
+        Es decir, en este caso específico, el algoritmo eventualmente vuelve al
+        inválido estado inicial.
         }
 
-        \subsubsection{Segunda Regla}{}
+        \subsubsection{Segunda Regla}{
+        El problema de la regla anterior es que
+        }
 
         \subsubsection{Regla Óptima}{}
 }
