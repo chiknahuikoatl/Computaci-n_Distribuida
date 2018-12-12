@@ -15,10 +15,6 @@
     urlcolor=cyan,
 }
 
-
-\bibliographystyle{alpha}
-\bibliography{bibfile}
-
 \begin{document}
 
 \begin{titlepage}
@@ -33,7 +29,7 @@
     \vspace{.5cm}
 	{\Large\itshape Edgar Quiroz Castañeda \par}
     \vspace{.5cm}
-	{\Large\itshape Naomi Reyes ...\par}
+	{\Large\itshape Naomi Reyes \dots \par}
 	\vfill
 	\includegraphics[width=0.5\textwidth]{escudo_f-ciencias.png}
 	\vfill
@@ -73,17 +69,73 @@ de que haya ocurrido algún error, el proceso llegue a un estado válido .
 }
 \section{Pase de Token en un Anillo}{}
 \section{Sincronizadores}{
-\subsection{Generalidades de sincronizadores}{}
+    Después del error inicial, se puede considerar que no habrá más errores
+    en el sistema. Entonces, el modelo es asícnrono sin fallas y se puede hacer
+    todo lo mismo que en un modelo de este tipo, si bien se requieren algoritmos
+    diferentes debido a las peculiaridades de comunicación del modelo.\\
+    Una de las cosas que se puede hacer es un sincronizador.
 
-\subsection{Sincronizador $\alpha$}{}
+    \subsection{Generalidades de sincronizadores}{
+    Un sincronizador es algún programa que corre en paralelo al programa
+    principal y permite determinar la ronda de comunicación en un momento dado
+    en un sistema asíncrono. \\
+    Con esto se puede asegurar que todos los procesos avancen sus rondas al
+    mismo tiempo. Esto permite emular un sistema síncrono, pues si se sabe la
+    ronda se puede garantizar que ningún proceso recibirá ningún mensaje de
+    la ronda $r+1$ si algún otro proceso no ha enviado todas los mensajes de
+    la ronda $r$.\\
+    Hay dos tipos de sincronizadores. Puede ser globales, que sincronizan a
+    toda la red. O pueden ser locales, que significan que sincronizan únicamente
+    vecindades.\\
+    Uno de los sincronizadores más simples es el sincronizador $\alpha$.
+    }
 
-\subsection{Sincronizador autorregulable}{}
+    \subsection{Sincronizador $\alpha$}{
+        La idea es que cada proceso avise a todos sus
+        vecinos cuando pase a la siguiente ronda. Cuando un proceso recibe el
+        aviso de ronda de todos sus entonces envía todos los mensajes de esa
+        ronda, y pasa a la siguiente ronda.\\
+        Puede pasar que un haya algún proceso $p_0$ ya haya enviado su aviso de
+        ronda, pero que que aún no haya enviado todos los mensajes de la ronda
+        $r$. Luego puede ser que algún $p_1 \in N(p_0)$ ya haya enviado todo y
+        ya esté en la ronda $r+1$.\\
+        $p_1$ no va a enviar ningún mensajes hasta que $p_0$ avise que ya avanzó de
+        ronda, por lo que se respeta la regla de sinronización, pero las rondas
+        de $p_0$ y $p_1$ difieren en 1.\\
+        De esto, vemos que $\alpha$ es un sincronizador local.
+        Y, en general, hay que notar que en cualquier momento cualesquiera dos nodos
+        difieren a los más en una ronda.
+    }
 
-    \subsubsection{Regla Simple}{}
+    \subsection{Sincronizador autorregulable}{
+        La idea de un sincronizador autoregulable es que cada proceso comience
+        con alguna ronda arbitraria, y que eventualmente se llegue y se
+        permanezca en un estado válido para un sincronizador $\alpha$.\\
+        Como en el modelo el estado de cada proceso es público para sus vecinos,
+        no es necesario enviar mensajes al cambiar de ronda.\\
+        Entonces, de las especificaciones del sincronizador $\alpha$, se tiene
+        que lo único que un estado válido debe cumplir es que para todo par de
+        procesos adyacentes, sus rondas difieran a lo más en 1.
+    }
 
-    \subsubsection{Segunda Regla}{}
+        \subsubsection{Regla Simple}{
+        Intuitivamente, si los estados de los procesos son públicos para sus
+        vecinos, lo más sencillo para ponerse de acuerdo en algún valor para la
+        ronda sería tomar el mínimo.\\
+        Pero esto generaría que los procesos se estanquen en ese mínimo, pues en
+        cuanto algún otro proceso cmabie de ronda, inmediatamente volvería a ese
+        mínimo.\\
+        Y por la naturaleza del modelo, no es posible saber localmente cuando ya
+        se llegó a un estado válido en el sistema.\\
+        Entonces se puede siempre aumentar 1 a aquel mínimo en cada paso y
+        esperar que eventualmente converga a un estado válido.\\
+        La regla es entonces
+        \[P(v) \leftarrow min_{w \in N(v)}(P(w)) + 1\]
+        }
 
-    \subsubsection{Regla Óptima}{}
+        \subsubsection{Segunda Regla}{}
+
+        \subsubsection{Regla Óptima}{}
 }
 \section{Conclusión}{}
 
