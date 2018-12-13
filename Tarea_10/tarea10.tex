@@ -149,14 +149,55 @@ de que haya ocurrido algún error, el proceso llegue a un estado válido .
         iniciando en 2 es $C_2 = (2, 3, 4, 5, 4, 2)$ que es exactamente el mismo
         anillo que al inicio, si se aumenta 1 a cada nodo.\\
         Es decir, en este caso específico, el algoritmo eventualmente vuelve al
-        inválido estado inicial.
+        inválido estado inicial.\\
+        Lo que significa, que de seguir ejecutandolo, sólo se volvería
+        eventualmente a un estado inválido.
         }
 
         \subsubsection{Segunda Regla}{
-        El problema de la regla anterior es que
+        El problema de la regla anterior es que en ciertas algunos casos, se
+        disminuye el número de la ronda. Con esto, en ciertos casos se preservan
+        diferencias mayores a 1.\\
+        Si se evita disminuir la ronda, entonces los valores de la ronda se
+        convergerán hacia los valores más grandes, llegando eventualmente a un
+        estado válido.
+        Esta regla sería
+        \[P(v) \leftarrow max(min_{w \in N(v)}(P(w)) + 1, P(v))\]
+        Esta regla efectivamente converge, pues todos los valores de los nodos
+        lentamente se acercan al valor más grande de la gráfica.\\
+        Sin embargo, al intentar analizar su complejidad para converger,
+        tenemos que sería de $O(max(v)$, donde $max(v)$ es el valor
+        de la máxima ronda inicial en la gráfica.\\
+        Y como este valor puede ser arbitrariamente grande, tenemos que la
+        complejidad en tiempo para converger del algoritmo no está acotada.
         }
 
-        \subsubsection{Regla Óptima}{}
+        \subsubsection{Regla Óptima}{
+        El problema de la regla anterior es que los procesos con valores iniciales
+        grandes nunca disminuyen. Entonces, para llegar a un estado válido,
+        el resto los valores tiene que aproximarse a esos valores.\\
+        Una solución sería dividir el algortimo es dos partes.\\
+        Primero, la etapa de estabilización, y luego, cuando ya se esté en un
+        estado válido, sólo ir incrementando la ronda.\\
+        Y para llegar rápidamente a un estado válido, debe de haber un mecanismo
+        para que los procesos con valores iniciales pequeños convergan rápido
+        hacia los valores más grandes.\\
+        Esta regla podría ser
+        \[P(v) \leftarrow
+        \begin{cases}
+            &max_{w \in N(v)}(P(w)) - 1, $ si w ya es está en una vecindad válida$ \\
+            &min_{w \in N(v)}(P(w)) + 1, $ en otro caso $
+        \end{cases}\]
+        De esta manera, en la primera ronda el proceso con valor máximo hará
+        válido el estado de su vecindad. En la segunda ronda, procesos en la
+        vecindad del proceso máximo harán válida su vecindad. Y así, en la ronda
+        a lo más $k$, los procesos a distancia $k$ del proceso inicial máximo
+        llevarán su vecindad a un estado válido. \\
+        Por lo tanto, en a los más $Diam(G)$ rondas, el toda la gráfica estará
+        en un estado válido.\\
+        Por lo tanto, este algoritmo sí esta acotado, con una complejidad en
+        tiempo de $O(Diam(G))$.
+        }
 }
 \section{Conclusión}{}
 
