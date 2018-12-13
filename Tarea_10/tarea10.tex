@@ -65,10 +65,9 @@
     Antes de que se estandarizara el sistema de transferencia de mensajes que se usa actualmente para los sistemas distribuidos, Dijkstra presentó el artículo sobre el pase de tokens asumiendo que los procesos tenían acceso directo al estado de sus vecinos. Esto hace que no encaje la teoría que desarrolló con los modelos actuales. \\
     Dijkstra, además, definió que un proceso auto estabilizable está formado por comandos-guarda que consisten de un condicional de la siguiente forma:\\
     \indent\indent \textbf{if} guarda \textbf{then} actualiza el estado; \\
-    Si la guarda es verdadera, entonces el comando está activado.\\
-    Un paso consiste de uno o mas comandos que se ejecutan simultáneamente.\\
-    Un comando activado eventualmente se ejecutará.\\
-    Un proceso siempre tiene acceso al estado de sus vecinos.\\
+    Si la guarda es verdadera, entonces se dice que el comando está activado; y un comando que ha sido activado eventualmente se ejecutará.\\
+    Los comandos se ejecutan en pasos, los cuales consisten de uno o mas comandos que se ejecutan simultáneamente. En la variante de demonio central, solamente se ejecuta un paso en un determinado momento.\\
+    El trabajo reciente se ha enfocado en asumir que hay partes del estado del proceso que son visibles para el usuario y otras que no. Esto en general se hace por medio de registros que permiten que un proceso envíe un mensaje específico a un vecino específico, además de que al proceso se le permite leer y escribir múltiples registros al mismo tiempo.
 
 }
 }
